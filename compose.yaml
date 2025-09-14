@@ -1,0 +1,7 @@
+﻿services:
+  langtice-api:
+    image: langtice-api
+    build:
+      context: .
+      dockerfile: langtice-api/Dockerfile
+
