@@ -26,3 +26,4 @@ artifacts/
 
 # Visual Studio cache (sometimes created even if you use Rider)
 .vs/
+.vscode/
