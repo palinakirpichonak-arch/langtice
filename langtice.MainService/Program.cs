@@ -7,9 +7,9 @@ var configuration = builder.Configuration;
 var username = configuration["postgres-username"];
 var password = configuration["postgres-password"];
 var connectionString = configuration
-                        .GetConnectionString("Database")
-                        .Replace("{USERNAME}", username)
-                        .Replace("{PASSWORD}", password);
+    .GetConnectionString("Database")
+    .Replace("{USERNAME}", username)
+    .Replace("{PASSWORD}", password);
 
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<LangticeDbContext>(options =>

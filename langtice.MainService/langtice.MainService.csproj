@@ -4,17 +4,13 @@
         <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <RootNamespace>langtice_api</RootNamespace>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-      <UserSecretsId>19027074-29d0-4fac-8a7b-4064c3c11fee</UserSecretsId>
+      <UserSecretsId>54116f6f-330a-4cec-b197-0cc16a821833</UserSecretsId>
   </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-          <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     </ItemGroup>
 
@@ -22,6 +18,11 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\langtice.AuthService\langtice.AuthService.csproj" />
+      <ProjectReference Include="..\langtice.NotificationService\langtice.NotificationService.csproj" />
     </ItemGroup>
 
     <ItemGroup>
