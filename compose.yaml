@@ -4,8 +4,8 @@
       - .env
     image: main-service
     build:
-      context: .
-      dockerfile: langtice.MainService/Dockerfile
+      context: MainService/
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     depends_on:
