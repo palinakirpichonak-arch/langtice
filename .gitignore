@@ -3,6 +3,9 @@ bin/
 obj/
 out/
 
+#Secrets
+.env
+
 # Rider project files
 .idea/
 

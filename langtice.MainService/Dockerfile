@@ -9,7 +9,9 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["langtice.MainService/langtice.MainService.csproj", "langtice.MainService/"]
 RUN dotnet restore "langtice.MainService/langtice.MainService.csproj"
-COPY . .
+
+COPY ["langtice.MainService/", "langtice.MainService/"]
+
 WORKDIR "/src/langtice.MainService"
 RUN dotnet build "./langtice.MainService.csproj" -c $BUILD_CONFIGURATION -o /app/build
 

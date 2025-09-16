@@ -1,7 +1,36 @@
 ﻿services:
-  langtice-api:
-    image: langtice-api
+  main-service:
+    env_file:
+      - .env
+    image: main-service
     build:
       context: .
-      dockerfile: langtice-api/Dockerfile
+      dockerfile: langtice.MainService/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: ${POSTGRES_HOST}
+      DB_PORT: ${POSTGRES_PORT}
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASS: ${POSTGRES_PASSWORD}
 
+  db:
+    env_file:
+      - .env
+    container_name: langtice-db
+    image: postgres:17
+    restart: always
+    ports:
+      - "5433:5432" 
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+volumes:
+  db-data:

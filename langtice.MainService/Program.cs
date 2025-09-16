@@ -1,15 +1,14 @@
-using langtice_api.Context;
+using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-var configuration = builder.Configuration;
+var host = Environment.GetEnvironmentVariable("DB_HOST");
+var port = Environment.GetEnvironmentVariable("DB_PORT");
+var db = Environment.GetEnvironmentVariable("DB_NAME");
+var username = Environment.GetEnvironmentVariable("DB_USER");
+var password = Environment.GetEnvironmentVariable("DB_PASS");
 
-var username = configuration["postgres-username"];
-var password = configuration["postgres-password"];
-var connectionString = configuration
-    .GetConnectionString("Database")
-    .Replace("{USERNAME}", username)
-    .Replace("{PASSWORD}", password);
+var connectionString = $"Host={host};Port={port};Database={db};Username={username};Password={password}";
 
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<LangticeDbContext>(options =>
@@ -23,7 +22,5 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
-app.UseHttpsRedirection();
 
 app.Run();
