@@ -1,6 +1,0 @@
-@langtice.NotificationService_HostAddress = http://localhost:5291
-
-GET {{langtice.NotificationService_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
