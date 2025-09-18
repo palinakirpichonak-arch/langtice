@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MainService.DAL.Models;
 
-public partial class Word
+public class Word
 {
     public Guid Id { get; set; }
 
@@ -18,10 +18,6 @@ public partial class Word
     public string Type { get; set; } = null!;
 
     public virtual Language Language { get; set; } = null!;
-
-    public virtual ICollection<Mistake> Mistakes { get; set; } = new List<Mistake>();
-
     public virtual ICollection<Translation> Translations { get; set; } = new List<Translation>();
-
     public virtual User? User { get; set; }
 }

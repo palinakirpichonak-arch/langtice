@@ -1,13 +1,26 @@
+using MainService.DAL;
+using MainService.DAL.Models;
+using MainService.DAL.Services;
+using MainService.PL.Extensions;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
+builder.Services.SetDbContext();
+builder.Services.SetServices();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-    app.MapOpenApi();
+    var migrationService = scope.ServiceProvider.GetRequiredService<IMigrationService>();
+    await migrationService.ApplyMigrationsAsync();
 }
 
+app.MapGet("/db", (LangticeContext dbContext) =>
+{
+    var db = dbContext.Database.GetDbConnection().Database;
+    return Results.Ok(db);
+});
 app.Run();
 

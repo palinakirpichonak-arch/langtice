@@ -2,5 +2,5 @@
 
 public interface IMigrationService
 {
-    void ApplyMigrationsAsync();
+    Task ApplyMigrationsAsync();
 }

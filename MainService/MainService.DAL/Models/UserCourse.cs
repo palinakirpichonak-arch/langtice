@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MainService.DAL.Models;
 
-public partial class UserCourse
+public class UserCourse
 {
     public Guid Id { get; set; }
 
