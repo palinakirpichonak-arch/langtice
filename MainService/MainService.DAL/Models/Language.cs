@@ -6,6 +6,5 @@ public class Language
     public string Name { get; set; } = null!;
     public virtual ICollection<Course> CoursesAsBase { get; set; } = new List<Course>();
     public virtual ICollection<Course> CoursesAsLearning { get; set; } = new List<Course>();
-    public virtual ICollection<Translation> Translations { get; set; } = new List<Translation>();
     public virtual ICollection<Word> Words { get; set; } = new List<Word>();
 }

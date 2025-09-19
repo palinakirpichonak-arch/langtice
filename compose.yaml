@@ -1,4 +1,4 @@
-﻿services:
+services:
   main-service:
     env_file:
       - .env
@@ -9,7 +9,8 @@
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       DB_HOST: ${POSTGRES_HOST}
       DB_PORT: ${POSTGRES_PORT}
@@ -27,10 +28,16 @@
       - "5433:5432" 
     volumes:
       - db-data:/var/lib/postgresql/data
+      # - ./MainService/MainService.DAL/Scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   db-data:
