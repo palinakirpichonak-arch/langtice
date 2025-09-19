@@ -17,7 +17,11 @@ public class LangticeContext : DbContext
 
     public LangticeContext(DbContextOptions<LangticeContext> options) : base(options)
     {
-        Database.EnsureCreated();
+        
+    }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseNpgsql();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

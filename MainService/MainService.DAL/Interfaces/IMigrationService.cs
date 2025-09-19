@@ -2,5 +2,5 @@
 
 public interface IMigrationService
 {
-    Task ApplyMigrationsAsync();
+    Task ApplyMigrationsAsync(CancellationToken cancellationToken);
 }

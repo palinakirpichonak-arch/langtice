@@ -7,7 +7,7 @@ namespace MainService.PL.Extensions;
 
 public static class ServiceCollectionExtension
 {
-    public static void SetDbContext(this IServiceCollection services)
+    public static void ConfigureDbContext(this IServiceCollection services)
     {
         services.AddDbContext<LangticeContext>(options =>
         {
@@ -21,8 +21,9 @@ public static class ServiceCollectionExtension
             options.UseNpgsql(connectionString);
         });
     }
-    public static void SetServices(this IServiceCollection services)
+    public static void ConfigureServices(this IServiceCollection services)
     {
         services.AddScoped<IMigrationService, MigrationService>();
+        services.AddHostedService<MigrationHostedService>();
     }
 }

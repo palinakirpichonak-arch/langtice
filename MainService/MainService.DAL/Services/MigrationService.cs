@@ -12,14 +12,14 @@ public class MigrationService : IMigrationService
         _dbContext = dbcontext;
     }
 
-    public async Task ApplyMigrationsAsync()
+    public async Task ApplyMigrationsAsync(CancellationToken cancellationToken)
     {
         try
         {
-            var pendingMigrations = _dbContext.Database.GetPendingMigrations();
+            var pendingMigrations = await _dbContext.Database.GetPendingMigrationsAsync(cancellationToken);
             if (pendingMigrations.Any())
             {
-                await _dbContext.Database.MigrateAsync();
+                await _dbContext.Database.MigrateAsync(cancellationToken);
             }
             else
             {
@@ -32,4 +32,5 @@ public class MigrationService : IMigrationService
             throw;
         }
     }
+    
 }
