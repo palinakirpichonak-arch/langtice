@@ -1,6 +1,11 @@
-﻿using MainService.DAL;
+﻿using MainService.AL.Words.Interfaces;
+using MainService.BLL.Words.Interfaces;
+using MainService.BLL.Words.Managers;
+using MainService.BLL.Words.Service;
+using MainService.DAL;
 using MainService.DAL.Models;
 using MainService.DAL.Services;
+using MainService.DAL.Words.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace MainService.PL.Extensions;
@@ -25,5 +30,16 @@ public static class ServiceCollectionExtension
     {
         services.AddScoped<IMigrationService, MigrationService>();
         services.AddHostedService<MigrationHostedService>();
+
+        //Repositories (DAL)
+        services.AddScoped<IWordRepository<Word>, WordRepository>();
+        
+        // Managers (BLL)
+        services.AddScoped<IWordManager, WordManager>();
+
+        // Services (Application Layer)
+        services.AddScoped<IWordService, WordService>();
+
+        services.AddControllers();
     }
 }
