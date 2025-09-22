@@ -1,13 +1,18 @@
+using MainService.DAL;
+using MainService.PL.Extensions;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
+builder.Services.ConfigureDbContext();
+builder.Services.ConfigureServices();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+app.MapGet("/db", (LangticeContext dbContext) =>
 {
-    app.MapOpenApi();
-}
-
+    var db = dbContext.Database.GetDbConnection().Database;
+    return Results.Ok(db);
+});
 app.Run();
 
