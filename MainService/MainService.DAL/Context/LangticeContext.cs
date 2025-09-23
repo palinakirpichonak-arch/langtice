@@ -105,5 +105,25 @@ public class LangticeContext : DbContext
             .HasOne(lc => lc.Lesson)
             .WithMany(l => l.LessonContents)
             .HasForeignKey(lc => lc.LessonId);
+        
+        //Seed data
+        modelBuilder.Entity<Language>().HasData(
+            new Language { Id = Guid.Parse("8dc05007-6ed9-406a-9eeb-fbbf748283e2"), Name = "English" },
+            new Language { Id = Guid.Parse("8e5a2463-e8d1-427a-bd84-9386e073999f"), Name = "German" },
+            new Language { Id = Guid.Parse("419ce969-51ab-41c9-9d2f-ae0f007d3b2d"), Name = "Russian" },
+            new Language { Id = Guid.Parse("5715abc0-de4e-4a5c-bd9c-4edcbade3e09"), Name = "French" }
+        );
+        
+        modelBuilder.Entity<User>().HasData(
+            new User
+            {
+                Id = Guid.Parse("a1b2c3d4-e5f6-4a7b-8c9d-1234567890ab"),
+                Username = "testuser",
+                Email = "testuser@example.com",
+                PasswordHash = "AQAAAAIAAYagAAAAEFakeHashedPassword1234567890", // placeholder hash
+                AvatarUrl = null,
+                Status = true
+            }
+        );
     }
 }

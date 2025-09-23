@@ -3,6 +3,7 @@ using System;
 using MainService.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MainService.DAL.Migrations
 {
     [DbContext(typeof(LangticeContext))]
-    partial class LangticeContextModelSnapshot : ModelSnapshot
+    [Migration("20250923105951_SeedLanguages")]
+    partial class SeedLanguages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -189,16 +192,6 @@ namespace MainService.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("a1b2c3d4-e5f6-4a7b-8c9d-1234567890ab"),
-                            Email = "testuser@example.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFakeHashedPassword1234567890",
-                            Status = true,
-                            Username = "testuser"
-                        });
                 });
 
             modelBuilder.Entity("MainService.DAL.Models.UserCourse", b =>
