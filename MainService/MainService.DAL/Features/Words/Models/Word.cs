@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace MainService.DAL.Models;
 
-public class Word
+public class Word : IEntity<Guid>
 {
     public Guid Id { get; set; }
     public string Text { get; set; } = null!;

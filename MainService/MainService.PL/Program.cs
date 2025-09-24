@@ -1,6 +1,4 @@
-using MainService.DAL;
 using MainService.PL.Extensions;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

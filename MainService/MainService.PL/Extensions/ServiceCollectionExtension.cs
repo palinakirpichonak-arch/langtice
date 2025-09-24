@@ -36,20 +36,10 @@ public static class ServiceCollectionExtension
         services.AddHostedService<MigrationHostedService>();
 
         //Repositories (DAL)
-        services.AddScoped<IRepository<Word>, WordRepository>();
-        services.AddScoped<IRepository<UserWord>, UserWordRepository>();
-        services.AddScoped<IRepository<Translation>, TranslationRepository>();
-        services.AddScoped<IKeysRepository<UserWord>, UserWordRepository>();
         
         // Managers (BLL)
-        services.AddScoped<IWordManager, WordManager>();
-        services.AddScoped<IUserWordManager, UserWordManager>();
-        services.AddScoped<ITranslationManager, TranslationManager>();
 
         // Services (Application Layer)
-        services.AddScoped<IWordService, WordService>();
-        services.AddScoped<IUserWordService, UserWordService>();
-        services.AddScoped<ITranslationService, TranslationService>();
 
         //Controllers
         services.AddControllers();

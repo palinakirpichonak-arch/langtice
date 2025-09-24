@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
-
+﻿using System.Text.Json.Serialization;
 namespace MainService.DAL.Models;
 
-public class User
+public class User : IEntity<Guid>
 {
     public Guid Id { get; set; }
     public string Username { get; set; } = null!;
@@ -19,4 +16,5 @@ public class User
     
     [JsonIgnore]
     public ICollection<UserWord> UserWords { get; set; } = new List<UserWord>();
+
 }

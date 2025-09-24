@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MainService.DAL.Models;
 
-public class Translation
+public class Translation : IEntity<Guid>
 {
     public Guid Id { get; set; }
     public Guid FromWordId { get; set; }

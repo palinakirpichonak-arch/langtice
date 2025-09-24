@@ -1,6 +1,6 @@
 ﻿namespace MainService.DAL.Models;
 
-public class Lesson
+public class Lesson : IEntity<Guid>
 {
     public Guid Id { get; set; }
     public Guid CourseId { get; set; }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MainService.DAL.Models;
 
-public class UserInfo
+public class UserInfo : IEntity<Guid>
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }

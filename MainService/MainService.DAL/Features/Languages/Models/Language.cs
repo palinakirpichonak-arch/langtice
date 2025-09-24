@@ -1,6 +1,6 @@
 ﻿namespace MainService.DAL.Models;
 
-public class Language
+public class Language : IEntity<Guid>
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = null!;
