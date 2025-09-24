@@ -14,32 +14,31 @@ public class TranslationsController : ControllerBase
     {
         _service = service;
     }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
+    
+    [HttpGet("by-word/{fromWordId}/course/{courseId}")]
+    public async Task<IActionResult> GetWordInCourse(Guid fromWordId, Guid courseId, CancellationToken cancellationToken)
     {
-        var translation = await _service.GetByIdAsync(id, cancellationToken);
-        if (translation == null) return NotFound();
-        return Ok(translation);
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
-    {
-        var translations = await _service.GetAllAsync(cancellationToken);
+        var translations = await _service.GetForWordInCourseAsync(fromWordId, courseId, cancellationToken);
         return Ok(translations);
     }
 
+    [HttpGet("by-user-words/{courseId}")]
+    public async Task<IActionResult> GetForUserWords([FromBody] IEnumerable<Guid> wordIds, Guid courseId, CancellationToken cancellationToken)
+    {
+        var translations = await _service.GetForUserWordsAsync(wordIds, courseId, cancellationToken);
+        return Ok(translations);
+    }
+    
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] CreateTranslationDTO dto, CancellationToken cancellationToken)
+    public async Task<IActionResult> AddTranslation([FromBody] CreateTranslationDTO dto, CancellationToken cancellationToken)
     {
         if (dto == null) return BadRequest();
         var translation = await _service.AddAsync(dto, cancellationToken);
-        return CreatedAtAction(nameof(GetById), new { id = translation.Id }, translation);
+        return CreatedAtAction(nameof(GetWordInCourse), new { id = translation.Id }, translation);
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteTranslation(Guid id, CancellationToken cancellationToken)
     {
         await _service.DeleteAsync(id, cancellationToken);
         return NoContent();

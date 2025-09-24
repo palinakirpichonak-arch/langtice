@@ -11,9 +11,9 @@ namespace MainService.BLL.Words.Manager;
 public class UserWordManager : IUserWordManager
 {
     private readonly IRepository<UserWord> _repository;
-    private readonly IUserWordRepository<UserWord> _userWordRepository;
+    private readonly IKeysRepository<UserWord> _userWordRepository;
 
-    public UserWordManager(IRepository<UserWord> repository,  IUserWordRepository<UserWord> userWordRepository)
+    public UserWordManager(IRepository<UserWord> repository,  IKeysRepository<UserWord> userWordRepository)
     {
         _repository = repository;
         _userWordRepository = userWordRepository;

@@ -1,5 +1,9 @@
-﻿using MainService.AL.Words.Interfaces;
+﻿using MainService.AL.Translations.Interfaces;
+using MainService.AL.Words.Interfaces;
+using MainService.BLL.Translations.Manager;
+using MainService.BLL.Translations.Service;
 using MainService.BLL.Words.Interfaces;
+using MainService.BLL.Words.Manager;
 using MainService.BLL.Words.Managers;
 using MainService.BLL.Words.Service;
 using MainService.DAL;
@@ -32,14 +36,22 @@ public static class ServiceCollectionExtension
         services.AddHostedService<MigrationHostedService>();
 
         //Repositories (DAL)
-        services.AddScoped<IWordRepository<Word>, WordRepository>();
+        services.AddScoped<IRepository<Word>, WordRepository>();
+        services.AddScoped<IRepository<UserWord>, UserWordRepository>();
+        services.AddScoped<IRepository<Translation>, TranslationRepository>();
+        services.AddScoped<IKeysRepository<UserWord>, UserWordRepository>();
         
         // Managers (BLL)
         services.AddScoped<IWordManager, WordManager>();
+        services.AddScoped<IUserWordManager, UserWordManager>();
+        services.AddScoped<ITranslationManager, TranslationManager>();
 
         // Services (Application Layer)
         services.AddScoped<IWordService, WordService>();
+        services.AddScoped<IUserWordService, UserWordService>();
+        services.AddScoped<ITranslationService, TranslationService>();
 
+        //Controllers
         services.AddControllers();
     }
 }

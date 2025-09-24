@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MainService.DAL.Words.Repository;
 
-public class TranslationRepository : IRepository<Translation>
+public class TranslationRepository : ITranslationRepository
 {
     private readonly LangticeContext _dbContext;
 
@@ -18,7 +18,29 @@ public class TranslationRepository : IRepository<Translation>
             .AsNoTracking()
             .FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
     }
+    
+    public async Task<Translation> GetTranslationByWordIdAsync(Guid fromWordId, Guid courseId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Translations
+            .AsNoTracking()
+            .FirstOrDefaultAsync(t => t.Id == fromWordId && t.CourseId == courseId, cancellationToken);
+    }
 
+    public async Task<IEnumerable<Translation>> GetTranslationsForWordInCourseAsync(Guid fromWordId, Guid courseId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Translations
+            .Where(t => t.CourseId == courseId && t.FromWordId == fromWordId)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Translation>> GetTranslationsForUserWordsAsync(IEnumerable<Guid> wordIds, Guid courseId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Translations
+            .AsNoTracking()
+            .Where(t => wordIds.Contains(t.FromWordId) && t.CourseId == courseId)
+            .ToListAsync(cancellationToken);
+    }
+    
     public async Task<IEnumerable<Translation>> GetAllItemsByAsync(CancellationToken cancellationToken)
     {
         return await _dbContext.Translations
@@ -33,9 +55,15 @@ public class TranslationRepository : IRepository<Translation>
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task UpdateItemAsync(Translation item, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task DeleteItemAsync(Translation item, CancellationToken cancellationToken)
     {
         _dbContext.Translations.Remove(item);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
+    
 }

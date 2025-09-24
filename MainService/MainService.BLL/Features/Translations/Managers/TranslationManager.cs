@@ -10,16 +10,16 @@ namespace MainService.BLL.Translations.Manager;
 
 public class TranslationManager : ITranslationManager
 {
-    private readonly IRepository<Translation> _repository;
+    private readonly ITranslationRepository _repository;
 
-    public TranslationManager(IRepository<Translation> repository)
+    public TranslationManager(ITranslationRepository repository)
     {
         _repository = repository;
     }
 
-    public async Task<Translation?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Translation?> GetByIdAsync(Guid wordId, CancellationToken cancellationToken)
     {
-        return await _repository.GetItemByIdAsync(id, cancellationToken);
+        return await _repository.GetItemByIdAsync(wordId, cancellationToken);
     }
 
     public async Task<IEnumerable<Translation>> GetAllAsync(CancellationToken cancellationToken)
@@ -36,4 +36,9 @@ public class TranslationManager : ITranslationManager
     {
         await _repository.DeleteItemAsync(translation, cancellationToken);
     }
+    public Task<IEnumerable<Translation>> GetForWordInCourseAsync(Guid fromWordId, Guid courseId, CancellationToken cancellationToken)
+        => _repository.GetTranslationsForWordInCourseAsync(fromWordId, courseId, cancellationToken);
+
+    public Task<IEnumerable<Translation>> GetForUserWordsAsync(IEnumerable<Guid> wordIds, Guid courseId, CancellationToken cancellationToken)
+        => _repository.GetTranslationsForUserWordsAsync(wordIds, courseId, cancellationToken);
 }

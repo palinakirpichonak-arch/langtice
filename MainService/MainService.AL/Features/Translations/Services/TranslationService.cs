@@ -13,9 +13,9 @@ public class TranslationService : ITranslationService
         _manager = manager;
     }
 
-    public async Task<Translation?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Translation?> GetByIdAsync(Guid wordId, CancellationToken cancellationToken)
     {
-        return await _manager.GetByIdAsync(id, cancellationToken);
+        return await _manager.GetByIdAsync(wordId, cancellationToken);
     }
 
     public async Task<IEnumerable<Translation>> GetAllAsync(CancellationToken cancellationToken)
@@ -42,4 +42,10 @@ public class TranslationService : ITranslationService
         if (entity != null)
             await _manager.DeleteAsync(entity, cancellationToken);
     }
+    
+    public Task<IEnumerable<Translation>> GetForWordInCourseAsync(Guid fromWordId, Guid courseId, CancellationToken cancellationToken)
+        => _manager.GetForWordInCourseAsync(fromWordId, courseId, cancellationToken);
+
+    public Task<IEnumerable<Translation>> GetForUserWordsAsync(IEnumerable<Guid> wordIds, Guid courseId, CancellationToken cancellationToken)
+        => _manager.GetForUserWordsAsync(wordIds, courseId, cancellationToken);
 }

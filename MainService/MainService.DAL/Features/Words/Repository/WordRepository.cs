@@ -30,6 +30,11 @@ public class WordRepository : IRepository<Word>
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task UpdateItemAsync(Word item, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task DeleteItemAsync(Word item, CancellationToken cancellationToken)
     {
         _dbContext.Words.Remove(item);
