@@ -1,4 +1,6 @@
-﻿namespace MainService.DAL.Services;
+﻿using MainService.DAL.Abstractions;
+
+namespace MainService.DAL.Services;
 
 public class MigrationHostedService : IHostedService
 {

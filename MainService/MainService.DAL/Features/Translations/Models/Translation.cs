@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MainService.DAL.Abstractions;
+using MainService.DAL.Features.Words.Models;
+using MainService.DAL.Models;
 
-namespace MainService.DAL.Models;
+namespace MainService.DAL.Features.Translations.Models;
 
 public class Translation : IEntity<Guid>
 {
@@ -11,5 +12,5 @@ public class Translation : IEntity<Guid>
     public Guid ToWordId { get; set; }
     public Word ToWord { get; set; } = null!;
     public Guid? CourseId { get; set; }
-    public Course? Course { get; set; } = null!;
+    public Course? Course { get; set; } 
 }

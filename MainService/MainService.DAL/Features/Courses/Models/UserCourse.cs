@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MainService.DAL.Abstractions;
+using MainService.DAL.Features.Users.Models;
+using MainService.DAL.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace MainService.DAL.Models;
+namespace MainService.DAL.Features.Courses.Models;
 
 public class UserCourse :  IEntity<UserCourseKey>
 {
     public UserCourseKey Id
     {
-        get => new(UserId, CourseId);
+        get => new();
         set
         {
             UserId = value.UserId;
@@ -20,13 +22,10 @@ public class UserCourse :  IEntity<UserCourseKey>
     public Course Course { get; set; } = null!;
 }
 
+[Owned]
 public class UserCourseKey
 {
-    public UserCourseKey(Guid userId, Guid courseId)
-    {
-        UserId = userId;
-        CourseId = courseId;
-    }
-    public Guid UserId;
-    public Guid CourseId;
+    public UserCourseKey() { }
+    public Guid UserId { get; set; }
+    public Guid CourseId{get;set;}
 }

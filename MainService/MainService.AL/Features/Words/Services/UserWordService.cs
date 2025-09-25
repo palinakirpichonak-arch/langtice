@@ -1,9 +1,14 @@
-﻿using MainService.AL.Words.DTO;
+﻿using MainService.DAL;
+using MainService.DAL.Abstractions;
+using MainService.DAL.Features.Words.Models;
 using MainService.DAL.Models;
+using MainService.IL.Services;
 
-namespace MainService.BLL.Words.Service;
+namespace MainService.AL.Features.Words.Services;
 
-public class UserWordService
+public class UserWordService :  Service<UserWord, UserWordKey> ,IUserWordService
 {
-    
+    public UserWordService(IRepository<UserWord, UserWordKey> repository) : base(repository)
+    {
+    }
 }

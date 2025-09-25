@@ -1,15 +1,7 @@
-﻿using MainService.AL.Translations.Interfaces;
-using MainService.AL.Words.Interfaces;
-using MainService.BLL.Translations.Manager;
-using MainService.BLL.Translations.Service;
-using MainService.BLL.Words.Interfaces;
-using MainService.BLL.Words.Manager;
-using MainService.BLL.Words.Managers;
-using MainService.BLL.Words.Service;
-using MainService.DAL;
-using MainService.DAL.Models;
+﻿using MainService.DAL;
+using MainService.DAL.Abstractions;
+using MainService.DAL.Context;
 using MainService.DAL.Services;
-using MainService.DAL.Words.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace MainService.PL.Extensions;

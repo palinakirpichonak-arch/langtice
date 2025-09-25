@@ -1,4 +1,5 @@
-using MainService.DAL.Models;
+using MainService.DAL.Abstractions;
+using MainService.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace MainService.DAL.Services;

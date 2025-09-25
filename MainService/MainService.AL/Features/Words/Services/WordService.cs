@@ -1,12 +1,16 @@
-﻿using MainService.AL.Words.DTO;
-using MainService.AL.Words.Interfaces;
-using MainService.BLL.Words.Interfaces;
+﻿using MainService.AL.Words.Interfaces;
+using MainService.DAL;
+using MainService.DAL.Abstractions;
+using MainService.DAL.Features.Words.Models;
 using MainService.DAL.Models;
+using MainService.IL.Services;
 
-namespace MainService.BLL.Words.Service
+namespace MainService.AL.Features.Words.Services
 {
-    public class WordService
+    public class WordService : Service<Word, Guid> , IWordService
     {
-        
+        public WordService(IRepository<Word, Guid> repository) : base(repository)
+        {
+        }
     }
 }

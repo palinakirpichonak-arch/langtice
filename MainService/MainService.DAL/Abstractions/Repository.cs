@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-namespace MainService.DAL;
+﻿using MainService.DAL.Context;
+using Microsoft.EntityFrameworkCore;
+
+namespace MainService.DAL.Abstractions;
 
 public abstract class Repository<TEntity, TKey> : 
         IRepository<TEntity, TKey>  where TEntity : class, IEntity<TKey>
 {
-    protected readonly LangticeContext _dbContext;
+    private readonly LangticeContext _dbContext;
 
     protected Repository(LangticeContext dbContext)
     {
@@ -13,7 +15,7 @@ public abstract class Repository<TEntity, TKey> :
 
     public async Task<TEntity?> GetItemByIdAsync(TKey id, CancellationToken cancellationToken)
     {
-        return await _dbContext.Set<TEntity>().FindAsync(new object[] {id}, cancellationToken);
+        return await _dbContext.Set<TEntity>().FindAsync([id], cancellationToken);
     }
 
     public async Task<IEnumerable<TEntity>> GetAllItemsByAsync(CancellationToken cancellationToken)

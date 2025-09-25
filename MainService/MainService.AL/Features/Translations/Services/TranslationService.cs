@@ -1,16 +1,15 @@
-﻿using MainService.AL.Translations.DTO;
+﻿using MainService.AL.Features.Translations.Services;
+using MainService.DAL;
+using MainService.DAL.Abstractions;
+using MainService.DAL.Features.Translations.Models;
 using MainService.DAL.Models;
-using MainService.AL.Translations.Interfaces;
+using MainService.IL.Services;
 
-namespace MainService.BLL.Translations.Service;
+namespace MainService.IL.Translations.Services;
 
-public class TranslationService 
+public class TranslationService : Service<Translation, Guid>, ITranslationService
 {
-    private readonly ITranslationManager _manager;
-
-    public TranslationService(ITranslationManager manager)
+    public TranslationService(IRepository<Translation, Guid> repository) : base(repository)
     {
-        _manager = manager;
     }
-    
 }

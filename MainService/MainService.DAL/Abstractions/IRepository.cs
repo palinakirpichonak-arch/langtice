@@ -1,6 +1,4 @@
-﻿using MainService.DAL.Models;
-
-namespace MainService.DAL;
+﻿namespace MainService.DAL.Abstractions;
 
 public interface IRepository<TEntity, TKey> where TEntity : IEntity<TKey>
 {

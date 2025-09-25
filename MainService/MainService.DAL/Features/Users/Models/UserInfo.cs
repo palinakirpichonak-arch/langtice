@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using MainService.DAL.Abstractions;
+using MainService.DAL.Features.Users.Models;
 
 namespace MainService.DAL.Models;
 
