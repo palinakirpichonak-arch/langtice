@@ -1,7 +1,18 @@
-﻿using MainService.DAL;
+﻿using MainService.AL.Features.Abstractions;
+using MainService.AL.Features.Translations.DTO;
+using MainService.AL.Features.Translations.Services;
+using MainService.AL.Features.Words.DTO;
+using MainService.AL.Features.Words.Services;
+using MainService.AL.Words.Interfaces;
+using MainService.BLL.Data.Translations.Repository;
+using MainService.BLL.Data.Words.Repository;
+using MainService.DAL;
 using MainService.DAL.Abstractions;
 using MainService.DAL.Context;
+using MainService.DAL.Features.Translations.Models;
+using MainService.DAL.Features.Words.Models;
 using MainService.DAL.Services;
+using MainService.IL.Translations.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace MainService.PL.Extensions;
@@ -28,11 +39,15 @@ public static class ServiceCollectionExtension
         services.AddHostedService<MigrationHostedService>();
 
         //Repositories (DAL)
-        
-        // Managers (BLL)
+        services.AddScoped<IWordRepository, WordRepository>();
+        services.AddScoped<IUserWordRepository, UserWordRepository>();
+        services.AddScoped<ITranslationRepository, TranslationRepository>();
 
         // Services (Application Layer)
-
+        services.AddScoped<IWordService, WordService>();
+        services.AddScoped<IUserWordService, UserWordService>();
+        services.AddScoped<ITranslationService, TranslationService>();
+        
         //Controllers
         services.AddControllers();
     }

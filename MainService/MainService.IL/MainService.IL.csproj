@@ -4,10 +4,6 @@
     <ProjectReference Include="..\MainService.DAL\MainService.DAL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\Words\Configurations\" />
-  </ItemGroup>
-
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
