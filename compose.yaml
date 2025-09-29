@@ -9,26 +9,31 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      db:
+      postgre-db:
         condition: service_healthy
-    environment:
+     # PostgreSQL env
       DB_HOST: ${POSTGRES_HOST}
       DB_PORT: ${POSTGRES_PORT}
       DB_NAME: ${POSTGRES_DB}
       DB_USER: ${POSTGRES_USER}
       DB_PASS: ${POSTGRES_PASSWORD}
+      # MongoDB env
+      MONGO_HOST: ${MONGO_HOST}
+      MONGO_PORT: ${MONGO_PORT}
+      MONGO_DB: ${MONGO_DB}
+      MONGO_USER: ${MONGO_USER}
+      MONGO_PASS: ${MONGO_PASSWORD}
 
-  db:
+  postgre-db:
     env_file:
       - .env
-    container_name: langtice-db
+    container_name: langtice-postgre-db
     image: postgres:17
     restart: always
     ports:
       - "5433:5432" 
     volumes:
-      - db-data:/var/lib/postgresql/data
-      # - ./MainService/MainService.DAL/Scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgre-db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -38,6 +43,26 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+  mongo-db:
+    env_file:
+      - .env
+    container_name: langtice-mongo-db
+    image: mongo:8
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-db-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DB}
+    healthcheck:
+      test: ["CMD", "mongo", "--username", "${MONGO_USER}", "--password", "${MONGO_PASSWORD}", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
-  db-data:
+  postgre-db-data:
+  mongo-db-data:

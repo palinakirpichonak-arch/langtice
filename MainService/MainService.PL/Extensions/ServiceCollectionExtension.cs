@@ -30,7 +30,7 @@ public static class ServiceCollectionExtension
             var password = Environment.GetEnvironmentVariable("DB_PASS");
 
             var connectionString = $"Host={host};Port={port};Database={db};Username={username};Password={password}";
-            options.UseNpgsql(connectionString);
+            options.UseNpgsql(connectionString,  x => x.MigrationsAssembly("Migrations"));
         });
     }
     public static void ConfigureServices(this IServiceCollection services)

@@ -13,6 +13,7 @@ COPY ["MainService.PL/MainService.PL.csproj", "MainService.PL/"]
 COPY ["MainService.AL/MainService.AL.csproj", "MainService.AL/"]
 COPY ["MainService.IL/MainService.IL.csproj", "MainService.IL/"]
 COPY ["MainService.DAL/MainService.DAL.csproj", "MainService.DAL/"]
+COPY ["Migrations/Migrations.csproj", "Migrations/"]
 
 RUN dotnet restore "MainService.PL/MainService.PL.csproj"
 
