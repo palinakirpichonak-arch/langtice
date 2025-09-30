@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MainService.DAL.Context;
 
-public class LangticeContext : DbContext
+public class PostgreLangticeContext(DbContextOptions<PostgreLangticeContext> options) : DbContext(options)
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Word> Words { get; set; }
@@ -21,10 +21,6 @@ public class LangticeContext : DbContext
     public DbSet<UserCourse> UserCourses { get; set; }
     public DbSet<Translation> Translations { get; set; }
 
-    public LangticeContext(DbContextOptions<LangticeContext> options) : base(options)
-    {
-        
-    }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql();

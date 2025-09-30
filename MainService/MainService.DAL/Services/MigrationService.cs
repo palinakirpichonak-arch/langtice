@@ -6,9 +6,9 @@ namespace MainService.DAL.Services;
 
 public class MigrationService : IMigrationService
 {
-    private readonly LangticeContext _dbContext;
+    private readonly PostgreLangticeContext _dbContext;
 
-    public MigrationService(LangticeContext dbcontext)
+    public MigrationService(PostgreLangticeContext dbcontext)
     {
         _dbContext = dbcontext;
     }
