@@ -14,6 +14,8 @@ using MainService.DAL.Features.Words.Models;
 using MainService.DAL.Services;
 using MainService.IL.Translations.Services;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace MainService.PL.Extensions;
 
@@ -21,7 +23,7 @@ public static class ServiceCollectionExtension
 {
     public static void ConfigureDbContext(this IServiceCollection services)
     {
-        services.AddDbContext<LangticeContext>(options =>
+        services.AddDbContext<PostgreLangticeContext>(options =>
         {
             var host = Environment.GetEnvironmentVariable("DB_HOST");
             var port = Environment.GetEnvironmentVariable("DB_PORT");
@@ -30,7 +32,16 @@ public static class ServiceCollectionExtension
             var password = Environment.GetEnvironmentVariable("DB_PASS");
 
             var connectionString = $"Host={host};Port={port};Database={db};Username={username};Password={password}";
-            options.UseNpgsql(connectionString,  x => x.MigrationsAssembly("Migrations"));
+            options.UseNpgsql(connectionString);
+        });
+        
+        services.AddDbContext<MongoLangticeContext>(options =>
+        {
+            var connection = Environment.GetEnvironmentVariable("MONGO_CONNECTION");
+            var database = Environment.GetEnvironmentVariable("MONGO_DB");
+
+            var client = new MongoClient(connection);
+            options.UseMongoDB(client, database);
         });
     }
     public static void ConfigureServices(this IServiceCollection services)

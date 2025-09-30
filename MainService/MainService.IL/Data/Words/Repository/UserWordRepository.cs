@@ -8,9 +8,9 @@ namespace MainService.BLL.Data.Words.Repository;
 
 public class UserWordRepository : Repository<UserWord, UserWordKey>, IUserWordRepository
 {
-    private readonly LangticeContext _dbContext;
+    private readonly PostgreLangticeContext _dbContext;
 
-    public UserWordRepository(LangticeContext dbContext) :  base(dbContext)
+    public UserWordRepository(PostgreLangticeContext dbContext) :  base(dbContext)
     {
         _dbContext = dbContext;
     }
