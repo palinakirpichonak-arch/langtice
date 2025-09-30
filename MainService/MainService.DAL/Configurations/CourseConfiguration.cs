@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using MainService.DAL.Features.Courses.Models;
 using MainService.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
