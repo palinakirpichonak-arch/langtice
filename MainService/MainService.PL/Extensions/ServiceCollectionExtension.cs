@@ -1,9 +1,11 @@
 ﻿using MainService.AL.Features.Abstractions;
+using MainService.AL.Features.Lessons.Services;
 using MainService.AL.Features.Translations.DTO;
 using MainService.AL.Features.Translations.Services;
 using MainService.AL.Features.Words.DTO;
 using MainService.AL.Features.Words.Services;
 using MainService.AL.Words.Interfaces;
+using MainService.BLL.Data.Lessons;
 using MainService.BLL.Data.Translations.Repository;
 using MainService.BLL.Data.Words.Repository;
 using MainService.DAL;
@@ -53,11 +55,15 @@ public static class ServiceCollectionExtension
         services.AddScoped<IWordRepository, WordRepository>();
         services.AddScoped<IUserWordRepository, UserWordRepository>();
         services.AddScoped<ITranslationRepository, TranslationRepository>();
+        services.AddScoped<ILessonRepository, LessonRepository>();
+        services.AddScoped<ITestRepository, TestRepository>();
 
-        // Services (Application Layer)
+        // Services (IL)
         services.AddScoped<IWordService, WordService>();
         services.AddScoped<IUserWordService, UserWordService>();
         services.AddScoped<ITranslationService, TranslationService>();
+        services.AddScoped<ILessonService, LessonService>();
+        services.AddScoped<ITestService, TestService>();
         
         //Controllers
         services.AddControllers();

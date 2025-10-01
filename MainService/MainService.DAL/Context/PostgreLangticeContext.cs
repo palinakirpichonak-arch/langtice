@@ -16,7 +16,6 @@ public class PostgreLangticeContext(DbContextOptions<PostgreLangticeContext> opt
     public DbSet<Language> Languages { get; set; }
     public DbSet<Course> Courses { get; set; }
     public DbSet<Lesson> Lessons { get; set; }
-    public DbSet<LessonСontent> LessonContents { get; set; }
     public DbSet<UserWord> UserWords { get; set; }
     public DbSet<UserCourse> UserCourses { get; set; }
     public DbSet<Translation> Translations { get; set; }
