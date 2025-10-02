@@ -14,4 +14,9 @@ public class UserWordRepository : Repository<UserWord, UserWordKey>, IUserWordRe
     {
         _dbContext = dbContext;
     }
+
+    public async Task<UserWord?> GetByIdsAsync(Guid userId, Guid wordId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.UserWords.FindAsync(new object[] { userId, wordId }, cancellationToken);
+    }
 }

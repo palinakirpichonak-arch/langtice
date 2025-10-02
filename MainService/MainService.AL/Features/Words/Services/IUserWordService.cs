@@ -6,5 +6,5 @@ using MainService.DAL.Models;
 public interface IUserWordService : IService<UserWord,UserWordDTO, UserWordKey>
 {
     Task<IEnumerable<UserWord>> GetAllByUserIdAsync(Guid userId, CancellationToken cancellationToken);
-    new Task<UserWord?> GetByIdAsync(UserWordKey key, CancellationToken cancellationToken);
+    Task<UserWord?> GetByIdsAsync(Guid userId, Guid wordId, CancellationToken cancellationToken);
 }

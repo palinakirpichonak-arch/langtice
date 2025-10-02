@@ -23,8 +23,7 @@ namespace MainService.PL.Words.Controllers
         [HttpGet("{userId}/{wordId}")]
         public async Task<IActionResult> GetUserWord(Guid userId, Guid wordId, CancellationToken cancellationToken)
         {
-            UserWordKey key = new UserWordKey { UserId = userId, WordId = wordId };
-            var userWord = await _service.GetByIdAsync(key, cancellationToken);
+            var userWord = await _service.GetByIdsAsync(userId, wordId, cancellationToken);
             if (userWord == null) return NotFound();
             return Ok(userWord);
         }
