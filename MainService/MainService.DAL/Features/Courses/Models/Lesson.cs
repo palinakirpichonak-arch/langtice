@@ -1,7 +1,7 @@
 ﻿using MainService.DAL.Abstractions;
-using MainService.DAL.Features.Courses.Models;
+using MainService.DAL.Models;
 
-namespace MainService.DAL.Models;
+namespace MainService.DAL.Features.Courses.Models;
 
 public class Lesson : IEntity<Guid>
 {
@@ -10,6 +10,6 @@ public class Lesson : IEntity<Guid>
     public Course Course { get; set; } = null!;
     public string Name { get; set; } = null!;
     public string? Description { get; set; }
+    public string? TestId { get; set; }
     public int OrderNum { get; set; }
-    public ICollection<LessonСontent> LessonContents { get; set; } = new List<LessonСontent>();
 }

@@ -2,6 +2,6 @@
 
 public interface IMapper<TEntity>
 {
-    TEntity ToEntity();       // Convert DTO to new entity
-    void MapTo(TEntity entity); // Map DTO properties to existing entity
+    TEntity ToEntity();     
+    void MapTo(TEntity entity); 
 }

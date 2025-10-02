@@ -21,6 +21,7 @@ services:
       DB_PASS: ${POSTGRES_PASSWORD}
       MONGO_CONNECTION: ${MONGO_CONNECTION}
       MONGO_DB: ${MONGO_DB}
+      ASPNETCORE_ENVIRONMENT: Development
 
   postgre-db:
     container_name: langtice-postgre-db
