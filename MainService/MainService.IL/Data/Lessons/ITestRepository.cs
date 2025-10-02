@@ -2,6 +2,6 @@
 
 namespace MainService.BLL.Data.Lessons;
 
-public interface ITestRepository : IMongoRepository<Test>
+public interface ITestRepository : IMongoRepository<Test, string>
 {
 }

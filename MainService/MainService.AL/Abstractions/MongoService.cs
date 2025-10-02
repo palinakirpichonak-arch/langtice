@@ -1,23 +1,21 @@
 ﻿using MainService.AL.Mappers;
 using MainService.DAL.Abstractions;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+using MongoDB.Bson;
 
 namespace MainService.AL.Abstractions;
 
-public abstract class MongoService<T, TDto> : IMongoService<T, TDto>
+public abstract class MongoService<T, TDto, TKey> : IMongoService<T, TDto, TKey>
     where T : class
     where TDto : IMapper<T>
 {
-    protected readonly IMongoRepository<T> _repository;
+    protected readonly IMongoRepository<T, TKey> _repository;
 
-    public MongoService(IMongoRepository<T> repository)
+    public MongoService(IMongoRepository<T, TKey> repository)
     {
         _repository = repository;
     }
 
-    public async Task<T?> GetByIdAsync(string id, CancellationToken cancellationToken)
+    public async Task<T?> GetByIdAsync(TKey id, CancellationToken cancellationToken)
     {
         return await _repository.GetByIdAsync(id, cancellationToken);
     }
@@ -34,7 +32,7 @@ public abstract class MongoService<T, TDto> : IMongoService<T, TDto>
         return entity;
     }
 
-    public async Task<T> UpdateAsync(string id, TDto dto, CancellationToken cancellationToken)
+    public async Task<T> UpdateAsync(TKey id, TDto dto, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetByIdAsync(id, cancellationToken);
         if (entity == null)
@@ -45,7 +43,7 @@ public abstract class MongoService<T, TDto> : IMongoService<T, TDto>
         return entity;
     }
 
-    public async Task DeleteAsync(string id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(TKey id, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetByIdAsync(id, cancellationToken);
         if (entity != null)

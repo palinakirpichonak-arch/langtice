@@ -1,5 +1,6 @@
 ﻿using MainService.AL.Mappers;
 using MainService.DAL.Features.Courses.Models;
+using MongoDB.Bson;
 
 namespace MainService.AL.Features.Lessons.DTO;
 
@@ -12,6 +13,7 @@ public class TestDto : IMapper<Test>
     {
         return new Test
         {
+            Id = ObjectId.GenerateNewId().ToString(),
             Title = Title,
             Questions = new List<Question>(Questions)
         };

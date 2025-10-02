@@ -58,7 +58,7 @@ public static class ServiceCollectionExtension
         services.AddScoped<ILessonRepository, LessonRepository>();
         services.AddScoped<ITestRepository, TestRepository>();
 
-        // Services (IL)
+        // Services (AL)
         services.AddScoped<IWordService, WordService>();
         services.AddScoped<IUserWordService, UserWordService>();
         services.AddScoped<ITranslationService, TranslationService>();
@@ -67,5 +67,9 @@ public static class ServiceCollectionExtension
         
         //Controllers
         services.AddControllers();
+        
+        //Swagger
+       services.AddEndpointsApiExplorer();
+       services.AddSwaggerGen();
     }
 }

@@ -1,9 +1,11 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 namespace MainService.DAL.Features.Courses.Models;
 
 public class Question
 {
-    [BsonElement("QuestionNumber")]
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
     public string QuestionNumber { get; set; }
 
     [BsonElement("Sentence")]

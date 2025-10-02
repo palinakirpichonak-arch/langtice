@@ -1,9 +1,10 @@
 ﻿using MainService.DAL.Context;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
 
 namespace MainService.DAL.Abstractions;
 
-public abstract class MongoRepository<T> : IMongoRepository<T>   where T : class
+public abstract class MongoRepository<T, TKey> : IMongoRepository<T, TKey>   where T : class
 {
     private readonly MongoLangticeContext _dbContext;
 
@@ -17,7 +18,7 @@ public abstract class MongoRepository<T> : IMongoRepository<T>   where T : class
         return await _dbContext.Set<T>().ToListAsync(cancellationToken);
     }
 
-    public async Task<T> GetByIdAsync(string id, CancellationToken cancellationToken)
+    public async Task<T> GetByIdAsync(TKey id, CancellationToken cancellationToken)
     {
         return await _dbContext.Set<T>().FindAsync(id, cancellationToken);
     }
@@ -25,7 +26,7 @@ public abstract class MongoRepository<T> : IMongoRepository<T>   where T : class
     public async Task AddAsync(T entity, CancellationToken cancellationToken)
     {
         await _dbContext.Set<T>().AddAsync(entity, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        // await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task UpdateAsync(T entity, CancellationToken cancellationToken)
@@ -37,7 +38,7 @@ public abstract class MongoRepository<T> : IMongoRepository<T>   where T : class
         }
     }
 
-    public async Task DeleteAsync(string id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(TKey id, CancellationToken cancellationToken)
     {
         var item = await _dbContext.Set<T>().FindAsync(id, cancellationToken);
         if (_dbContext.Set<T>().Contains(item))

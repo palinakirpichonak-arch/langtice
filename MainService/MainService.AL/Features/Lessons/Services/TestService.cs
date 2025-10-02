@@ -1,12 +1,14 @@
 ﻿using MainService.AL.Abstractions;
 using MainService.AL.Features.Lessons.DTO;
+using MainService.BLL.Data.Lessons;
 using MainService.DAL.Abstractions;
+using MongoDB.Bson;
 
 namespace MainService.AL.Features.Lessons.Services;
 
-public class TestService : MongoService<Test, TestDto>, ITestService
+public class TestService : MongoService<Test, TestDto,string>, ITestService
 {
-    public TestService(IMongoRepository<Test> repository) : base(repository)
+    public TestService(ITestRepository repository) : base(repository)
     {
     }
     
