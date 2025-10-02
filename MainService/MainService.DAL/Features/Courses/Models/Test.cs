@@ -1,6 +1,6 @@
-﻿using MainService.DAL.Features.Courses.Models;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+namespace MainService.DAL.Features.Courses.Models;
 
 public class Test
 {
