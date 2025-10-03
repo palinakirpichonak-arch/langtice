@@ -2,9 +2,7 @@
 using MainService.AL.Words.Interfaces;
 using MainService.DAL.Features.Words.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+using MapsterMapper;
 
 namespace MainService.PL.Words.Controllers
 {
@@ -13,10 +11,11 @@ namespace MainService.PL.Words.Controllers
     public class WordsController : ControllerBase
     {
         private readonly IWordService _wordService;
-
-        public WordsController(IWordService wordService)
+        private readonly IMapper _mapper;
+        public WordsController(IWordService wordService,  IMapper mapper)
         {
             _wordService = wordService;
+            _mapper = mapper;
         }
 
         // GET words/{id}
@@ -30,13 +29,13 @@ namespace MainService.PL.Words.Controllers
 
         // POST words/
         [HttpPost]
-        public async Task<IActionResult> CreateWord([FromBody] WordDto dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateWord([FromBody] RequestWordDto dto, CancellationToken cancellationToken)
         {
             if (dto == null) return BadRequest();
             
             await _wordService.CreateAsync(dto, cancellationToken);
 
-            var word = dto.ToEntity();
+            var word = _mapper.Map<Word>(dto);
             return CreatedAtAction(nameof(GetWordById), new { id = word.Id }, word);
         }
         // DELETE words/

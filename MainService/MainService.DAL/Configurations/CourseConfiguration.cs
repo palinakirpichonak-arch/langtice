@@ -13,14 +13,16 @@ public class CourseConfiguration : IEntityTypeConfiguration<Course>
         //----Course----
         modelBuilder
             .HasOne(c => c.LearningLanguage)
-            .WithMany(l => l.CoursesAsLearning)
+            .WithMany()
             .HasForeignKey(c => c.LearningLanguageId)
             .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder
             .HasOne(c => c.BaseLanguage)
-            .WithMany(l => l.CoursesAsBase)
+            .WithMany()
             .HasForeignKey(c => c.BaseLanguageId)
             .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Property(c => c.Status)
+            .HasDefaultValue(true);
     }
 }

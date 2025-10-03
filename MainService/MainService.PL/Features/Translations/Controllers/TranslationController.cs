@@ -1,6 +1,5 @@
 ﻿using MainService.AL.Features.Translations.DTO;
 using MainService.AL.Features.Translations.Services;
-using MainService.DAL.Features.Translations.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Translations.Controllers;
@@ -34,7 +33,7 @@ public class TranslationsController : ControllerBase
         if (translation == null) return BadRequest();
 
         var created = await _service.CreateAsync(translation, cancellationToken);
-        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        return CreatedAtAction(nameof(GetById), new {  }, created);
     }
     
     // DELETE translations/{id}

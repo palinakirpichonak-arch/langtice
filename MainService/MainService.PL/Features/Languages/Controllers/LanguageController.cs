@@ -1,7 +1,5 @@
 ﻿using MainService.AL.Features.Languages.DTO;
-using MainService.AL.Features.Abstractions;
 using MainService.AL.Features.Languages.Services;
-using MainService.DAL.Features.Languages.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Languages.Controllers
@@ -38,7 +36,7 @@ namespace MainService.PL.Features.Languages.Controllers
         public async Task<IActionResult> Create([FromBody] LanguageDto dto, CancellationToken cancellationToken)
         {
             var created = await _languageService.CreateAsync(dto, cancellationToken);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            return CreatedAtAction(nameof(GetById), created);
         }
 
         [HttpDelete("{id:guid}")]

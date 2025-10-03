@@ -36,7 +36,7 @@ namespace MainService.PL.Features.Lessons.Controllers
             if (dto == null) return BadRequest();
 
             var created = await _lessonService.CreateAsync(dto, cancellationToken);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            return CreatedAtAction(nameof(GetById), new {  }, created);
         }
         
         [HttpPut("{id}")]

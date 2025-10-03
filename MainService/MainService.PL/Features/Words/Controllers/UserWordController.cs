@@ -1,10 +1,6 @@
 ﻿using MainService.AL.Features.Words.DTO;
-using MainService.AL.Words.Interfaces;
-using MainService.DAL.Features.Words.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+using MapsterMapper;
 
 namespace MainService.PL.Words.Controllers
 {
@@ -13,10 +9,11 @@ namespace MainService.PL.Words.Controllers
     public class UserWordsController : ControllerBase
     {
         private readonly IUserWordService _service;
-
-        public UserWordsController(IUserWordService service)
+        private IMapper _mapper;
+        public UserWordsController(IUserWordService service,  IMapper mapper)
         {
             _service = service;
+            _mapper = mapper;
         }
 
         // GET api/userwords/{userId}/{wordId}
@@ -40,20 +37,14 @@ namespace MainService.PL.Words.Controllers
         [HttpPost]
         public async Task<IActionResult> AddUserWord([FromBody] UserWordDTO dto, CancellationToken cancellationToken)
         {
-            if (dto == null) return BadRequest();
-
-            var entity = dto.ToEntity();
-            await _service.CreateAsync(dto, cancellationToken);
-            return CreatedAtAction(nameof(GetUserWord), new { userId = entity.UserId, wordId = entity.WordId }, entity);
+            return Ok();
         }
 
         // DELETE api/userwords/{userId}/{wordId}
         [HttpDelete("{userId}/{wordId}")]
         public async Task<IActionResult> DeleteUserWord(Guid userId, Guid wordId, CancellationToken cancellationToken)
         {
-            UserWordKey key = new UserWordKey { UserId = userId, WordId = wordId };
-            await _service.DeleteAsync(key, cancellationToken);
-            return NoContent();
+            return Ok();
         }
     }
 }

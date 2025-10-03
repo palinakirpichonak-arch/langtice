@@ -20,6 +20,8 @@ public class UserCourseController : ControllerBase
     [HttpGet("user/{userId}")]
     public async Task<IActionResult> GetUserCourses(Guid userId, CancellationToken cancellationToken)
     {
+        if(userId == Guid.Empty)
+            return BadRequest();
         var courses = await _userCourseService.GetAllByUserIdAsync(userId, cancellationToken);
         return Ok(courses);
     }
@@ -39,7 +41,7 @@ public class UserCourseController : ControllerBase
     public async Task<IActionResult> AddUserCourse([FromBody] UserCourseDto dto, CancellationToken cancellationToken)
     {
         var entity = await _userCourseService.CreateAsync(dto, cancellationToken);
-        return CreatedAtAction(nameof(GetUserCourse), new { userId = entity.UserId, courseId = entity.CourseId }, entity);
+        return CreatedAtAction(nameof(GetUserCourse), new {  }, entity);
     }
 
     // DELETE: api/usercourse/{userId}/{courseId}

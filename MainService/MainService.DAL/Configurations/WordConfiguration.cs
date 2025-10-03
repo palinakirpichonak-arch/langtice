@@ -10,7 +10,7 @@ public class WordConfiguration  : IEntityTypeConfiguration<Word>
     {
         builder
             .HasOne(w => w.Language)
-            .WithMany(l => l.Words)
+            .WithMany()
             .HasForeignKey(w => w.LanguageId);
     }
 }

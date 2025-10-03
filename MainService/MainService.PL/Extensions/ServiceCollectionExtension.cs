@@ -1,28 +1,22 @@
-﻿using MainService.AL.Features.Abstractions;
-using MainService.AL.Features.Courses.Services;
+﻿using MainService.AL.Features.Courses.Services;
 using MainService.AL.Features.Languages.Services;
 using MainService.AL.Features.Lessons.Services;
-using MainService.AL.Features.Translations.DTO;
 using MainService.AL.Features.Translations.Services;
-using MainService.AL.Features.Words.DTO;
 using MainService.AL.Features.Words.Services;
+using MainService.AL.Mappers;
 using MainService.AL.Words.Interfaces;
 using MainService.BLL.Data.Courses;
 using MainService.BLL.Data.Languages;
 using MainService.BLL.Data.Lessons;
 using MainService.BLL.Data.Translations.Repository;
 using MainService.BLL.Data.Words.Repository;
-using MainService.DAL;
 using MainService.DAL.Abstractions;
 using MainService.DAL.Context;
 using MainService.DAL.Features.Courses.Models;
-using MainService.DAL.Features.Translations.Models;
-using MainService.DAL.Features.Words.Models;
 using MainService.DAL.Services;
 using MainService.IL.Translations.Services;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
-using MongoDB.Bson;
-using MongoDB.Driver;
 
 namespace MainService.PL.Extensions;
 
@@ -77,6 +71,10 @@ public static class ServiceCollectionExtension
         
         //Controllers
         services.AddControllers();
+
+        //Mappers
+        services.AddMapster();
+        MapsterConfig.Configure();
         
         //Swagger
        services.AddEndpointsApiExplorer();

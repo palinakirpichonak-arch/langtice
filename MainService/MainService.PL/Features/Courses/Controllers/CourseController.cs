@@ -26,7 +26,7 @@ namespace MainService.PL.Features.Courses.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
-            var courses = await _courseService.GetAllAsync(cancellationToken);
+            var courses = await _courseService.GetAllItemsAdminAsync(cancellationToken);
             return Ok(courses);
         }
         
@@ -47,12 +47,6 @@ namespace MainService.PL.Features.Courses.Controllers
             var updatedCourse = await _courseService.UpdateAsync(id, dto, cancellationToken);
             return Ok(updatedCourse);
         }
-        
-        [HttpPatch("{id:guid}/status")]
-        public async Task<IActionResult> ChangeStatus(Guid id, CancellationToken cancellationToken)
-        {
-            await _courseService.ChangeStatusAsync(id, cancellationToken);
-            return NoContent();
-        }
+
     }
 }

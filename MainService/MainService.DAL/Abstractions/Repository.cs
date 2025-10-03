@@ -18,7 +18,7 @@ public abstract class Repository<TEntity, TKey> :
         return await _dbContext.Set<TEntity>().FindAsync([id], cancellationToken);
     }
 
-    public async Task<IEnumerable<TEntity>> GetAllItemsByAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<TEntity>> GetAllItemsAsync(CancellationToken cancellationToken)
     {
        return await _dbContext.Set<TEntity>().ToListAsync(cancellationToken);
     }
