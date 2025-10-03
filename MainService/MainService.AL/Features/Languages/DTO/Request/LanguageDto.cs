@@ -16,7 +16,7 @@ namespace MainService.AL.Features.Languages.DTO
             };
         }
         
-        public void MapTo(Language entity)
+        public void ToDto(Language entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 

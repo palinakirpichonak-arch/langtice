@@ -1,4 +1,5 @@
 ﻿using MainService.AL.Features.Lessons.DTO;
+using MainService.AL.Features.Lessons.DTO.Request;
 using Microsoft.AspNetCore.Mvc;
 using MainService.AL.Features.Lessons.Services;
 using MongoDB.Bson;
@@ -16,6 +17,15 @@ public class TestController : ControllerBase
         _testService = testService;
     }
 
+    // GET /tests/{id} - Get a single test for editing for example
+    [HttpGet]
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    {
+        var test = await _testService.GetAllAsync(cancellationToken);
+        if (test == null) return NotFound();
+        return Ok(test);
+    }
+    
     // GET /tests/{id} - Get a single test for editing for example
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTestById(string id, CancellationToken cancellationToken)

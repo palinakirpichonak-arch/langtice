@@ -24,7 +24,7 @@ public class LessonDto : IMapper<Lesson>
         };
     }
 
-    public void MapTo(Lesson entity)
+    public void ToDto(Lesson entity)
     {
         entity.CourseId = CourseId;
         entity.Name = Name;

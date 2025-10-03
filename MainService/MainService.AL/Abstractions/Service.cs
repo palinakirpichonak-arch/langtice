@@ -37,7 +37,7 @@ namespace MainService.IL.Services
             var entity = await _repository.GetItemByIdAsync(id, cancellationToken);
             if (entity == null) throw new KeyNotFoundException($"Entity {id} not found");
 
-            dto.MapTo(entity);
+            dto.ToDto(entity);
             await _repository.UpdateItemAsync(entity, cancellationToken);
             return entity;
         }

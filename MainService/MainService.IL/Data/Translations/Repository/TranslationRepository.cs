@@ -9,9 +9,9 @@ namespace MainService.BLL.Data.Translations.Repository;
 
 public class TranslationRepository : Repository<Translation,Guid>, ITranslationRepository
 {
-    private readonly PostgreLangticeContext _dbContext;
+    private readonly PostgreDbContext _dbContext;
 
-    public TranslationRepository(PostgreLangticeContext dbContext) :  base(dbContext)
+    public TranslationRepository(PostgreDbContext dbContext) :  base(dbContext)
     {
         _dbContext = dbContext;
     }

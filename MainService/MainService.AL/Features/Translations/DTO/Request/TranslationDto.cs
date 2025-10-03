@@ -19,7 +19,7 @@ public class TranslationDto : IMapper<Translation>
         };
     }
 
-    public void MapTo(Translation entity)
+    public void ToDto(Translation entity)
     {
         entity.FromWordId = FromWordId;
         entity.ToWordId = ToWordId;

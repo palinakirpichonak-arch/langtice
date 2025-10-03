@@ -17,7 +17,7 @@ public class WordDto : IMapper<Word>
         };
     }
 
-    public void MapTo(Word entity)
+    public void ToDto(Word entity)
     {
         if (entity == null) throw new ArgumentNullException(nameof(entity));
 

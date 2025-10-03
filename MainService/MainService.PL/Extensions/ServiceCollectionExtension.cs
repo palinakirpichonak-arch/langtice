@@ -1,16 +1,21 @@
 ﻿using MainService.AL.Features.Abstractions;
+using MainService.AL.Features.Courses.Services;
+using MainService.AL.Features.Languages.Services;
 using MainService.AL.Features.Lessons.Services;
 using MainService.AL.Features.Translations.DTO;
 using MainService.AL.Features.Translations.Services;
 using MainService.AL.Features.Words.DTO;
 using MainService.AL.Features.Words.Services;
 using MainService.AL.Words.Interfaces;
+using MainService.BLL.Data.Courses;
+using MainService.BLL.Data.Languages;
 using MainService.BLL.Data.Lessons;
 using MainService.BLL.Data.Translations.Repository;
 using MainService.BLL.Data.Words.Repository;
 using MainService.DAL;
 using MainService.DAL.Abstractions;
 using MainService.DAL.Context;
+using MainService.DAL.Features.Courses.Models;
 using MainService.DAL.Features.Translations.Models;
 using MainService.DAL.Features.Words.Models;
 using MainService.DAL.Services;
@@ -25,7 +30,7 @@ public static class ServiceCollectionExtension
 {
     public static void ConfigureDbContext(this IServiceCollection services)
     {
-        services.AddDbContext<PostgreLangticeContext>(options =>
+        services.AddDbContext<PostgreDbContext>(options =>
         {
             var host = Environment.GetEnvironmentVariable("DB_HOST");
             var port = Environment.GetEnvironmentVariable("DB_PORT");
@@ -37,14 +42,11 @@ public static class ServiceCollectionExtension
             options.UseNpgsql(connectionString);
         });
         
-        services.AddDbContext<MongoLangticeContext>(options =>
-        {
-            var connection = Environment.GetEnvironmentVariable("MONGO_CONNECTION");
-            var database = Environment.GetEnvironmentVariable("MONGO_DB");
-
-            var client = new MongoClient(connection);
-            options.UseMongoDB(client, database);
-        });
+        services.AddSingleton<MongoDbContext>(sp =>
+            new MongoDbContext(
+                Environment.GetEnvironmentVariable("MONGO_CONNECTION"),
+                Environment.GetEnvironmentVariable("MONGO_DB")
+            ));
     }
     public static void ConfigureServices(this IServiceCollection services)
     {
@@ -55,13 +57,21 @@ public static class ServiceCollectionExtension
         services.AddScoped<IWordRepository, WordRepository>();
         services.AddScoped<IUserWordRepository, UserWordRepository>();
         services.AddScoped<ITranslationRepository, TranslationRepository>();
+        services.AddScoped<ICourseRepository, CourseRepository>();
+        services.AddScoped<IUserCourseRepository, UserCourseRepository>();
+        services.AddScoped<ILanguageRepository, LanguageRepository>();
         services.AddScoped<ILessonRepository, LessonRepository>();
         services.AddScoped<ITestRepository, TestRepository>();
+        services.AddScoped<IMongoRepository<Test, string>>(sp =>
+            new MongoRepository<Test, string>(sp.GetRequiredService<MongoDbContext>(), "tests"));
 
         // Services (AL)
         services.AddScoped<IWordService, WordService>();
         services.AddScoped<IUserWordService, UserWordService>();
         services.AddScoped<ITranslationService, TranslationService>();
+        services.AddScoped<ICourseService, CourseService>();
+        services.AddScoped<IUserCourseService, UserCourseService>();
+        services.AddScoped<ILanguageService, LanguageService>();
         services.AddScoped<ILessonService, LessonService>();
         services.AddScoped<ITestService, TestService>();
         

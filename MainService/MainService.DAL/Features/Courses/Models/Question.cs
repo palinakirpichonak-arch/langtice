@@ -5,8 +5,7 @@ namespace MainService.DAL.Features.Courses.Models;
 public class Question
 {
     [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string QuestionNumber { get; set; }
+    public int QuestionNumber { get; set; }
 
     [BsonElement("Sentence")]
     public string Sentence { get; set; } = null!;

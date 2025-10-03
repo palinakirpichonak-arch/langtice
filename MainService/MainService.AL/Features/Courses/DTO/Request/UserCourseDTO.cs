@@ -17,7 +17,7 @@ public class UserCourseDto : IMapper<UserCourse>
         };
     }
 
-    public void MapTo(UserCourse entity)
+    public void ToDto(UserCourse entity)
     {
         entity.UserId = UserId;
         entity.CourseId = CourseId;

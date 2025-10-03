@@ -1,50 +1,37 @@
-﻿using MainService.DAL.Context;
-using Microsoft.EntityFrameworkCore;
-using MongoDB.Bson;
+﻿using MongoDB.Driver;
+using MainService.DAL.Abstractions;
+using MainService.DAL.Context;
 
-namespace MainService.DAL.Abstractions;
-
-public abstract class MongoRepository<T, TKey> : IMongoRepository<T, TKey>   where T : class
+public class MongoRepository<T, TKey> : IMongoRepository<T, TKey> where T : class
 {
-    private readonly MongoLangticeContext _dbContext;
+    private readonly IMongoCollection<T> _collection;
 
-    public MongoRepository(MongoLangticeContext dbContext)
+    public MongoRepository(MongoDbContext context, string collectionName)
     {
-        _dbContext = dbContext;
+        _collection = context.GetCollection<T>(collectionName);
     }
-    
-    public async Task<List<T>> GetAllAsync(CancellationToken cancellationToken)
-    {
-        return await _dbContext.Set<T>().ToListAsync(cancellationToken);
-    }
+
+    public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken)
+        => await _collection.Find(_ => true).ToListAsync(cancellationToken);
 
     public async Task<T> GetByIdAsync(TKey id, CancellationToken cancellationToken)
     {
-        return await _dbContext.Set<T>().FindAsync(id, cancellationToken);
+        var filter = Builders<T>.Filter.Eq("Id", id);
+        return await _collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task AddAsync(T entity, CancellationToken cancellationToken)
-    {
-        await _dbContext.Set<T>().AddAsync(entity, cancellationToken);
-        // await _dbContext.SaveChangesAsync(cancellationToken);
-    }
+        => await _collection.InsertOneAsync(entity, null, cancellationToken);
 
-    public async Task UpdateAsync(T entity, CancellationToken cancellationToken)
+    public async Task UpdateAsync(TKey id, T entity, CancellationToken cancellationToken)
     {
-        if (_dbContext.Set<T>().Contains(entity))
-        {
-            _dbContext.Set<T>().Update(entity);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-        }
+        var filter = Builders<T>.Filter.Eq("Id", id);
+        await _collection.ReplaceOneAsync(filter, entity, new ReplaceOptions(), cancellationToken);
     }
 
     public async Task DeleteAsync(TKey id, CancellationToken cancellationToken)
     {
-        var item = await _dbContext.Set<T>().FindAsync(id, cancellationToken);
-        if (_dbContext.Set<T>().Contains(item))
-        {
-            _dbContext.Set<T>().Remove(item);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-        }
+        var filter = Builders<T>.Filter.Eq("Id", id);
+        await _collection.DeleteOneAsync(filter, cancellationToken);
     }
 }

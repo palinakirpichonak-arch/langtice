@@ -1,11 +1,12 @@
 ﻿using MainService.AL.Mappers;
 using MainService.DAL.Features.Courses.Models;
+using MongoDB.Bson;
 
 namespace MainService.AL.Features.Lessons.DTO;
 
 public class QuestionDto : IMapper<Question>
 {
-    public string QuestionNumber { get; set; } = null!;
+    public int QuestionNumber { get; set; }
     public string Sentence { get; set; } = null!;
     public string[] AnswerOptions { get; set; } = null!;
     
@@ -19,7 +20,7 @@ public class QuestionDto : IMapper<Question>
         };
     }
     
-    public void MapTo(Question entity)
+    public void ToDto(Question entity)
     {
         entity.QuestionNumber = QuestionNumber;
         entity.Sentence = Sentence;

@@ -8,9 +8,9 @@ namespace MainService.BLL.Data.Words.Repository;
 
 public class WordRepository : Repository<Word, Guid>, IWordRepository
 {
-    private readonly PostgreLangticeContext _dbContext;
+    private readonly PostgreDbContext _dbContext;
 
-    public WordRepository(PostgreLangticeContext dbContext) : base(dbContext)
+    public WordRepository(PostgreDbContext dbContext) : base(dbContext)
     {
         _dbContext = dbContext;
     }

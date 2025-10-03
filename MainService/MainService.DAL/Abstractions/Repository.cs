@@ -6,9 +6,9 @@ namespace MainService.DAL.Abstractions;
 public abstract class Repository<TEntity, TKey> : 
         IRepository<TEntity, TKey>  where TEntity : class, IEntity<TKey>
 {
-    private readonly PostgreLangticeContext _dbContext;
+    private readonly PostgreDbContext _dbContext;
 
-    protected Repository(PostgreLangticeContext dbContext)
+    protected Repository(PostgreDbContext dbContext)
     {
         _dbContext = dbContext;   
     }

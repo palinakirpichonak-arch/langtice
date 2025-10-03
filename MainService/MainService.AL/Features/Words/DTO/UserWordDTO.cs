@@ -16,13 +16,12 @@ public class UserWordDTO : IMapper<UserWord>
             AddedAt = DateTime.UtcNow
         };
     }
-    public void MapTo(UserWord entity)
+    public void ToDto(UserWord entity)
     {
         if (entity == null) throw new ArgumentNullException(nameof(entity));
 
         entity.UserId = this.UserId;
         entity.WordId = this.WordId;
-        // Optional: update timestamp
         entity.AddedAt = DateTime.UtcNow;
     }
 }

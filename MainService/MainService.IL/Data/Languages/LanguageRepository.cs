@@ -6,7 +6,7 @@ namespace MainService.BLL.Data.Languages;
 
 public class LanguageRepository : Repository<Language, Guid>, ILanguageRepository
 {
-    public LanguageRepository(PostgreLangticeContext dbContext) : base(dbContext)
+    public LanguageRepository(PostgreDbContext dbContext) : base(dbContext)
     {
     }
 }

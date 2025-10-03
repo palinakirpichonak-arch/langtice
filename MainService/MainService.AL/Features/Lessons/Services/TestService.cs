@@ -1,7 +1,9 @@
 ﻿using MainService.AL.Abstractions;
 using MainService.AL.Features.Lessons.DTO;
+using MainService.AL.Features.Lessons.DTO.Request;
 using MainService.BLL.Data.Lessons;
 using MainService.DAL.Abstractions;
+using MainService.DAL.Features.Courses.Models;
 using MongoDB.Bson;
 
 namespace MainService.AL.Features.Lessons.Services;
@@ -16,7 +18,7 @@ public class TestService : MongoService<Test, TestDto,string>, ITestService
     {
         var test = await _repository.GetByIdAsync(testId,cancellationToken);
         ActiveTestDto activeTest = new();
-        activeTest.MapTo(test);
+        activeTest.ToDto(test);
         
         return activeTest;
     }

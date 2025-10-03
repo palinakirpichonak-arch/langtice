@@ -3,5 +3,5 @@
 public interface IMapper<TEntity>
 {
     TEntity ToEntity();     
-    void MapTo(TEntity entity); 
+    void ToDto(TEntity entity); 
 }

@@ -6,7 +6,7 @@ namespace MainService.BLL.Data.Courses;
 
 public class UserCourseRepository : Repository<UserCourse, UserCourseKey>, IUserCourseRepository
 {
-    public UserCourseRepository(PostgreLangticeContext dbContext) : base(dbContext)
+    public UserCourseRepository(PostgreDbContext dbContext) : base(dbContext)
     {
     }
 }

@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace MainService.DAL.Context;
 
-    public class LangticeContextFactory : IDesignTimeDbContextFactory<PostgreLangticeContext>
+    public class PostgreContextFactory : IDesignTimeDbContextFactory<PostgreDbContext>
     {
-        public PostgreLangticeContext CreateDbContext(string[] args)
+        public PostgreDbContext CreateDbContext(string[] args)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<PostgreLangticeContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<PostgreDbContext>();
             var host = Environment.GetEnvironmentVariable("DB_HOST");
             var port = Environment.GetEnvironmentVariable("DB_PORT");
             var db = Environment.GetEnvironmentVariable("DB_NAME");
@@ -17,7 +17,7 @@ namespace MainService.DAL.Context;
             var connectionString = $"Host={host};Port={port};Database={db};Username={username};Password={password}";
             optionsBuilder.UseNpgsql(connectionString);
             
-            return new PostgreLangticeContext(optionsBuilder.Options);
+            return new PostgreDbContext(optionsBuilder.Options);
         }
     }
 

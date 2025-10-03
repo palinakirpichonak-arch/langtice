@@ -38,8 +38,8 @@ public abstract class MongoService<T, TDto, TKey> : IMongoService<T, TDto, TKey>
         if (entity == null)
             throw new KeyNotFoundException($"Entity with id {id} not found");
 
-        dto.MapTo(entity);
-        await _repository.UpdateAsync(entity, cancellationToken);
+        dto.ToDto(entity);
+        await _repository.UpdateAsync(id,entity, cancellationToken);
         return entity;
     }
 

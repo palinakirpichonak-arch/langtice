@@ -20,7 +20,7 @@ namespace MainService.AL.Features.Courses.DTO
             };
         }
         
-        public void MapTo(Course entity)
+        public void ToDto(Course entity)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 

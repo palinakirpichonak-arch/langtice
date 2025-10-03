@@ -1,5 +1,7 @@
 ﻿using MainService.AL.Abstractions;
 using MainService.AL.Features.Lessons.DTO;
+using MainService.AL.Features.Lessons.DTO.Request;
+using MainService.DAL.Features.Courses.Models;
 using MongoDB.Bson;
 
 namespace MainService.AL.Features.Lessons.Services;

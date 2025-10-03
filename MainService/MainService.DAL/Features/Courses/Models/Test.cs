@@ -6,11 +6,9 @@ public class Test
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; } = null!;
+    public string Id { get; set; }
 
-    [BsonElement("Title")]
     public string Title { get; set; } = null!;
 
-    [BsonElement("Questions")]
     public List<Question> Questions { get; set; } = new();
 }

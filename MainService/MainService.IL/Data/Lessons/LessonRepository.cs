@@ -7,7 +7,7 @@ namespace MainService.BLL.Data.Lessons;
 
 public class LessonRepository : Repository<Lesson, Guid>, ILessonRepository
 {
-    public LessonRepository(PostgreLangticeContext dbContext) : base(dbContext)
+    public LessonRepository(PostgreDbContext dbContext) : base(dbContext)
     {
     }
 }

@@ -2,7 +2,7 @@
 using MainService.DAL.Features.Courses.Models;
 using MongoDB.Bson;
 
-namespace MainService.AL.Features.Lessons.DTO;
+namespace MainService.AL.Features.Lessons.DTO.Request;
 
 public class TestDto : IMapper<Test>
 {
@@ -19,7 +19,7 @@ public class TestDto : IMapper<Test>
         };
     }
     
-    public void MapTo(Test entity)
+    public void ToDto(Test entity)
     {
         entity.Title = this.Title;
         entity.Questions = new List<Question>(this.Questions);

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MainService.DAL.Context;
 
-public class PostgreLangticeContext(DbContextOptions<PostgreLangticeContext> options) : DbContext(options)
+public class PostgreDbContext(DbContextOptions<PostgreDbContext> options) : DbContext(options)
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Word> Words { get; set; }

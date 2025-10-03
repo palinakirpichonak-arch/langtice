@@ -1,5 +1,6 @@
 ﻿using MainService.AL.Features.Languages.DTO;
 using MainService.AL.Features.Abstractions;
+using MainService.AL.Features.Languages.Services;
 using MainService.DAL.Features.Languages.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +10,9 @@ namespace MainService.PL.Features.Languages.Controllers
     [Route("[controller]")]
     public class LanguageController : ControllerBase
     {
-        private readonly IService<Language, LanguageDto, Guid> _languageService;
+        private readonly ILanguageService _languageService;
 
-        public LanguageController(IService<Language, LanguageDto, Guid> languageService)
+        public LanguageController(ILanguageService languageService)
         {
             _languageService = languageService;
         }

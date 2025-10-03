@@ -1,4 +1,5 @@
 ﻿using MainService.AL.Mappers;
+using MainService.DAL.Features.Courses.Models;
 
 namespace MainService.AL.Features.Lessons.DTO;
 
@@ -16,7 +17,7 @@ public class ActiveTestDto : IMapper<Test>
         };
     }
     
-    public void MapTo(Test entity)
+    public void ToDto(Test entity)
     {
         Title = entity.Title;
         Questions = entity.Questions.Select(q => new QuestionDto
