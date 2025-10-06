@@ -1,20 +1,16 @@
-﻿using MainService.AL.Features.Words.DTO;
-using MainService.AL.Words.Interfaces;
-using MainService.DAL.Features.Words.Models;
+﻿using MainService.AL.Features.Words.DTO.Request;
+using MainService.AL.Features.Words.Services;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace MainService.PL.Words.Controllers
+namespace MainService.PL.Features.Words.Controllers
 {
     [Route("[controller]")]
     [ApiController]
     public class WordsController : ControllerBase
     {
         private readonly IWordService _wordService;
-
-        public WordsController(IWordService wordService)
+        public WordsController(IWordService wordService,  IMapper mapper)
         {
             _wordService = wordService;
         }
@@ -30,14 +26,13 @@ namespace MainService.PL.Words.Controllers
 
         // POST words/
         [HttpPost]
-        public async Task<IActionResult> CreateWord([FromBody] WordDto dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateWord([FromBody] RequestWordDto dto, CancellationToken cancellationToken)
         {
             if (dto == null) return BadRequest();
             
-            await _wordService.CreateAsync(dto, cancellationToken);
-
-            var word = dto.ToEntity();
-            return CreatedAtAction(nameof(GetWordById), new { id = word.Id }, word);
+            var created = await _wordService.CreateAsync(dto, cancellationToken);
+            
+            return CreatedAtAction(nameof(GetWordById), new { id = created.Id }, created);
         }
         // DELETE words/
         [HttpDelete("{id}")]

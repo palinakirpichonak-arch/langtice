@@ -1,10 +1,12 @@
-﻿using MainService.AL.Features.Abstractions;
-using MainService.AL.Features.Words.DTO;
-using MainService.DAL.Features.Words.Models;
-using MainService.DAL.Models;
+﻿using MainService.AL.Features.Words.DTO.Request;
+using MainService.AL.Features.Words.DTO.Response;
 
-public interface IUserWordService : IService<UserWord,UserWordDTO, UserWordKey>
+namespace MainService.AL.Features.Words.Services;
+
+public interface IUserWordService
 {
-    Task<IEnumerable<UserWord>> GetAllByUserIdAsync(Guid userId, CancellationToken cancellationToken);
-    new Task<UserWord?> GetByIdAsync(UserWordKey key, CancellationToken cancellationToken);
+    Task<IEnumerable<ResponseUserWordDto>> GetAllByUserIdAsync(Guid userId, CancellationToken cancellationToken);
+    Task<ResponseUserWordDto?> GetByIdsAsync(Guid userId, Guid wordId, CancellationToken cancellationToken);
+    Task<ResponseUserWordDto> CreateAsync(RequestUserWordDto dto, CancellationToken cancellationToken);
+    Task DeleteAsync(Guid userId, Guid wordId, CancellationToken cancellationToken);
 }

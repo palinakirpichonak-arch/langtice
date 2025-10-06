@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using MainService.DAL.Abstractions;
-using MainService.DAL.Features.Users.Models;
+﻿using MainService.DAL.Abstractions;
 
-namespace MainService.DAL.Models;
+namespace MainService.DAL.Features.Users.Models;
 
 public class UserInfo : IEntity<Guid>
 {

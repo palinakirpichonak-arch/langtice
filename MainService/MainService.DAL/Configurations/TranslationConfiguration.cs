@@ -10,13 +10,13 @@ public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
     {
         builder
             .HasOne(t => t.FromWord)
-            .WithMany(w => w.TranslationsFrom)
+            .WithMany()
             .HasForeignKey(t => t.FromWordId)
             .OnDelete(DeleteBehavior.Restrict); 
 
         builder
             .HasOne(t => t.ToWord)
-            .WithMany(w => w.TranslationsTo)
+            .WithMany()
             .HasForeignKey(t => t.ToWordId)
             .OnDelete(DeleteBehavior.Restrict);
         

@@ -1,7 +1,5 @@
-﻿using MainService.DAL;
-using MainService.DAL.Abstractions;
+﻿using MainService.DAL.Abstractions;
 using MainService.DAL.Features.Translations.Models;
-using MainService.DAL.Models;
 
 namespace MainService.BLL.Data.Translations.Repository;
 

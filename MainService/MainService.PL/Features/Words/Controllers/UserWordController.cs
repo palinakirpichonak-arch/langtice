@@ -1,30 +1,25 @@
-﻿using MainService.AL.Features.Words.DTO;
-using MainService.AL.Words.Interfaces;
-using MainService.DAL.Features.Words.Models;
+﻿using MainService.AL.Features.Words.DTO.Request;
+using MainService.AL.Features.Words.Services;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace MainService.PL.Words.Controllers
+namespace MainService.PL.Features.Words.Controllers
 {
     [Route("[controller]")]
     [ApiController]
     public class UserWordsController : ControllerBase
     {
-        private readonly IUserWordService _service;
-
-        public UserWordsController(IUserWordService service)
+        private readonly IUserWordService _userWordservice;
+        public UserWordsController(IUserWordService service,  IMapper mapper)
         {
-            _service = service;
+            _userWordservice = service;
         }
 
         // GET api/userwords/{userId}/{wordId}
         [HttpGet("{userId}/{wordId}")]
         public async Task<IActionResult> GetUserWord(Guid userId, Guid wordId, CancellationToken cancellationToken)
         {
-            UserWordKey key = new UserWordKey { UserId = userId, WordId = wordId };
-            var userWord = await _service.GetByIdAsync(key, cancellationToken);
+            var userWord = await _userWordservice.GetByIdsAsync(userId, wordId, cancellationToken);
             if (userWord == null) return NotFound();
             return Ok(userWord);
         }
@@ -33,27 +28,24 @@ namespace MainService.PL.Words.Controllers
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetUserWords(Guid userId, CancellationToken cancellationToken)
         {
-            var words = await _service.GetAllByUserIdAsync(userId, cancellationToken);
+            var words = await _userWordservice.GetAllByUserIdAsync(userId, cancellationToken);
             return Ok(words);
         }
 
         // POST api/userwords
         [HttpPost]
-        public async Task<IActionResult> AddUserWord([FromBody] UserWordDTO dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddUserWord([FromBody] RequestUserWordDto dto, CancellationToken cancellationToken)
         {
             if (dto == null) return BadRequest();
-
-            var entity = dto.ToEntity();
-            await _service.CreateAsync(dto, cancellationToken);
-            return CreatedAtAction(nameof(GetUserWord), new { userId = entity.UserId, wordId = entity.WordId }, entity);
+            var created = await _userWordservice.CreateAsync(dto, cancellationToken);
+            return Ok(created);
         }
 
         // DELETE api/userwords/{userId}/{wordId}
         [HttpDelete("{userId}/{wordId}")]
         public async Task<IActionResult> DeleteUserWord(Guid userId, Guid wordId, CancellationToken cancellationToken)
         {
-            UserWordKey key = new UserWordKey { UserId = userId, WordId = wordId };
-            await _service.DeleteAsync(key, cancellationToken);
+            await _userWordservice.DeleteAsync(userId, wordId, cancellationToken);
             return NoContent();
         }
     }

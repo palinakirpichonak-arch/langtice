@@ -1,9 +1,9 @@
 ﻿using MainService.AL.Features.Translations.DTO;
+using MainService.AL.Features.Translations.DTO.Request;
 using MainService.AL.Features.Translations.Services;
-using MainService.DAL.Features.Translations.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MainService.PL.Translations.Controllers;
+namespace MainService.PL.Features.Translations.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -29,7 +29,7 @@ public class TranslationsController : ControllerBase
     
     // POST translations
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] TranslationDto translation, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create([FromBody] RequestTranslationDto translation, CancellationToken cancellationToken)
     {
         if (translation == null) return BadRequest();
 
