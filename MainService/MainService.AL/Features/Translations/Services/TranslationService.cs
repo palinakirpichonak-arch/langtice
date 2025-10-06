@@ -30,7 +30,7 @@ public class TranslationService : ITranslationService
         return _mapper.Map<IEnumerable<ResponseTranslationDto>>(entities);
     }
 
-    public async Task<ResponseTranslationDto> CreateAsync(TranslationDto dto, CancellationToken cancellationToken)
+    public async Task<ResponseTranslationDto> CreateAsync(RequestTranslationDto dto, CancellationToken cancellationToken)
     {
         var entity = _mapper.Map<Translation>(dto);
         entity.Id = Guid.NewGuid();
@@ -38,7 +38,7 @@ public class TranslationService : ITranslationService
         return _mapper.Map<ResponseTranslationDto>(entity);
     }
 
-    public async Task<ResponseTranslationDto> UpdateAsync(Guid id, TranslationDto dto, CancellationToken cancellationToken)
+    public async Task<ResponseTranslationDto> UpdateAsync(Guid id, RequestTranslationDto dto, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetItemByIdAsync(id, cancellationToken);
         if (entity is null) throw new KeyNotFoundException($"Translation {id} not found");

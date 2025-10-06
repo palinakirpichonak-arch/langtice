@@ -1,4 +1,4 @@
-﻿namespace MainService.AL.Features.Words.DTO;
+﻿namespace MainService.AL.Features.Words.DTO.Request;
 
 public class RequestWordDto
 {

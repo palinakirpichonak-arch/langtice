@@ -3,6 +3,7 @@ using MainService.DAL.Abstractions;
 using MainService.DAL.Context;
 using MainService.DAL.Features.Words.Models;
 using MainService.DAL.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MainService.BLL.Data.Words.Repository;
 
@@ -14,9 +15,19 @@ public class UserWordRepository : Repository<UserWord, UserWordKey>, IUserWordRe
     {
         _dbContext = dbContext;
     }
-
-    public async Task<UserWord?> GetByIdsAsync(Guid userId, Guid wordId, CancellationToken cancellationToken)
+    
+    public override async Task<IEnumerable<UserWord>> GetAllItemsAsync(CancellationToken ct)
     {
-        return await _dbContext.UserWords.FindAsync(new object[] { userId, wordId }, cancellationToken);
+        return await _dbContext.UserWords
+            .Include(uw => uw.Word)
+            .ToListAsync(ct);
     }
+
+    public override async Task<UserWord?> GetItemByIdAsync(UserWordKey id, CancellationToken ct)
+    {
+        return await _dbContext.UserWords
+            .Include(uw => uw.Word)
+            .FirstOrDefaultAsync(uw => uw.UserId == id.UserId && uw.WordId == id.WordId, ct);
+    }
+    
 }

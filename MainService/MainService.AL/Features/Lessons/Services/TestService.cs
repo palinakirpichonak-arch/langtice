@@ -71,16 +71,14 @@ public class TestService : ITestService
     public async Task DeleteAsync(string id, CancellationToken cancellationToken)
     {
         await _testRepository.DeleteAsync(id, cancellationToken);
-        // var lessons = (await _lessonRepository
-        //     .GetAllItemsAsync(cancellationToken))
-        //     .Select(l => l)
-        //     .Where(l => l.TestId == id);
-        //
-        // foreach (var lesson in lessons)
-        // {
-        //     lesson.TestId = null;
-        // }
-        // _lessonRepository.UpdateItemAsync()
+        var lessons = await _lessonRepository.GetAllItemsAsync(cancellationToken);
+        var lessonsToUpdate =  lessons.Where(l => l.TestId == id);
+        
+        foreach (var lesson in lessonsToUpdate)
+        {
+            lesson.TestId = null;
+           await _lessonRepository.UpdateItemAsync(lesson, cancellationToken);
+        }
     }
 
     public async Task<(int correct, int mistake)> CheckTest(string testId, UserTestDto userTest, CancellationToken cancellationToken)

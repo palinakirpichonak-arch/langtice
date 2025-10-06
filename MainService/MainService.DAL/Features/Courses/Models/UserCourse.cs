@@ -1,15 +1,16 @@
-﻿using MainService.DAL.Abstractions;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using MainService.DAL.Abstractions;
 using MainService.DAL.Features.Users.Models;
-using MainService.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace MainService.DAL.Features.Courses.Models;
 
 public class UserCourse :  IEntity<UserCourseKey>
 {
+    [NotMapped]
     public UserCourseKey Id
     {
-        get => new();
+        get => new(UserId, CourseId);
         set
         {
             UserId = value.UserId;
@@ -25,7 +26,11 @@ public class UserCourse :  IEntity<UserCourseKey>
 [Owned]
 public class UserCourseKey
 {
-    public UserCourseKey() { }
+    public UserCourseKey(Guid userId, Guid courseId)
+    {
+        UserId = userId;
+        CourseId = courseId;
+    }
     public Guid UserId { get; set; }
     public Guid CourseId{get;set;}
 }

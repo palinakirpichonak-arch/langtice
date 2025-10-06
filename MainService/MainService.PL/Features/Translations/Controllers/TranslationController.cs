@@ -28,12 +28,12 @@ public class TranslationsController : ControllerBase
     
     // POST translations
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] TranslationDto translation, CancellationToken cancellationToken)
+    public async Task<IActionResult> Create([FromBody] RequestTranslationDto translation, CancellationToken cancellationToken)
     {
         if (translation == null) return BadRequest();
 
         var created = await _service.CreateAsync(translation, cancellationToken);
-        return CreatedAtAction(nameof(GetById), new {  }, created);
+        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
     
     // DELETE translations/{id}

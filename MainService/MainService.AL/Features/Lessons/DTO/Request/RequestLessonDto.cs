@@ -1,6 +1,6 @@
 ﻿namespace MainService.AL.Features.Lessons.DTO;
 
-public class LessonDto
+public class RequestLessonDto
 {
     public Guid CourseId { get; set; }
     public string Name { get; set; } = null!;

@@ -15,10 +15,4 @@ public class Word : IEntity<Guid>
     
     [JsonIgnore]
     public ICollection<UserWord>? UserWords { get; set; } = new List<UserWord>();
-    
-    [JsonIgnore]
-    public ICollection<Translation>? TranslationsFrom { get; set; } = new List<Translation>();
-    
-    [JsonIgnore]
-    public ICollection<Translation>? TranslationsTo { get; set; } = new List<Translation>();
 }

@@ -1,6 +1,10 @@
-﻿namespace MainService.AL.Features.Words.DTO;
+﻿using MainService.DAL.Features.Languages.Models;
+
+namespace MainService.AL.Features.Words.DTO.Response;
 
 public class ResponseWordDto
 {
+    public Guid Id { get; set; }
     public string Text { get; set; } = null!;
+    public Language Language { get; set; }
 }

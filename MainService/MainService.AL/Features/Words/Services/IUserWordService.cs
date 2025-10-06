@@ -1,9 +1,10 @@
-﻿using MainService.AL.Features.Words.DTO;
+﻿using MainService.AL.Features.Words.DTO.Request;
+using MainService.AL.Features.Words.DTO.Response;
 
 public interface IUserWordService
 {
-    Task<IEnumerable<UserWord>> GetAllByUserIdAsync(Guid userId, CancellationToken cancellationToken);
-    Task<UserWord?> GetByIdsAsync(Guid userId, Guid wordId, CancellationToken cancellationToken);
-    Task<UserWord> CreateAsync(UserWordDTO dto, CancellationToken cancellationToken);
-    Task DeleteAsync(UserWordKey id, CancellationToken cancellationToken);
+    Task<IEnumerable<ResponseUserWordDto>> GetAllByUserIdAsync(Guid userId, CancellationToken cancellationToken);
+    Task<ResponseUserWordDto?> GetByIdsAsync(Guid userId, Guid wordId, CancellationToken cancellationToken);
+    Task<ResponseUserWordDto> CreateAsync(RequestUserWordDto dto, CancellationToken cancellationToken);
+    Task DeleteAsync(Guid userId, Guid wordId, CancellationToken cancellationToken);
 }

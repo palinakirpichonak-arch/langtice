@@ -1,4 +1,5 @@
 ﻿using MainService.AL.Features.Words.DTO;
+using MainService.AL.Features.Words.DTO.Request;
 using MainService.AL.Words.Interfaces;
 using MainService.DAL.Features.Words.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +12,9 @@ namespace MainService.PL.Words.Controllers
     public class WordsController : ControllerBase
     {
         private readonly IWordService _wordService;
-        private readonly IMapper _mapper;
         public WordsController(IWordService wordService,  IMapper mapper)
         {
             _wordService = wordService;
-            _mapper = mapper;
         }
 
         // GET words/{id}
@@ -33,10 +32,9 @@ namespace MainService.PL.Words.Controllers
         {
             if (dto == null) return BadRequest();
             
-            await _wordService.CreateAsync(dto, cancellationToken);
-
-            var word = _mapper.Map<Word>(dto);
-            return CreatedAtAction(nameof(GetWordById), new { id = word.Id }, word);
+            var created = await _wordService.CreateAsync(dto, cancellationToken);
+            
+            return CreatedAtAction(nameof(GetWordById), new { id = created.Id }, created);
         }
         // DELETE words/
         [HttpDelete("{id}")]

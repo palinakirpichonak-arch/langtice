@@ -1,13 +1,7 @@
-﻿using MainService.AL.Features.Languages.DTO;
-
-namespace MainService.AL.Features.Courses.DTO.Response;
+﻿namespace MainService.AL.Features.Courses.DTO.Response;
 
 public class ResponseUserCourseDto
 {
-    public Guid Id { get; set; }
-    public Guid LearningLanguageId { get; set; }
-    public LanguageDto LearningLanguage { get; set; }
-    public Guid BaseLanguageId { get; set; }
-    public LanguageDto BaseLanguage { get; set; }
-    public bool? Status { get; set; }
+    public Guid UserId { get; set; }
+    public Guid CourseId { get; set; } 
 }

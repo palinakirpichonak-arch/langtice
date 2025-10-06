@@ -33,10 +33,11 @@ namespace MainService.PL.Features.Languages.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] LanguageDto dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> Create([FromBody] RequestLanguageDto dto, CancellationToken cancellationToken)
         {
             var created = await _languageService.CreateAsync(dto, cancellationToken);
-            return CreatedAtAction(nameof(GetById), created);
+            return CreatedAtAction
+            (nameof(GetById), new { id = created.Id }, created);
         }
 
         [HttpDelete("{id:guid}")]

@@ -1,4 +1,5 @@
 ﻿using MainService.AL.Features.Courses.DTO;
+using MainService.AL.Features.Courses.DTO.Request;
 using MainService.AL.Features.Courses.Services;
 using MainService.DAL.Features.Courses.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -30,26 +31,25 @@ public class UserCourseController : ControllerBase
     [HttpGet("{userId}/{courseId}")]
     public async Task<IActionResult> GetUserCourse(Guid userId, Guid courseId, CancellationToken cancellationToken)
     {
-        var key = new UserCourseKey { UserId = userId, CourseId = courseId };
-        var course = await _userCourseService.GetByIdAsync(key, cancellationToken);
+        var course = await _userCourseService.GetByIdsAsync(userId, courseId, cancellationToken);
         if (course == null) return NotFound();
         return Ok(course);
     }
 
     // POST: api/usercourse
     [HttpPost]
-    public async Task<IActionResult> AddUserCourse([FromBody] UserCourseDto dto, CancellationToken cancellationToken)
+    public async Task<IActionResult> AddUserCourse([FromBody] RequestUserCourseDto dto, CancellationToken cancellationToken)
     {
         var entity = await _userCourseService.CreateAsync(dto, cancellationToken);
-        return CreatedAtAction(nameof(GetUserCourse), new {  }, entity);
+        return CreatedAtAction(nameof(GetUserCourse), 
+            new { userId = entity.UserId, courseId = entity.CourseId  }, entity);
     }
 
     // DELETE: api/usercourse/{userId}/{courseId}
     [HttpDelete("{userId}/{courseId}")]
     public async Task<IActionResult> DeleteUserCourse(Guid userId, Guid courseId, CancellationToken cancellationToken)
     {
-        var key = new UserCourseKey { UserId = userId, CourseId = courseId };
-        await _userCourseService.DeleteAsync(key, cancellationToken);
+        await _userCourseService.DeleteAsync( userId, courseId, cancellationToken);
         return NoContent();
     }
 }

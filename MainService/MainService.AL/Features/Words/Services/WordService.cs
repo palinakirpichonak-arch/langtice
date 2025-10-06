@@ -1,4 +1,5 @@
-﻿using MainService.AL.Features.Words.DTO;
+﻿using MainService.AL.Features.Words.DTO.Request;
+using MainService.AL.Features.Words.DTO.Response;
 using MainService.AL.Words.Interfaces;
 using MainService.BLL.Data.Words.Repository;
 using MainService.DAL.Features.Words.Models;

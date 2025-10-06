@@ -1,5 +1,5 @@
-﻿using MainService.AL.Features.Words.DTO;
-using MainService.DAL.Features.Words.Models;
+﻿using MainService.AL.Features.Words.DTO.Request;
+using MainService.AL.Features.Words.DTO.Response;
 
 namespace MainService.AL.Words.Interfaces;
 

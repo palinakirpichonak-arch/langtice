@@ -23,4 +23,20 @@ public class TranslationRepository : Repository<Translation,Guid>, ITranslationR
                 .Where(t => t.FromWordId == wordId && t.CourseId == courseId)
                 .SingleAsync(cancellationToken);
     }
+
+    public override async Task<IEnumerable<Translation>> GetAllItemsAsync(CancellationToken ct)
+    {
+        return await _dbContext.Translations
+            .Include(t=>t.FromWord)
+            .Include(t=>t.ToWord)
+            .ToListAsync(ct);
+    }
+
+    public override async Task<Translation?> GetItemByIdAsync(Guid id, CancellationToken ct)
+    {
+        return await _dbContext.Translations
+            .Include(t => t.FromWord)
+            .Include(t => t.ToWord)
+            .FirstOrDefaultAsync(t => t.Id == id, ct);
+    }
 }

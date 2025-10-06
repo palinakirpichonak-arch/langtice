@@ -31,16 +31,16 @@ namespace MainService.PL.Features.Lessons.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] LessonDto dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> Create([FromBody] RequestLessonDto dto, CancellationToken cancellationToken)
         {
             if (dto == null) return BadRequest();
 
             var created = await _lessonService.CreateAsync(dto, cancellationToken);
-            return CreatedAtAction(nameof(GetById), new {  }, created);
+            return CreatedAtAction(nameof(GetById), new { id = created.Id}, created);
         }
         
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] LessonDto dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> Update(Guid id, [FromBody] RequestLessonDto dto, CancellationToken cancellationToken)
         {
             if (dto == null) return BadRequest();
 

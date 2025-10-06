@@ -1,4 +1,5 @@
 ﻿using MainService.AL.Features.Courses.DTO;
+using MainService.AL.Features.Courses.DTO.Request;
 using MainService.AL.Features.Courses.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +23,13 @@ namespace MainService.PL.Features.Courses.Controllers
             if (course == null) return NotFound();
             return Ok(course);
         }
+        [HttpGet("/active")]
+        public async Task<IActionResult> GetActiveById(CancellationToken cancellationToken)
+        {
+            var course = await _courseService.GetActiveCourses(cancellationToken);
+            if (course == null) return NotFound();
+            return Ok(course);
+        }
         
         [HttpGet]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
@@ -31,7 +39,7 @@ namespace MainService.PL.Features.Courses.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CourseDto dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> Create([FromBody] RequestCourseDto dto, CancellationToken cancellationToken)
         {
             if (dto == null) return BadRequest("Invalid course data.");
 
@@ -40,7 +48,7 @@ namespace MainService.PL.Features.Courses.Controllers
         }
         
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] CourseDto dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> Update(Guid id, [FromBody] RequestCourseDto dto, CancellationToken cancellationToken)
         {
             if (dto == null) return BadRequest("Invalid course data.");
 

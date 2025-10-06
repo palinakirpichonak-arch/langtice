@@ -5,11 +5,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Languages\DTO\Response\" />
-    <Folder Include="Features\Lessons\DTO\Response\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Mapster" Version="7.4.0" />
   </ItemGroup>
 

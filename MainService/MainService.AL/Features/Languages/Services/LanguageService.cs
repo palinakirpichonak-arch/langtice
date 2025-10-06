@@ -16,29 +16,29 @@ public class LanguageService : ILanguageService
         _mapper = mapper;
     }
 
-    public async Task<LanguageDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<ResponseLanguageDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetItemByIdAsync(id, cancellationToken);
-        return entity is null ? null : _mapper.Map<LanguageDto>(entity);
+        return entity is null ? null : _mapper.Map<ResponseLanguageDto>(entity);
     }
 
-    public async Task<IEnumerable<LanguageDto>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<ResponseLanguageDto>> GetAllAsync(CancellationToken cancellationToken)
     {
         var entities = await _repository.GetAllItemsAsync(cancellationToken);
-        return _mapper.Map<IEnumerable<LanguageDto>>(entities);
+        return _mapper.Map<IEnumerable<ResponseLanguageDto>>(entities);
     }
 
-    public async Task<LanguageDto> CreateAsync(LanguageDto dto, CancellationToken cancellationToken)
+    public async Task<ResponseLanguageDto> CreateAsync(RequestLanguageDto dto, CancellationToken cancellationToken)
     {
         var entity = _mapper.Map<Language>(dto);
         entity.Id = Guid.NewGuid();
 
         await _repository.AddItemAsync(entity, cancellationToken);
 
-        return _mapper.Map<LanguageDto>(entity);
+        return _mapper.Map<ResponseLanguageDto>(entity);
     }
 
-    public async Task<LanguageDto> UpdateAsync(Guid id, LanguageDto dto, CancellationToken cancellationToken)
+    public async Task<ResponseLanguageDto> UpdateAsync(Guid id, ResponseLanguageDto dto, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetItemByIdAsync(id, cancellationToken);
         if (entity is null)
@@ -48,7 +48,7 @@ public class LanguageService : ILanguageService
 
         await _repository.UpdateItemAsync(entity, cancellationToken);
 
-        return _mapper.Map<LanguageDto>(entity);
+        return _mapper.Map<ResponseLanguageDto>(entity);
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
