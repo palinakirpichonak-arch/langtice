@@ -1,4 +1,4 @@
-﻿using MainService.AL.Features.Languages.DTO;
+﻿using MainService.AL.Features.Languages.DTO.Request;
 using MainService.AL.Features.Languages.Services;
 using Microsoft.AspNetCore.Mvc;
 

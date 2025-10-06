@@ -1,4 +1,4 @@
-﻿namespace MainService.AL.Features.Translations.DTO;
+﻿namespace MainService.AL.Features.Translations.DTO.Request;
 
 public class RequestTranslationDto 
 {

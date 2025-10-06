@@ -1,5 +1,4 @@
-﻿using MainService.AL.Features.Courses.DTO;
-using MainService.AL.Features.Courses.DTO.Request;
+﻿using MainService.AL.Features.Courses.DTO.Request;
 using MainService.AL.Features.Courses.DTO.Response;
 using MainService.AL.Features.Words.DTO.Request;
 using MainService.AL.Features.Words.DTO.Response;

@@ -1,4 +1,4 @@
-﻿namespace MainService.AL.Features.Lessons.DTO;
+﻿namespace MainService.AL.Features.Lessons.DTO.Response;
 
 public class ResponseLessonDto
 {

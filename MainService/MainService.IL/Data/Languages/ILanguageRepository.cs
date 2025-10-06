@@ -3,7 +3,4 @@ using MainService.DAL.Features.Languages.Models;
 
 namespace MainService.BLL.Data.Languages;
 
-public interface ILanguageRepository : IRepository<Language, Guid>
-{
-    
-}
+public interface ILanguageRepository : IRepository<Language, Guid>;

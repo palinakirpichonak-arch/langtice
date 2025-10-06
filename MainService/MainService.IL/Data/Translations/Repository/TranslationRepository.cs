@@ -1,8 +1,6 @@
-﻿using MainService.DAL;
-using MainService.DAL.Abstractions;
+﻿using MainService.DAL.Abstractions;
 using MainService.DAL.Context;
 using MainService.DAL.Features.Translations.Models;
-using MainService.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace MainService.BLL.Data.Translations.Repository;

@@ -1,4 +1,5 @@
-﻿using MainService.AL.Features.Languages.DTO;
+﻿using MainService.AL.Features.Languages.DTO.Request;
+using MainService.AL.Features.Languages.DTO.Response;
 
 namespace MainService.AL.Features.Languages.Services;
 

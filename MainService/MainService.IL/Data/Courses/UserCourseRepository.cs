@@ -1,5 +1,4 @@
-﻿using MainService.DAL;
-using MainService.DAL.Abstractions;
+﻿using MainService.DAL.Abstractions;
 using MainService.DAL.Context;
 using MainService.DAL.Features.Courses.Models;
 using Microsoft.EntityFrameworkCore;

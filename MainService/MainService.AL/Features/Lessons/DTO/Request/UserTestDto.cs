@@ -1,6 +1,6 @@
 ﻿using MainService.DAL.Features.Courses.Models;
 
-namespace MainService.AL.Features.Lessons.DTO;
+namespace MainService.AL.Features.Lessons.DTO.Request;
 
 public class UserTestDto
 {

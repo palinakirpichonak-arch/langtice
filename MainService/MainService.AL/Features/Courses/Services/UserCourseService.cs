@@ -1,5 +1,4 @@
-﻿using MainService.AL.Features.Courses.DTO;
-using MainService.AL.Features.Courses.DTO.Request;
+﻿using MainService.AL.Features.Courses.DTO.Request;
 using MainService.AL.Features.Courses.DTO.Response;
 using MainService.BLL.Data.Courses;
 using MainService.DAL.Features.Courses.Models;

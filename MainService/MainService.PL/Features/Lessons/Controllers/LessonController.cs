@@ -1,4 +1,5 @@
 ﻿using MainService.AL.Features.Lessons.DTO;
+using MainService.AL.Features.Lessons.DTO.Request;
 using MainService.AL.Features.Lessons.Services;
 using Microsoft.AspNetCore.Mvc;
 

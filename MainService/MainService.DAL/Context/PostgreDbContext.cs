@@ -4,7 +4,6 @@ using MainService.DAL.Features.Languages.Models;
 using MainService.DAL.Features.Translations.Models;
 using MainService.DAL.Features.Users.Models;
 using MainService.DAL.Features.Words.Models;
-using MainService.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace MainService.DAL.Context;

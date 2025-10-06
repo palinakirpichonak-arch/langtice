@@ -1,7 +1,5 @@
-﻿using MainService.AL.Features.Courses.DTO;
-using MainService.AL.Features.Courses.DTO.Request;
+﻿using MainService.AL.Features.Courses.DTO.Request;
 using MainService.AL.Features.Courses.Services;
-using MainService.DAL.Features.Courses.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Courses.Controllers;

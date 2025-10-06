@@ -4,7 +4,6 @@ using MainService.AL.Features.Lessons.Services;
 using MainService.AL.Features.Translations.Services;
 using MainService.AL.Features.Words.Services;
 using MainService.AL.Mappers;
-using MainService.AL.Words.Interfaces;
 using MainService.BLL.Data.Courses;
 using MainService.BLL.Data.Languages;
 using MainService.BLL.Data.Lessons;
@@ -14,7 +13,7 @@ using MainService.DAL.Abstractions;
 using MainService.DAL.Context;
 using MainService.DAL.Features.Courses.Models;
 using MainService.DAL.Services;
-using MainService.IL.Translations.Services;
+using MainService.PL.Services;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 

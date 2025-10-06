@@ -1,6 +1,7 @@
-﻿using MongoDB.Driver;
-using MainService.DAL.Abstractions;
-using MainService.DAL.Context;
+﻿using MainService.DAL.Context;
+using MongoDB.Driver;
+
+namespace MainService.DAL.Abstractions;
 
 public class MongoRepository<T, TKey> : IMongoRepository<T, TKey> where T : class
 {

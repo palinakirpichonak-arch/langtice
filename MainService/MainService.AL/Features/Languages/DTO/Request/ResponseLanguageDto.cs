@@ -1,4 +1,4 @@
-﻿namespace MainService.AL.Features.Languages.DTO
+﻿namespace MainService.AL.Features.Languages.DTO.Request
 {
     public class RequestLanguageDto 
     {

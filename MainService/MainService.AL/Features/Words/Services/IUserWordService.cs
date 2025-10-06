@@ -1,6 +1,8 @@
 ﻿using MainService.AL.Features.Words.DTO.Request;
 using MainService.AL.Features.Words.DTO.Response;
 
+namespace MainService.AL.Features.Words.Services;
+
 public interface IUserWordService
 {
     Task<IEnumerable<ResponseUserWordDto>> GetAllByUserIdAsync(Guid userId, CancellationToken cancellationToken);

@@ -1,4 +1,4 @@
-﻿using MainService.AL.Features.Languages.DTO;
+﻿using MainService.AL.Features.Languages.DTO.Response;
 
 namespace MainService.AL.Features.Courses.DTO.Response;
 

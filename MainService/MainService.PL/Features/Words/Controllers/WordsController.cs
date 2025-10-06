@@ -1,11 +1,9 @@
-﻿using MainService.AL.Features.Words.DTO;
-using MainService.AL.Features.Words.DTO.Request;
-using MainService.AL.Words.Interfaces;
-using MainService.DAL.Features.Words.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using MainService.AL.Features.Words.DTO.Request;
+using MainService.AL.Features.Words.Services;
 using MapsterMapper;
+using Microsoft.AspNetCore.Mvc;
 
-namespace MainService.PL.Words.Controllers
+namespace MainService.PL.Features.Words.Controllers
 {
     [Route("[controller]")]
     [ApiController]

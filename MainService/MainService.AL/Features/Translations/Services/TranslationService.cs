@@ -1,11 +1,10 @@
-﻿using MainService.AL.Features.Translations.DTO;
+﻿using MainService.AL.Features.Translations.DTO.Request;
 using MainService.AL.Features.Translations.DTO.Response;
-using MainService.AL.Features.Translations.Services;
 using MainService.BLL.Data.Translations.Repository;
 using MainService.DAL.Features.Translations.Models;
 using MapsterMapper;
 
-namespace MainService.IL.Translations.Services;
+namespace MainService.AL.Features.Translations.Services;
 
 public class TranslationService : ITranslationService
 {
