@@ -2,7 +2,9 @@
 using MainService.AL.Features.Lessons.DTO.Request;
 using MainService.AL.Features.Lessons.DTO.Response;
 using MainService.BLL.Data.Lessons;
+using MainService.DAL.Abstractions;
 using MainService.DAL.Features.Courses.Models;
+using Mapster;
 using MapsterMapper;
 
 namespace MainService.AL.Features.Lessons.Services;
@@ -35,10 +37,18 @@ public class LessonService : ILessonService
         return entity is null ? null : _mapper.Map<ResponseLessonDto>(entity);
     }
 
-    public async Task<IEnumerable<ResponseLessonDto>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<PaginatedList<ResponseLessonDto>> GetAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
-        var entities = await _lessonRepository.GetAllItemsAsync(cancellationToken);
-        return _mapper.Map<IEnumerable<ResponseLessonDto>>(entities);
+        var  entities = await _lessonRepository.GetAllItemsAsync(pageIndex, pageSize, cancellationToken);
+        var list = entities.Items.Adapt<List<ResponseLessonDto>>();
+        return new PaginatedList<ResponseLessonDto>(list, pageIndex, pageSize);
+    }
+
+    public async Task<PaginatedList<ResponseLessonDto>> GetAllWithCourseIdAsync(Guid courseId, int pageIndex, int pageSize, CancellationToken cancellationToken)
+    {
+        var  entities = await _lessonRepository.GetAllItemsWithIdAsync(courseId, pageIndex, pageSize, cancellationToken);
+        var list = entities.Items.Adapt<List<ResponseLessonDto>>();
+        return new PaginatedList<ResponseLessonDto>(list, pageIndex, pageSize);
     }
 
     public async Task<ResponseLessonDto> CreateAsync(RequestLessonDto dto, CancellationToken cancellationToken)

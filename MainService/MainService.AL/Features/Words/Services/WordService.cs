@@ -1,7 +1,9 @@
 ﻿using MainService.AL.Features.Words.DTO.Request;
 using MainService.AL.Features.Words.DTO.Response;
 using MainService.BLL.Data.Words.Repository;
+using MainService.DAL.Abstractions;
 using MainService.DAL.Features.Words.Models;
+using Mapster;
 using MapsterMapper;
 
 namespace MainService.AL.Features.Words.Services;
@@ -23,10 +25,11 @@ public class WordService : IWordService
         return entity is null ? null : _mapper.Map<ResponseWordDto>(entity);
     }
 
-    public async Task<IEnumerable<ResponseWordDto>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<PaginatedList<ResponseWordDto>> GetAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllItemsAsync(cancellationToken);
-        return _mapper.Map<IEnumerable<ResponseWordDto>>(entities);
+        var  entities = await _repository.GetAllItemsAsync(pageIndex, pageSize, cancellationToken);
+        var list = entities.Items.Adapt<List<ResponseWordDto>>();
+        return new PaginatedList<ResponseWordDto>(list, pageIndex, pageSize);
     }
 
     public async Task<ResponseWordDto> CreateAsync(RequestWordDto dto, CancellationToken cancellationToken)

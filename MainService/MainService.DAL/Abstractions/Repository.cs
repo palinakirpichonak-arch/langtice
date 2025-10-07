@@ -23,6 +23,34 @@ public abstract class Repository<TEntity, TKey> :
         return await _dbContext.Set<TEntity>().ToListAsync(cancellationToken);
     }
 
+    public async Task<PaginatedList<TEntity>> GetAllItemsAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
+    {
+        var entities = await _dbContext.Set<TEntity>()
+            .OrderBy(b => b.Id)
+            .Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+        var count = await _dbContext.Set<TEntity>().CountAsync(cancellationToken);
+        var totalPages = (int)Math.Ceiling(count / (double)pageSize);
+
+        return new PaginatedList<TEntity>(entities, pageIndex, totalPages);
+    }
+
+    public async Task<PaginatedList<TEntity>> GetAllItemsWithIdAsync(Guid id, int pageIndex, int pageSize, CancellationToken cancellationToken)
+    {
+        var entities = await _dbContext.Set<TEntity>()
+            .OrderBy(b => b.Id)
+            .Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize).Where(e => e.Id.Equals(id))
+            .ToListAsync(cancellationToken);
+
+        var count = await _dbContext.Set<TEntity>().CountAsync(cancellationToken);
+        var totalPages = (int)Math.Ceiling(count / (double)pageSize);
+
+        return new PaginatedList<TEntity>(entities, pageIndex, totalPages);
+    }
+
     public virtual async Task AddItemAsync(TEntity item, CancellationToken cancellationToken)
     {
         await _dbContext.Set<TEntity>().AddAsync(item, cancellationToken);
