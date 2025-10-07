@@ -1,13 +1,14 @@
-using MainService.DAL.Models;
+using MainService.DAL.Abstractions;
+using MainService.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace MainService.DAL.Services;
 
 public class MigrationService : IMigrationService
 {
-    private readonly LangticeContext _dbContext;
+    private readonly PostgreDbContext _dbContext;
 
-    public MigrationService(LangticeContext dbcontext)
+    public MigrationService(PostgreDbContext dbcontext)
     {
         _dbContext = dbcontext;
     }

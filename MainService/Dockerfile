@@ -11,7 +11,7 @@ WORKDIR /src
 
 COPY ["MainService.PL/MainService.PL.csproj", "MainService.PL/"]
 COPY ["MainService.AL/MainService.AL.csproj", "MainService.AL/"]
-COPY ["MainService.BLL/MainService.BLL.csproj", "MainService.BLL/"]
+COPY ["MainService.IL/MainService.IL.csproj", "MainService.IL/"]
 COPY ["MainService.DAL/MainService.DAL.csproj", "MainService.DAL/"]
 
 RUN dotnet restore "MainService.PL/MainService.PL.csproj"
