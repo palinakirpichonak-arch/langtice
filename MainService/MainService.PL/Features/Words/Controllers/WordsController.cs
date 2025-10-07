@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Words.Controllers
 {
-    [Route("[controller]")]
+    [Tags("Words")]
+    [Route("words")]
     [ApiController]
     public class WordsController : ControllerBase
     {
@@ -14,8 +15,15 @@ namespace MainService.PL.Features.Words.Controllers
         {
             _wordService = wordService;
         }
-
-        // GET words/{id}
+        
+        [HttpGet]
+        public async Task<IActionResult> GetAllWords(int pageIndex, int pageCount, CancellationToken cancellationToken)
+        {
+            var words = await _wordService.GetAllAsync(pageIndex,pageCount, cancellationToken);
+            if (words == null) return NotFound();
+            return Ok(words);
+        }
+        
         [HttpGet("{id}")]
         public async Task<IActionResult> GetWordById(Guid id, CancellationToken cancellationToken)
         {
@@ -24,7 +32,6 @@ namespace MainService.PL.Features.Words.Controllers
             return Ok(word);
         }
 
-        // POST words/
         [HttpPost]
         public async Task<IActionResult> CreateWord([FromBody] RequestWordDto dto, CancellationToken cancellationToken)
         {
@@ -34,7 +41,7 @@ namespace MainService.PL.Features.Words.Controllers
             
             return CreatedAtAction(nameof(GetWordById), new { id = created.Id }, created);
         }
-        // DELETE words/
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWord(Guid id, CancellationToken cancellationToken)
         {

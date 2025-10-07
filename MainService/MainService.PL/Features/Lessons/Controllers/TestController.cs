@@ -1,10 +1,10 @@
-﻿using MainService.AL.Features.Lessons.DTO;
-using MainService.AL.Features.Lessons.DTO.Request;
+﻿using MainService.AL.Features.Lessons.DTO.Request;
 using Microsoft.AspNetCore.Mvc;
 using MainService.AL.Features.Lessons.Services;
 
 namespace MainService.PL.Features.Lessons.Controllers;
 
+[Tags("Tests")]
 [Route("tests")]
 [ApiController]
 public class TestController : ControllerBase
@@ -16,16 +16,14 @@ public class TestController : ControllerBase
         _testService = testService;
     }
 
-    // GET /tests/{id} - Get a single test for editing for example
     [HttpGet]
-    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllTests(CancellationToken cancellationToken)
     {
         var test = await _testService.GetAllAsync(cancellationToken);
         if (test == null) return NotFound();
         return Ok(test);
     }
     
-    // GET /tests/{id} - Get a single test for editing for example
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTestById(string id, CancellationToken cancellationToken)
     {
@@ -34,7 +32,6 @@ public class TestController : ControllerBase
         return Ok(test);
     }
     
-    // GET /tests/{id} - Get an active test to user
     [HttpGet("{id}/active")]
     public async Task<IActionResult> GetActiveTestById(string id, CancellationToken cancellationToken)
     {
@@ -42,9 +39,7 @@ public class TestController : ControllerBase
         if (test == null) return NotFound();
         return Ok(test);
     }
-
-
-    // POST /tests - Create a new test
+    
     [HttpPost]
     public async Task<IActionResult> CreateTest([FromBody] TestDto dto, CancellationToken cancellationToken)
     {
@@ -54,7 +49,6 @@ public class TestController : ControllerBase
         return CreatedAtAction(nameof(GetTestById), new { id = test.Id }, test);
     }
 
-    // PUT /tests/{id} - Update an existing test
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTest(string id, [FromBody] TestDto dto, CancellationToken cancellationToken)
     {
@@ -64,7 +58,6 @@ public class TestController : ControllerBase
         return Ok(test);
     }
 
-    // DELETE /tests/{id} - Delete a test
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTest(string id, CancellationToken cancellationToken)
     {
@@ -72,7 +65,6 @@ public class TestController : ControllerBase
         return NoContent();
     }
 
-    // POST /tests/{id}/submit - Submit answers for a test
     [HttpPost("{id}/submit")]
     public async Task<IActionResult> SubmitTest(string id, [FromBody] UserTestDto userTest, CancellationToken cancellationToken)
     {

@@ -1,6 +1,7 @@
 ﻿using MainService.AL.Features.Words.DTO.Request;
 using MainService.AL.Features.Words.DTO.Response;
 using MainService.BLL.Data.Words.Repository;
+using MainService.DAL.Abstractions;
 using MainService.DAL.Features.Words.Models;
 using Mapster;
 using MapsterMapper;
@@ -24,6 +25,13 @@ public class UserWordService : IUserWordService
         return entities
             .Where(e => e.UserId == userId)
             .Select(e => e.Adapt<ResponseUserWordDto>());
+    }
+
+    public async Task<PaginatedList<ResponseUserWordDto>> GetAllWithUserIdAsync(Guid userId, int pageIndex, int pageSize, CancellationToken cancellationToken)
+    {
+        var  entities = await _repository.GetAllItemsWithIdAsync(userId, pageIndex, pageSize, cancellationToken);
+        var list = entities.Items.Adapt<List<ResponseUserWordDto>>();
+        return new PaginatedList<ResponseUserWordDto>(list, pageIndex, pageSize);
     }
 
     public async Task<ResponseUserWordDto?> GetByIdsAsync(Guid userId, Guid wordId, CancellationToken cancellationToken)

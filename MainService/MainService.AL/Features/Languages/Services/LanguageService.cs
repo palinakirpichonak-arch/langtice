@@ -1,7 +1,9 @@
 ﻿using MainService.AL.Features.Languages.DTO.Request;
 using MainService.AL.Features.Languages.DTO.Response;
 using MainService.BLL.Data.Languages;
+using MainService.DAL.Abstractions;
 using MainService.DAL.Features.Languages.Models;
+using Mapster;
 using MapsterMapper;
 
 namespace MainService.AL.Features.Languages.Services;
@@ -27,6 +29,13 @@ public class LanguageService : ILanguageService
     {
         var entities = await _repository.GetAllItemsAsync(cancellationToken);
         return _mapper.Map<IEnumerable<ResponseLanguageDto>>(entities);
+    }
+
+    public async Task<PaginatedList<ResponseLanguageDto>> GetAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
+    {
+        var  entities = await _repository.GetAllItemsAsync(pageIndex, pageSize, cancellationToken);
+        var list = entities.Items.Adapt<List<ResponseLanguageDto>>();
+        return new PaginatedList<ResponseLanguageDto>(list, pageIndex, pageSize);
     }
 
     public async Task<ResponseLanguageDto> CreateAsync(RequestLanguageDto dto, CancellationToken cancellationToken)

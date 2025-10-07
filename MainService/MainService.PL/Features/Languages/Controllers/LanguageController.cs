@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Languages.Controllers
 {
+    [Tags("Languages")]
     [ApiController]
-    [Route("[controller]")]
+    [Route("languages")]
     public class LanguageController : ControllerBase
     {
         private readonly ILanguageService _languageService;
@@ -16,14 +17,14 @@ namespace MainService.PL.Features.Languages.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllLanguages(int pageIndex, int pageSize, CancellationToken cancellationToken)
         {
-            var languages = await _languageService.GetAllAsync(cancellationToken);
+            var languages = await _languageService.GetAllAsync(pageIndex, pageSize, cancellationToken);
             return Ok(languages);
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetLanguageById(Guid id, CancellationToken cancellationToken)
         {
             var language = await _languageService.GetByIdAsync(id, cancellationToken);
             if (language == null)
@@ -33,15 +34,15 @@ namespace MainService.PL.Features.Languages.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] RequestLanguageDto dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateLanguage([FromBody] RequestLanguageDto dto, CancellationToken cancellationToken)
         {
             var created = await _languageService.CreateAsync(dto, cancellationToken);
             return CreatedAtAction
-            (nameof(GetById), new { id = created.Id }, created);
+            (nameof(GetLanguageById), new { id = created.Id }, created);
         }
 
         [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteLanguage(Guid id, CancellationToken cancellationToken)
         {
             await _languageService.DeleteAsync(id, cancellationToken);
             return NoContent();

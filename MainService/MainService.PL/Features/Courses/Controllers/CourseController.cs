@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Courses.Controllers
 {
-    [Route("[controller]")]
+    [Tags("Courses")]
+    [Route("courses")]
     [ApiController]
     public class CoursesController : ControllerBase
     {
@@ -16,14 +17,15 @@ namespace MainService.PL.Features.Courses.Controllers
         }
         
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetCourseById(Guid id, CancellationToken cancellationToken)
         {
             var course = await _courseService.GetByIdAsync(id, cancellationToken);
             if (course == null) return NotFound();
             return Ok(course);
         }
+        
         [HttpGet("/active")]
-        public async Task<IActionResult> GetActiveById(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetActiveCourseById(CancellationToken cancellationToken)
         {
             var course = await _courseService.GetActiveCourses(cancellationToken);
             if (course == null) return NotFound();
@@ -31,29 +33,28 @@ namespace MainService.PL.Features.Courses.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllCourses(CancellationToken cancellationToken)
         {
             var courses = await _courseService.GetAllItemsAdminAsync(cancellationToken);
             return Ok(courses);
         }
         
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] RequestCourseDto dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateCourse([FromBody] RequestCourseDto dto, CancellationToken cancellationToken)
         {
             if (dto == null) return BadRequest("Invalid course data.");
 
             var course = await _courseService.CreateAsync(dto, cancellationToken);
-            return CreatedAtAction(nameof(GetById), new { id = course.Id }, course);
+            return CreatedAtAction(nameof(GetCourseById), new { id = course.Id }, course);
         }
         
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] RequestCourseDto dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateCourse(Guid id, [FromBody] RequestCourseDto dto, CancellationToken cancellationToken)
         {
             if (dto == null) return BadRequest("Invalid course data.");
 
             var updatedCourse = await _courseService.UpdateAsync(id, dto, cancellationToken);
             return Ok(updatedCourse);
         }
-
     }
 }

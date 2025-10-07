@@ -1,47 +1,51 @@
-﻿using MainService.AL.Features.Translations.DTO;
-using MainService.AL.Features.Translations.DTO.Request;
+﻿using MainService.AL.Features.Translations.DTO.Request;
 using MainService.AL.Features.Translations.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Translations.Controllers;
 
-[Route("api/[controller]")]
+[Tags("Translations")]
+[Route("translations")]
 [ApiController]
 public class TranslationsController : ControllerBase
 {
-    private readonly ITranslationService _service;
+    private readonly ITranslationService _translationService;
 
-    public TranslationsController(ITranslationService service)
+    public TranslationsController(ITranslationService translationService)
     {
-        _service = service;
+        _translationService = translationService;
     }
 
-    // GET translations/{id}
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
+    [HttpGet]
+    public async Task<IActionResult> GetPaginatedTranslations(int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
-        var translation = await _service.GetByIdAsync(id, cancellationToken);
+        var translations = await _translationService.GetAllAsync(pageIndex, pageSize, cancellationToken);
+        return Ok(translations);
+    }
+    
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetTranslationById(Guid id, CancellationToken cancellationToken)
+    {
+        var translation = await _translationService.GetByIdAsync(id, cancellationToken);
         if (translation == null)
             return NotFound();
 
         return Ok(translation);
     }
     
-    // POST translations
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] RequestTranslationDto translation, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateTranslation([FromBody] RequestTranslationDto translation, CancellationToken cancellationToken)
     {
         if (translation == null) return BadRequest();
 
-        var created = await _service.CreateAsync(translation, cancellationToken);
-        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+        var created = await _translationService.CreateAsync(translation, cancellationToken);
+        return CreatedAtAction(nameof(GetTranslationById), new { id = created.Id }, created);
     }
     
-    // DELETE translations/{id}
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteTranslation(Guid id, CancellationToken cancellationToken)
     {
-        await _service.DeleteAsync(id, cancellationToken);
+        await _translationService.DeleteAsync(id, cancellationToken);
         return NoContent();
     }
 }

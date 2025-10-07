@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Courses.Controllers;
 
-[Route("api/[controller]")]
+[Tags("Usercourses")]
+[Route("user-courses")]
 [ApiController]
 public class UserCourseController : ControllerBase
 {
@@ -15,9 +16,8 @@ public class UserCourseController : ControllerBase
         _userCourseService = userCourseService;
     }
 
-    // GET: api/usercourse/user/{userId}
     [HttpGet("user/{userId}")]
-    public async Task<IActionResult> GetUserCourses(Guid userId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllUserCourses(Guid userId, CancellationToken cancellationToken)
     {
         if(userId == Guid.Empty)
             return BadRequest();
@@ -25,25 +25,22 @@ public class UserCourseController : ControllerBase
         return Ok(courses);
     }
 
-    // GET: api/usercourse/{userId}/{courseId}
     [HttpGet("{userId}/{courseId}")]
-    public async Task<IActionResult> GetUserCourse(Guid userId, Guid courseId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetUserCourseByIds(Guid userId, Guid courseId, CancellationToken cancellationToken)
     {
         var course = await _userCourseService.GetByIdsAsync(userId, courseId, cancellationToken);
         if (course == null) return NotFound();
         return Ok(course);
     }
 
-    // POST: api/usercourse
     [HttpPost]
     public async Task<IActionResult> AddUserCourse([FromBody] RequestUserCourseDto dto, CancellationToken cancellationToken)
     {
         var entity = await _userCourseService.CreateAsync(dto, cancellationToken);
-        return CreatedAtAction(nameof(GetUserCourse), 
+        return CreatedAtAction(nameof(GetUserCourseByIds), 
             new { userId = entity.UserId, courseId = entity.CourseId  }, entity);
     }
 
-    // DELETE: api/usercourse/{userId}/{courseId}
     [HttpDelete("{userId}/{courseId}")]
     public async Task<IActionResult> DeleteUserCourse(Guid userId, Guid courseId, CancellationToken cancellationToken)
     {

@@ -1,7 +1,9 @@
 ﻿using MainService.AL.Features.Translations.DTO.Request;
 using MainService.AL.Features.Translations.DTO.Response;
 using MainService.BLL.Data.Translations.Repository;
+using MainService.DAL.Abstractions;
 using MainService.DAL.Features.Translations.Models;
+using Mapster;
 using MapsterMapper;
 
 namespace MainService.AL.Features.Translations.Services;
@@ -23,10 +25,11 @@ public class TranslationService : ITranslationService
         return entity is null ? null : _mapper.Map<ResponseTranslationDto>(entity);
     }
 
-    public async Task<IEnumerable<ResponseTranslationDto>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<PaginatedList<ResponseTranslationDto>> GetAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllItemsAsync(cancellationToken);
-        return _mapper.Map<IEnumerable<ResponseTranslationDto>>(entities);
+        var  entities = await _repository.GetAllItemsAsync(pageIndex, pageSize, cancellationToken);
+        var list = entities.Items.Adapt<List<ResponseTranslationDto>>();
+        return new PaginatedList<ResponseTranslationDto>(list, pageIndex, pageSize);
     }
 
     public async Task<ResponseTranslationDto> CreateAsync(RequestTranslationDto dto, CancellationToken cancellationToken)
