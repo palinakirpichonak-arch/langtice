@@ -29,7 +29,7 @@ public class UserWordService : IUserWordService
 
     public async Task<PaginatedList<ResponseUserWordDto>> GetAllWithUserIdAsync(Guid userId, int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
-        var  entities = await _repository.GetAllItemsWithIdAsync(userId, pageIndex, pageSize, cancellationToken);
+        var  entities = await _repository.GetAllByUserIdAsync(userId, pageIndex, pageSize, cancellationToken);
         var list = entities.Items.Adapt<List<ResponseUserWordDto>>();
         return new PaginatedList<ResponseUserWordDto>(list, pageIndex, pageSize);
     }
