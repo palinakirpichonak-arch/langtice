@@ -9,6 +9,7 @@ using MainService.BLL.Data.Languages;
 using MainService.BLL.Data.Lessons;
 using MainService.BLL.Data.Translations.Repository;
 using MainService.BLL.Data.Words.Repository;
+using MainService.BLL.Services;
 using MainService.DAL.Abstractions;
 using MainService.DAL.Context;
 using MainService.DAL.Features.Courses.Models;
@@ -44,6 +45,7 @@ public static class ServiceCollectionExtension
     public static void ConfigureServices(this IServiceCollection services)
     {
         services.AddScoped<IMigrationService, MigrationService>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddHostedService<MigrationHostedService>();
 
         //Repositories (DAL)

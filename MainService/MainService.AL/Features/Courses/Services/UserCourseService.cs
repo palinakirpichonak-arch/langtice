@@ -1,6 +1,6 @@
 ﻿using MainService.AL.Features.Courses.DTO.Request;
 using MainService.AL.Features.Courses.DTO.Response;
-using MainService.BLL.Data.Courses;
+using MainService.BLL.Services;
 using MainService.DAL.Features.Courses.Models;
 using Mapster;
 using MapsterMapper;
@@ -9,43 +9,45 @@ namespace MainService.AL.Features.Courses.Services;
 
 public class UserCourseService : IUserCourseService
 {
-    private readonly IUserCourseRepository _repository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public UserCourseService(IUserCourseRepository repository, IMapper mapper)
+    public UserCourseService(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        _repository = repository;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
     public async Task<IEnumerable<ResponseUserCourseDto>> GetAllByUserIdAsync(Guid userId, CancellationToken cancellationToken)
     {
-        var entities = await _repository.GetAllItemsAsync(cancellationToken);
+        var entities = await _unitOfWork.UserCourses.GetAllItemsAsync(cancellationToken);
         var filtered = entities.Where(uc => uc.UserId == userId);
         return _mapper.Map<IEnumerable<ResponseUserCourseDto>>(filtered);
     }
-    
+
     public async Task<ResponseUserCourseDto?> GetByIdsAsync(Guid userId, Guid courseId, CancellationToken cancellationToken)
     {
         var key = new UserCourseKey(userId, courseId);
-        var entity = await _repository.GetItemByIdAsync(key, cancellationToken);
+        var entity = await _unitOfWork.UserCourses.GetItemByIdAsync(key, cancellationToken);
         return entity is null ? null : _mapper.Map<ResponseUserCourseDto>(entity);
     }
-    
+
     public async Task<ResponseUserCourseDto> CreateAsync(RequestUserCourseDto dto, CancellationToken cancellationToken)
     {
         var entity = dto.Adapt<UserCourse>();
-        await _repository.AddItemAsync(entity, cancellationToken);
-        var response = entity.Adapt<ResponseUserCourseDto>();
+        await _unitOfWork.UserCourses.AddItemAsync(entity, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return response;
+        return _mapper.Map<ResponseUserCourseDto>(entity);
     }
 
     public async Task DeleteAsync(Guid userId, Guid courseId, CancellationToken cancellationToken)
     {
-        var key = new UserCourseKey(userId, courseId); ;
-        var entity = await _repository.GetItemByIdAsync(key, cancellationToken);
+        var key = new UserCourseKey(userId, courseId);
+        var entity = await _unitOfWork.UserCourses.GetItemByIdAsync(key, cancellationToken);
         if (entity is null) throw new KeyNotFoundException($"UserCourse {userId}-{courseId} not found");
-        await _repository.DeleteItemAsync(entity, cancellationToken);
+
+        _unitOfWork.UserCourses.DeleteItemAsync(entity, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

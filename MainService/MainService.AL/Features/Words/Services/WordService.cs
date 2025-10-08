@@ -1,6 +1,6 @@
 ﻿using MainService.AL.Features.Words.DTO.Request;
 using MainService.AL.Features.Words.DTO.Response;
-using MainService.BLL.Data.Words.Repository;
+using MainService.BLL.Services;
 using MainService.DAL.Abstractions;
 using MainService.DAL.Features.Words.Models;
 using Mapster;
@@ -10,24 +10,24 @@ namespace MainService.AL.Features.Words.Services;
 
 public class WordService : IWordService
 {
-    private readonly IWordRepository _repository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public WordService(IWordRepository repository, IMapper mapper)
+    public WordService(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        _repository = repository;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
     public async Task<ResponseWordDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetItemByIdAsync(id, cancellationToken);
+        var entity = await _unitOfWork.Words.GetItemByIdAsync(id, cancellationToken);
         return entity is null ? null : _mapper.Map<ResponseWordDto>(entity);
     }
 
     public async Task<PaginatedList<ResponseWordDto>> GetAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
-        var  entities = await _repository.GetAllItemsAsync(pageIndex, pageSize, cancellationToken);
+        var entities = await _unitOfWork.Words.GetAllItemsAsync(pageIndex, pageSize, cancellationToken);
         var list = entities.Items.Adapt<List<ResponseWordDto>>();
         return new PaginatedList<ResponseWordDto>(list, pageIndex, pageSize);
     }
@@ -36,25 +36,31 @@ public class WordService : IWordService
     {
         var entity = _mapper.Map<Word>(dto);
         entity.Id = Guid.NewGuid();
-        await _repository.AddItemAsync(entity, cancellationToken);
+
+        await _unitOfWork.Words.AddItemAsync(entity, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+
         return _mapper.Map<ResponseWordDto>(entity);
     }
 
     public async Task<ResponseWordDto> UpdateAsync(Guid id, RequestWordDto dto, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetItemByIdAsync(id, cancellationToken);
+        var entity = await _unitOfWork.Words.GetItemByIdAsync(id, cancellationToken);
         if (entity is null) throw new KeyNotFoundException($"Word {id} not found");
 
         _mapper.Map(dto, entity);
-        await _repository.UpdateItemAsync(entity, cancellationToken);
+        _unitOfWork.Words.UpdateItemAsync(entity, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+
         return _mapper.Map<ResponseWordDto>(entity);
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetItemByIdAsync(id, cancellationToken);
+        var entity = await _unitOfWork.Words.GetItemByIdAsync(id, cancellationToken);
         if (entity is null) throw new KeyNotFoundException($"Word {id} not found");
 
-        await _repository.DeleteItemAsync(entity, cancellationToken);
+        _unitOfWork.Words.DeleteItemAsync(entity, cancellationToken);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

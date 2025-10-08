@@ -54,18 +54,15 @@ public abstract class Repository<TEntity, TKey> :
     public virtual async Task AddItemAsync(TEntity item, CancellationToken cancellationToken)
     {
         await _dbContext.Set<TEntity>().AddAsync(item, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public virtual async Task UpdateItemAsync(TEntity item, CancellationToken cancellationToken)
+    public virtual void UpdateItemAsync(TEntity item, CancellationToken cancellationToken)
     {
         _dbContext.Set<TEntity>().Update(item);
-        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public virtual async Task DeleteItemAsync(TEntity item, CancellationToken cancellationToken)
+    public virtual void DeleteItemAsync(TEntity item, CancellationToken cancellationToken)
     {
         _dbContext.Set<TEntity>().Remove(item);
-        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }
