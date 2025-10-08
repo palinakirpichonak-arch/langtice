@@ -37,7 +37,7 @@ public abstract class Repository<TEntity, TKey> :
         return new PaginatedList<TEntity>(entities, pageIndex, totalPages);
     }
 
-    public async Task<PaginatedList<TEntity>> GetAllItemsWithIdAsync(Guid id, int pageIndex, int pageSize, CancellationToken cancellationToken)
+    public async Task<PaginatedList<TEntity>> GetAllItemsWithIdAsync(TKey id, int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
         var entities = await _dbContext.Set<TEntity>()
             .OrderBy(b => b.Id)
