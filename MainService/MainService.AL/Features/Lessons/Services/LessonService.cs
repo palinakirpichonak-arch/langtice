@@ -53,7 +53,7 @@ public class LessonService : ILessonService
         var entity = _mapper.Map<Lesson>(dto);
         entity.Id = Guid.NewGuid();
 
-        await _unitOfWork.Lessons.AddItemAsync(entity, cancellationToken);
+        _unitOfWork.Lessons.AddItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return _mapper.Map<ResponseLessonDto>(entity);
@@ -65,7 +65,7 @@ public class LessonService : ILessonService
         if (entity is null) throw new KeyNotFoundException($"Lesson {id} not found");
 
         _mapper.Map(dto, entity);
-        _unitOfWork.Lessons.UpdateItemAsync(entity, cancellationToken);
+        _unitOfWork.Lessons.UpdateItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return _mapper.Map<ResponseLessonDto>(entity);
@@ -79,7 +79,7 @@ public class LessonService : ILessonService
         // Keep test deletion as-is
         await _testRepository.DeleteAsync(entity.TestId, cancellationToken);
 
-        _unitOfWork.Lessons.DeleteItemAsync(entity, cancellationToken);
+        _unitOfWork.Lessons.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

@@ -36,7 +36,7 @@ public class TranslationService : ITranslationService
     {
         var entity = _mapper.Map<Translation>(dto);
         entity.Id = Guid.NewGuid();
-        await _unitOfWork.Translations.AddItemAsync(entity, cancellationToken);
+        _unitOfWork.Translations.AddItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return _mapper.Map<ResponseTranslationDto>(entity);
     }
@@ -47,7 +47,7 @@ public class TranslationService : ITranslationService
         if (entity is null) throw new KeyNotFoundException($"Translation {id} not found");
 
         _mapper.Map(dto, entity);
-        _unitOfWork.Translations.UpdateItemAsync(entity, cancellationToken);
+        _unitOfWork.Translations.UpdateItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return _mapper.Map<ResponseTranslationDto>(entity);
     }
@@ -57,7 +57,7 @@ public class TranslationService : ITranslationService
         var entity = await _unitOfWork.Translations.GetItemByIdAsync(id, cancellationToken);
         if (entity is null) throw new KeyNotFoundException($"Translation {id} not found");
 
-        _unitOfWork.Translations.DeleteItemAsync(entity, cancellationToken);
+        _unitOfWork.Translations.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

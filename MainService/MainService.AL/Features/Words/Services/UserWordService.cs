@@ -46,7 +46,7 @@ public class UserWordService : IUserWordService
         var entity = dto.Adapt<UserWord>();
         entity.AddedAt = DateTime.UtcNow;
 
-        await _unitOfWork.UserWords.AddItemAsync(entity, cancellationToken);
+        _unitOfWork.UserWords.AddItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return entity.Adapt<ResponseUserWordDto>();
@@ -58,7 +58,7 @@ public class UserWordService : IUserWordService
         var entity = await _unitOfWork.UserWords.GetItemByIdAsync(key, cancellationToken);
         if (entity is null) throw new KeyNotFoundException($"UserWord {key} not found");
 
-        _unitOfWork.UserWords.DeleteItemAsync(entity, cancellationToken);
+        _unitOfWork.UserWords.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

@@ -7,7 +7,7 @@ public interface IRepository<TEntity, TKey> where TEntity : IEntity<TKey>
     Task<PaginatedList<TEntity>> GetAllItemsAsync(int pageIndex, int pageSize, CancellationToken cancellationToken);
     Task<PaginatedList<TEntity>> GetAllItemsWithIdAsync(TKey id,int pageIndex, int pageSize, CancellationToken cancellationToken);
     
-    Task AddItemAsync(TEntity item, CancellationToken cancellationToken);
-    void UpdateItemAsync(TEntity item, CancellationToken cancellationToken);
-    void DeleteItemAsync(TEntity item, CancellationToken cancellationToken); 
+    void AddItem(TEntity item);
+    void UpdateItem(TEntity item);
+    void DeleteItem(TEntity item); 
 }

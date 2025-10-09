@@ -48,7 +48,7 @@ public class CourseService : ICourseService
         if (entity.BaseLanguage is null || entity.LearningLanguage is null)
             throw new KeyNotFoundException("One of the languages was not found");
 
-        await _unitOfWork.Courses.AddItemAsync(entity, cancellationToken);
+        _unitOfWork.Courses.AddItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return _mapper.Map<ResponseCourseDto>(entity);
@@ -72,7 +72,7 @@ public class CourseService : ICourseService
         if (entity is null)
             throw new KeyNotFoundException($"Course with id {id} not found");
 
-        _unitOfWork.Courses.DeleteItemAsync(entity, cancellationToken);
+        _unitOfWork.Courses.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

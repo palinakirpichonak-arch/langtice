@@ -15,32 +15,49 @@ using MainService.DAL.Context;
 using MainService.DAL.Features.Courses.Models;
 using MainService.DAL.Services;
 using MainService.PL.Services;
+using MainService.PL.Services.Options;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace MainService.PL.Extensions;
 
 public static class ServiceCollectionExtension
 {
+    
+    public static void ConfigureAppOptions(this IServiceCollection services, IConfiguration configuration)
+    {
+        // PostgreSQL
+        services.Configure<PostgresOptions>(options =>
+        {
+            options.Host = configuration["DB_HOST"];
+            options.Port = configuration["DB_PORT"];
+            options.Database = configuration["DB_NAME"];
+            options.User = configuration["DB_USER"];
+            options.Password = configuration["DB_PASS"];
+        });
+
+        // MongoDB
+        services.Configure<MongoOptions>(options =>
+        {
+            options.Connection = configuration["MONGO_CONNECTION"];
+            options.Database = configuration["MONGO_DB"];
+        });
+    }
+    
     public static void ConfigureDbContext(this IServiceCollection services)
     {
-        services.AddDbContext<PostgreDbContext>(options =>
+        services.AddDbContext<PostgreDbContext>((sp, options) =>
         {
-            var host = Environment.GetEnvironmentVariable("DB_HOST");
-            var port = Environment.GetEnvironmentVariable("DB_PORT");
-            var db = Environment.GetEnvironmentVariable("DB_NAME");
-            var username = Environment.GetEnvironmentVariable("DB_USER");
-            var password = Environment.GetEnvironmentVariable("DB_PASS");
-
-            var connectionString = $"Host={host};Port={port};Database={db};Username={username};Password={password}";
-            options.UseNpgsql(connectionString);
+            var pgOptions = sp.GetRequiredService<IOptions<PostgresOptions>>().Value;
+            options.UseNpgsql(pgOptions.ConnectionString);
         });
-        
+
         services.AddSingleton<MongoDbContext>(sp =>
-            new MongoDbContext(
-                Environment.GetEnvironmentVariable("MONGO_CONNECTION"),
-                Environment.GetEnvironmentVariable("MONGO_DB")
-            ));
+        {
+            var mongoOptions = sp.GetRequiredService<IOptions<MongoOptions>>().Value;
+            return new MongoDbContext(mongoOptions.Connection, mongoOptions.Database);
+        });
     }
     public static void ConfigureServices(this IServiceCollection services)
     {

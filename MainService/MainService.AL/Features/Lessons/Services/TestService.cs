@@ -75,7 +75,7 @@ public class TestService : ITestService
         foreach (var lesson in lessonsToUpdate)
         {
             lesson.TestId = null;
-            _unitOfWork.Lessons.UpdateItemAsync(lesson, cancellationToken);
+            _unitOfWork.Lessons.UpdateItem(lesson);
         }
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);

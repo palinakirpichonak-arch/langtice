@@ -35,7 +35,7 @@ public class UserCourseService : IUserCourseService
     public async Task<ResponseUserCourseDto> CreateAsync(RequestUserCourseDto dto, CancellationToken cancellationToken)
     {
         var entity = dto.Adapt<UserCourse>();
-        await _unitOfWork.UserCourses.AddItemAsync(entity, cancellationToken);
+        _unitOfWork.UserCourses.AddItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return _mapper.Map<ResponseUserCourseDto>(entity);
@@ -47,7 +47,7 @@ public class UserCourseService : IUserCourseService
         var entity = await _unitOfWork.UserCourses.GetItemByIdAsync(key, cancellationToken);
         if (entity is null) throw new KeyNotFoundException($"UserCourse {userId}-{courseId} not found");
 
-        _unitOfWork.UserCourses.DeleteItemAsync(entity, cancellationToken);
+        _unitOfWork.UserCourses.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

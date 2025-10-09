@@ -51,17 +51,17 @@ public abstract class Repository<TEntity, TKey> :
         return new PaginatedList<TEntity>(entities, pageIndex, totalPages);
     }
 
-    public virtual async Task AddItemAsync(TEntity item, CancellationToken cancellationToken)
+    public virtual void AddItem(TEntity item)
     {
-        await _dbContext.Set<TEntity>().AddAsync(item, cancellationToken);
+        _dbContext.Set<TEntity>().Add(item);
     }
 
-    public virtual void UpdateItemAsync(TEntity item, CancellationToken cancellationToken)
+    public virtual void UpdateItem(TEntity item)
     {
         _dbContext.Set<TEntity>().Update(item);
     }
 
-    public virtual void DeleteItemAsync(TEntity item, CancellationToken cancellationToken)
+    public virtual void DeleteItem(TEntity item)
     {
         _dbContext.Set<TEntity>().Remove(item);
     }

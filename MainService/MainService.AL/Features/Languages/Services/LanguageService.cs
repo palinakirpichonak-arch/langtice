@@ -43,7 +43,7 @@ public class LanguageService : ILanguageService
         var entity = _mapper.Map<Language>(dto);
         entity.Id = Guid.NewGuid();
 
-        await _unitOfWork.Languages.AddItemAsync(entity, cancellationToken);
+        _unitOfWork.Languages.AddItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return _mapper.Map<ResponseLanguageDto>(entity);
@@ -56,7 +56,7 @@ public class LanguageService : ILanguageService
             throw new KeyNotFoundException($"Language with id {id} not found");
 
         _mapper.Map(dto, entity);
-        _unitOfWork.Languages.UpdateItemAsync(entity, cancellationToken);
+        _unitOfWork.Languages.UpdateItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return _mapper.Map<ResponseLanguageDto>(entity);
@@ -68,7 +68,7 @@ public class LanguageService : ILanguageService
         if (entity is null)
             throw new KeyNotFoundException($"Language with id {id} not found");
 
-        _unitOfWork.Languages.DeleteItemAsync(entity, cancellationToken);
+        _unitOfWork.Languages.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

@@ -37,7 +37,7 @@ public class WordService : IWordService
         var entity = _mapper.Map<Word>(dto);
         entity.Id = Guid.NewGuid();
 
-        await _unitOfWork.Words.AddItemAsync(entity, cancellationToken);
+        _unitOfWork.Words.AddItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return _mapper.Map<ResponseWordDto>(entity);
@@ -49,7 +49,7 @@ public class WordService : IWordService
         if (entity is null) throw new KeyNotFoundException($"Word {id} not found");
 
         _mapper.Map(dto, entity);
-        _unitOfWork.Words.UpdateItemAsync(entity, cancellationToken);
+        _unitOfWork.Words.UpdateItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return _mapper.Map<ResponseWordDto>(entity);
@@ -60,7 +60,7 @@ public class WordService : IWordService
         var entity = await _unitOfWork.Words.GetItemByIdAsync(id, cancellationToken);
         if (entity is null) throw new KeyNotFoundException($"Word {id} not found");
 
-        _unitOfWork.Words.DeleteItemAsync(entity, cancellationToken);
+        _unitOfWork.Words.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }
