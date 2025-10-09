@@ -1,8 +1,8 @@
 ﻿using MainService.DAL.Abstractions;
 using MainService.DAL.Context;
-using MainService.DAL.Features.Courses.Models;
+using MainService.DAL.Features.Lessons;
 
-namespace MainService.BLL.Data.Lessons;
+namespace MainService.BLL.Data.Courses;
 
 public class TestRepository : MongoRepository<Test, string>, ITestRepository
 {

@@ -3,7 +3,7 @@ using MainService.DAL.Context;
 using MainService.DAL.Features.Courses.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace MainService.BLL.Data.Courses;
+namespace MainService.BLL.Data.Users;
 
 public class UserCourseRepository : Repository<UserCourse, UserCourseKey>, IUserCourseRepository
 {

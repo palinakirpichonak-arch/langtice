@@ -1,5 +1,6 @@
 ﻿using MainService.DAL.Abstractions;
 using MainService.DAL.Features.Languages.Models;
+using MainService.DAL.Features.Lessons;
 
 namespace MainService.DAL.Features.Courses.Models;
 

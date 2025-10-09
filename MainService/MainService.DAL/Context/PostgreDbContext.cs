@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using MainService.DAL.Features.Courses.Models;
 using MainService.DAL.Features.Languages.Models;
+using MainService.DAL.Features.Lessons;
 using MainService.DAL.Features.Translations.Models;
 using MainService.DAL.Features.Users.Models;
 using MainService.DAL.Features.Words.Models;

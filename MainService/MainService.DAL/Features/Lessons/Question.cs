@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
-namespace MainService.DAL.Features.Courses.Models;
+
+namespace MainService.DAL.Features.Lessons;
 
 public class Question
 {

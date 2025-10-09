@@ -3,7 +3,7 @@ using MainService.DAL.Context;
 using MainService.DAL.Features.Words.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace MainService.BLL.Data.Words.Repository;
+namespace MainService.BLL.Data.Users;
 
 public class UserWordRepository : Repository<UserWord, UserWordKey>, IUserWordRepository
 {

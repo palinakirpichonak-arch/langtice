@@ -1,7 +1,7 @@
 using MainService.BLL.Data.Courses;
 using MainService.BLL.Data.Languages;
-using MainService.BLL.Data.Lessons;
 using MainService.BLL.Data.Translations.Repository;
+using MainService.BLL.Data.Users;
 using MainService.BLL.Data.Words.Repository;
 
 namespace MainService.BLL.Services

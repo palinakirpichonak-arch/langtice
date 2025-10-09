@@ -1,5 +1,7 @@
 ﻿using MainService.DAL.Abstractions;
-namespace MainService.DAL.Features.Courses.Models;
+using MainService.DAL.Features.Courses.Models;
+
+namespace MainService.DAL.Features.Lessons;
 
 public class Lesson : IEntity<Guid>
 {

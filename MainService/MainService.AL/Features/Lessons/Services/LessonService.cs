@@ -1,9 +1,10 @@
 ﻿using MainService.AL.Features.Lessons.DTO.Request;
 using MainService.AL.Features.Lessons.DTO.Response;
-using MainService.BLL.Data.Lessons;
+using MainService.BLL.Data.Courses;
 using MainService.BLL.Services;
 using MainService.DAL.Abstractions;
 using MainService.DAL.Features.Courses.Models;
+using MainService.DAL.Features.Lessons;
 using Mapster;
 using MapsterMapper;
 
@@ -76,7 +77,6 @@ public class LessonService : ILessonService
         var entity = await _unitOfWork.Lessons.GetItemByIdAsync(id, cancellationToken);
         if (entity is null) throw new KeyNotFoundException($"Lesson {id} not found");
 
-        // Keep test deletion as-is
         await _testRepository.DeleteAsync(entity.TestId, cancellationToken);
 
         _unitOfWork.Lessons.DeleteItem(entity);

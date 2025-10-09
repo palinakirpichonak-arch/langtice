@@ -1,8 +1,9 @@
 ﻿using MainService.AL.Features.Lessons.DTO.Request;
-using MainService.BLL.Data.Lessons;
+using MainService.BLL.Data.Courses;
 using MainService.BLL.Services;
 using MainService.DAL.Abstractions;
 using MainService.DAL.Features.Courses.Models;
+using MainService.DAL.Features.Lessons;
 using MapsterMapper;
 using MongoDB.Bson;
 

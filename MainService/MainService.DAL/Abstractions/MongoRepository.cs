@@ -21,6 +21,20 @@ public class MongoRepository<T, TKey> : IMongoRepository<T, TKey> where T : clas
         return await _collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
     }
 
+    public async Task<PaginatedList<T>> GetAllItemsWithIdAsync(
+        TKey id, int pageIndex, int pageSize, CancellationToken cancellationToken)
+    {
+        var filter = Builders<T>.Filter.Eq("Id", id); // фильтруем по самому Id
+        var totalCount = (int)await _collection.CountDocumentsAsync(filter, cancellationToken: cancellationToken);
+
+        var items = await _collection.Find(filter)
+            .Skip((pageIndex - 1) * pageSize)
+            .Limit(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return new PaginatedList<T>(items, pageIndex, totalCount);
+    }
+
     public async Task AddAsync(T entity, CancellationToken cancellationToken)
         => await _collection.InsertOneAsync(entity, null, cancellationToken);
 

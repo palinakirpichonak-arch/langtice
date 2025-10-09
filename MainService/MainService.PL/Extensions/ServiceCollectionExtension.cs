@@ -1,4 +1,5 @@
 ﻿using MainService.AL.Features.Courses.Services;
+using MainService.AL.Features.FlashCards.Services;
 using MainService.AL.Features.Languages.Services;
 using MainService.AL.Features.Lessons.Services;
 using MainService.AL.Features.Translations.Services;
@@ -6,13 +7,14 @@ using MainService.AL.Features.Words.Services;
 using MainService.AL.Mappers;
 using MainService.BLL.Data.Courses;
 using MainService.BLL.Data.Languages;
-using MainService.BLL.Data.Lessons;
 using MainService.BLL.Data.Translations.Repository;
+using MainService.BLL.Data.Users;
 using MainService.BLL.Data.Words.Repository;
 using MainService.BLL.Services;
 using MainService.DAL.Abstractions;
 using MainService.DAL.Context;
 using MainService.DAL.Features.Courses.Models;
+using MainService.DAL.Features.Lessons;
 using MainService.DAL.Services;
 using MainService.PL.Services;
 using MainService.PL.Services.Options;
@@ -74,8 +76,11 @@ public static class ServiceCollectionExtension
         services.AddScoped<ILanguageRepository, LanguageRepository>();
         services.AddScoped<ILessonRepository, LessonRepository>();
         services.AddScoped<ITestRepository, TestRepository>();
+        services.AddScoped<IUserFlashCardsRepository, UserFlashCardsRepository>();
         services.AddScoped<IMongoRepository<Test, string>>(sp =>
             new MongoRepository<Test, string>(sp.GetRequiredService<MongoDbContext>(), "tests"));
+        services.AddScoped<IMongoRepository<UserFlashCards, string>>(sp =>
+            new MongoRepository<UserFlashCards, string>(sp.GetRequiredService<MongoDbContext>(), "flashcards"));
 
         // Services (AL)
         services.AddScoped<IWordService, WordService>();
@@ -86,6 +91,7 @@ public static class ServiceCollectionExtension
         services.AddScoped<ILanguageService, LanguageService>();
         services.AddScoped<ILessonService, LessonService>();
         services.AddScoped<ITestService, TestService>();
+        services.AddScoped<IUserFlashCardsService, UserFlashCardsService>();
         
         //Controllers
         services.AddControllers();

@@ -2,6 +2,7 @@
 using MainService.AL.Features.Lessons.DTO.Response;
 using MainService.DAL.Abstractions;
 using MainService.DAL.Features.Courses.Models;
+using MainService.DAL.Features.Lessons;
 
 namespace MainService.AL.Features.Lessons.Services;
 
