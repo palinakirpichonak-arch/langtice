@@ -34,9 +34,9 @@ public class FlashCardController : ControllerBase
     
     // POST: /flashcards/generate/{userId}
     [HttpPost("generate/{userId}")]
-    public async Task<IActionResult> GenerateFromUserWords(Guid userId, [FromQuery] string? title, CancellationToken cancellationToken)
+    public async Task<IActionResult> GenerateFromUserWords(Guid userId, [FromQuery] string? title, int count, CancellationToken cancellationToken)
     {
-        var set = await _flashCardsService.GenerateFromUserWordsAsync(userId, title, cancellationToken);
+        var set = await _flashCardsService.GenerateFromUserWordsAsync(userId, title, count, cancellationToken);
         return CreatedAtAction(nameof(GetById), new { id = set.Id }, set);
     }
 

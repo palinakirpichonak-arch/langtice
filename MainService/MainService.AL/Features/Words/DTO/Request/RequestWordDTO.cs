@@ -2,6 +2,6 @@
 
 public class RequestWordDto
 {
+    public Guid Id { get; set; }
     public string Text { get; set; } = null!;
-    public Guid LanguageId { get; set; }
 }

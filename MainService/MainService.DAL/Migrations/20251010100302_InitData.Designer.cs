@@ -3,6 +3,7 @@ using System;
 using MainService.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MainService.DAL.Migrations
 {
     [DbContext(typeof(PostgreDbContext))]
-    partial class PostgreLangticeContextModelSnapshot : ModelSnapshot
+    [Migration("20251010100302_InitData")]
+    partial class InitData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,35 +49,15 @@ namespace MainService.DAL.Migrations
                     b.HasIndex("LearningLanguageId");
 
                     b.ToTable("Courses");
-                });
 
-            modelBuilder.Entity("MainService.DAL.Features.Courses.Models.Lesson", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CourseId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("OrderNum")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("TestId")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("Lessons");
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("7ff9cff2-4cf1-45db-aa70-855bb69e507d"),
+                            BaseLanguageId = new Guid("8dc05007-6ed9-406a-9eeb-fbbf748283e2"),
+                            LearningLanguageId = new Guid("8e5a2463-e8d1-427a-bd84-9386e073999f"),
+                            Status = true
+                        });
                 });
 
             modelBuilder.Entity("MainService.DAL.Features.Courses.Models.UserCourse", b =>
@@ -129,6 +112,35 @@ namespace MainService.DAL.Migrations
                         });
                 });
 
+            modelBuilder.Entity("MainService.DAL.Features.Lessons.Lesson", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("OrderNum")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TestId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("Lessons");
+                });
+
             modelBuilder.Entity("MainService.DAL.Features.Translations.Models.Translation", b =>
                 {
                     b.Property<Guid>("Id")
@@ -153,6 +165,29 @@ namespace MainService.DAL.Migrations
                     b.HasIndex("ToWordId");
 
                     b.ToTable("Translations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b1b2c3d4-e5f6-4789-abc1-123456789001"),
+                            CourseId = new Guid("7ff9cff2-4cf1-45db-aa70-855bb69e507d"),
+                            FromWordId = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789001"),
+                            ToWordId = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789006")
+                        },
+                        new
+                        {
+                            Id = new Guid("b1b2c3d4-e5f6-4789-abc1-123456789002"),
+                            CourseId = new Guid("7ff9cff2-4cf1-45db-aa70-855bb69e507d"),
+                            FromWordId = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789002"),
+                            ToWordId = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789007")
+                        },
+                        new
+                        {
+                            Id = new Guid("b1b2c3d4-e5f6-4789-abc1-123456789003"),
+                            CourseId = new Guid("7ff9cff2-4cf1-45db-aa70-855bb69e507d"),
+                            FromWordId = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789003"),
+                            ToWordId = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789008")
+                        });
                 });
 
             modelBuilder.Entity("MainService.DAL.Features.Users.Models.User", b =>
@@ -194,45 +229,7 @@ namespace MainService.DAL.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MainService.DAL.Features.Words.Models.UserWord", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("WordId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("AddedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("UserId", "WordId");
-
-                    b.HasIndex("WordId");
-
-                    b.ToTable("UserWords");
-                });
-
-            modelBuilder.Entity("MainService.DAL.Features.Words.Models.Word", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("LanguageId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("Words");
-                });
-
-            modelBuilder.Entity("MainService.DAL.Models.UserInfo", b =>
+            modelBuilder.Entity("MainService.DAL.Features.Users.Models.UserInfo", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -267,6 +264,138 @@ namespace MainService.DAL.Migrations
                     b.ToTable("UserInfo");
                 });
 
+            modelBuilder.Entity("MainService.DAL.Features.Words.Models.UserWord", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("WordId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("AddedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("UserId", "WordId");
+
+                    b.HasIndex("WordId");
+
+                    b.ToTable("UserWords");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("a1b2c3d4-e5f6-4a7b-8c9d-1234567890ab"),
+                            WordId = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789001"),
+                            AddedAt = new DateTime(2024, 1, 10, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            UserId = new Guid("a1b2c3d4-e5f6-4a7b-8c9d-1234567890ab"),
+                            WordId = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789002"),
+                            AddedAt = new DateTime(2024, 1, 11, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            UserId = new Guid("a1b2c3d4-e5f6-4a7b-8c9d-1234567890ab"),
+                            WordId = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789003"),
+                            AddedAt = new DateTime(2024, 1, 12, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            UserId = new Guid("a1b2c3d4-e5f6-4a7b-8c9d-1234567890ab"),
+                            WordId = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789006"),
+                            AddedAt = new DateTime(2024, 1, 13, 0, 0, 0, 0, DateTimeKind.Utc)
+                        },
+                        new
+                        {
+                            UserId = new Guid("a1b2c3d4-e5f6-4a7b-8c9d-1234567890ab"),
+                            WordId = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789007"),
+                            AddedAt = new DateTime(2024, 1, 14, 0, 0, 0, 0, DateTimeKind.Utc)
+                        });
+                });
+
+            modelBuilder.Entity("MainService.DAL.Features.Words.Models.Word", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("LanguageId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("Words");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789001"),
+                            LanguageId = new Guid("8dc05007-6ed9-406a-9eeb-fbbf748283e2"),
+                            Text = "Hello"
+                        },
+                        new
+                        {
+                            Id = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789002"),
+                            LanguageId = new Guid("8dc05007-6ed9-406a-9eeb-fbbf748283e2"),
+                            Text = "Goodbye"
+                        },
+                        new
+                        {
+                            Id = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789003"),
+                            LanguageId = new Guid("8dc05007-6ed9-406a-9eeb-fbbf748283e2"),
+                            Text = "Thank you"
+                        },
+                        new
+                        {
+                            Id = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789004"),
+                            LanguageId = new Guid("8dc05007-6ed9-406a-9eeb-fbbf748283e2"),
+                            Text = "Please"
+                        },
+                        new
+                        {
+                            Id = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789005"),
+                            LanguageId = new Guid("8dc05007-6ed9-406a-9eeb-fbbf748283e2"),
+                            Text = "Water"
+                        },
+                        new
+                        {
+                            Id = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789006"),
+                            LanguageId = new Guid("8e5a2463-e8d1-427a-bd84-9386e073999f"),
+                            Text = "Hallo"
+                        },
+                        new
+                        {
+                            Id = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789007"),
+                            LanguageId = new Guid("8e5a2463-e8d1-427a-bd84-9386e073999f"),
+                            Text = "Auf Wiedersehen"
+                        },
+                        new
+                        {
+                            Id = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789008"),
+                            LanguageId = new Guid("8e5a2463-e8d1-427a-bd84-9386e073999f"),
+                            Text = "Danke"
+                        },
+                        new
+                        {
+                            Id = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789009"),
+                            LanguageId = new Guid("8e5a2463-e8d1-427a-bd84-9386e073999f"),
+                            Text = "Bitte"
+                        },
+                        new
+                        {
+                            Id = new Guid("a1b2c3d4-e5f6-4789-abc1-123456789010"),
+                            LanguageId = new Guid("8e5a2463-e8d1-427a-bd84-9386e073999f"),
+                            Text = "Wasser"
+                        });
+                });
+
             modelBuilder.Entity("MainService.DAL.Features.Courses.Models.Course", b =>
                 {
                     b.HasOne("MainService.DAL.Features.Languages.Models.Language", "BaseLanguage")
@@ -284,17 +413,6 @@ namespace MainService.DAL.Migrations
                     b.Navigation("BaseLanguage");
 
                     b.Navigation("LearningLanguage");
-                });
-
-            modelBuilder.Entity("MainService.DAL.Features.Courses.Models.Lesson", b =>
-                {
-                    b.HasOne("MainService.DAL.Features.Courses.Models.Course", "Course")
-                        .WithMany("Lessons")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("MainService.DAL.Features.Courses.Models.UserCourse", b =>
@@ -316,6 +434,17 @@ namespace MainService.DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("MainService.DAL.Features.Lessons.Lesson", b =>
+                {
+                    b.HasOne("MainService.DAL.Features.Courses.Models.Course", "Course")
+                        .WithMany("Lessons")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
             modelBuilder.Entity("MainService.DAL.Features.Translations.Models.Translation", b =>
                 {
                     b.HasOne("MainService.DAL.Features.Courses.Models.Course", "Course")
@@ -323,13 +452,13 @@ namespace MainService.DAL.Migrations
                         .HasForeignKey("CourseId");
 
                     b.HasOne("MainService.DAL.Features.Words.Models.Word", "FromWord")
-                        .WithMany("TranslationsFrom")
+                        .WithMany()
                         .HasForeignKey("FromWordId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("MainService.DAL.Features.Words.Models.Word", "ToWord")
-                        .WithMany("TranslationsTo")
+                        .WithMany()
                         .HasForeignKey("ToWordId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -339,6 +468,17 @@ namespace MainService.DAL.Migrations
                     b.Navigation("FromWord");
 
                     b.Navigation("ToWord");
+                });
+
+            modelBuilder.Entity("MainService.DAL.Features.Users.Models.UserInfo", b =>
+                {
+                    b.HasOne("MainService.DAL.Features.Users.Models.User", "User")
+                        .WithOne("Userinfo")
+                        .HasForeignKey("MainService.DAL.Features.Users.Models.UserInfo", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MainService.DAL.Features.Words.Models.UserWord", b =>
@@ -364,20 +504,10 @@ namespace MainService.DAL.Migrations
                 {
                     b.HasOne("MainService.DAL.Features.Languages.Models.Language", "Language")
                         .WithMany()
-                        .HasForeignKey("LanguageId");
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Language");
-                });
-
-            modelBuilder.Entity("MainService.DAL.Models.UserInfo", b =>
-                {
-                    b.HasOne("MainService.DAL.Features.Users.Models.User", "User")
-                        .WithOne("Userinfo")
-                        .HasForeignKey("MainService.DAL.Models.UserInfo", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MainService.DAL.Features.Courses.Models.Course", b =>
@@ -399,10 +529,6 @@ namespace MainService.DAL.Migrations
 
             modelBuilder.Entity("MainService.DAL.Features.Words.Models.Word", b =>
                 {
-                    b.Navigation("TranslationsFrom");
-
-                    b.Navigation("TranslationsTo");
-
                     b.Navigation("UserWords");
                 });
 #pragma warning restore 612, 618

@@ -33,7 +33,7 @@ namespace MainService.AL.Features.FlashCards.Services
             return await _flashCardsRepository.GetByIdAsync(id, cancellationToken);
         }
 
-        public async Task<UserFlashCards> GenerateFromUserWordsAsync(Guid userId, string? title, CancellationToken cancellationToken)
+        public async Task<UserFlashCards> GenerateFromUserWordsAsync(Guid userId, string? title, int count, CancellationToken cancellationToken)
         {
             var userWordsPage = await _unitOfWork.UserWords.GetAllByUserIdAsync(userId, 1, int.MaxValue, cancellationToken);
             var translations = await _unitOfWork.Translations.GetAllItemsAsync(cancellationToken);
@@ -51,6 +51,7 @@ namespace MainService.AL.Features.FlashCards.Services
                     };
                 })
                 .Where(fc => fc != null)
+                .Take(count)
                 .ToList()!;
 
             var entity = new UserFlashCards

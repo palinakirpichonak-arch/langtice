@@ -24,6 +24,7 @@ public class UserWordRepository : Repository<UserWord, UserWordKey>, IUserWordRe
     public async Task<PaginatedList<UserWord>> GetAllByUserIdAsync(Guid userId, int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
         var query = _dbContext.UserWords
+            .Include(uw => uw.Word)
             .Where(uw => uw.UserId == userId);
 
         var items = await query

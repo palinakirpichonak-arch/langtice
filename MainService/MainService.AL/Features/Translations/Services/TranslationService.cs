@@ -1,5 +1,6 @@
 ﻿using MainService.AL.Features.Translations.DTO.Request;
 using MainService.AL.Features.Translations.DTO.Response;
+using MainService.AL.Features.Words.DTO.Response;
 using MainService.BLL.Services;
 using MainService.DAL.Abstractions;
 using MainService.DAL.Features.Translations.Models;
@@ -27,8 +28,30 @@ public class TranslationService : ITranslationService
 
     public async Task<PaginatedList<ResponseTranslationDto>> GetAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
-        var entities = await _unitOfWork.Translations.GetAllItemsAsync(pageIndex, pageSize, cancellationToken);
-        var list = entities.Items.Adapt<List<ResponseTranslationDto>>();
+        var entities = await _unitOfWork.Translations
+            .GetAllItemsAsync(cancellationToken);
+
+        var pagedEntities = entities
+            .Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+        
+        var list = pagedEntities.Select(t => new ResponseTranslationDto
+        {
+            Id = t.Id,
+            CourseId = t.CourseId,
+            FromWord = new ResponseWordDto
+            {
+                Id = t.FromWord.Id,
+                Text = t.FromWord.Text
+            },
+            ToWord = new ResponseWordDto
+            {
+                Id = t.ToWord.Id,
+                Text = t.ToWord.Text
+            }
+        }).ToList();
+
         return new PaginatedList<ResponseTranslationDto>(list, pageIndex, pageSize);
     }
 
