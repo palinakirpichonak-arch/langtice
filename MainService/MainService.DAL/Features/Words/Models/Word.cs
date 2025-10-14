@@ -8,8 +8,8 @@ public class Word : IEntity<Guid>
 {
     public Guid Id { get; set; }
     public string Text { get; set; } = null!;
-    public Guid? LanguageId { get; set; }
-    public Language? Language { get; set; }
+    public Guid LanguageId { get; set; }
+    public Language Language { get; set; }
     
     [JsonIgnore]
     public ICollection<UserWord>? UserWords { get; set; } = new List<UserWord>();

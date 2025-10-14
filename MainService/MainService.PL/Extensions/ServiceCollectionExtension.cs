@@ -86,10 +86,11 @@ public static class ServiceCollectionExtension
         services.AddScoped<ILessonRepository, LessonRepository>();
         services.AddScoped<ITestRepository, TestRepository>();
         services.AddScoped<IUserFlashCardsRepository, UserFlashCardsRepository>();
+        services.AddScoped<IUserTestRepository, UserTestRepository>();
         services.AddScoped<IMongoRepository<Test, string>>(sp =>
             new MongoRepository<Test, string>(sp.GetRequiredService<MongoDbContext>(), "tests"));
         services.AddScoped<IMongoRepository<UserFlashCards, string>>(sp =>
-            new MongoRepository<UserFlashCards, string>(sp.GetRequiredService<MongoDbContext>(), "flashcards"));
+            new MongoRepository<UserFlashCards, string>(sp.GetRequiredService<MongoDbContext>(), "userflashcards"));
 
         // Services (AL)
         services.AddScoped<IWordService, WordService>();
@@ -101,6 +102,8 @@ public static class ServiceCollectionExtension
         services.AddScoped<ILessonService, LessonService>();
         services.AddScoped<ITestService, TestService>();
         services.AddScoped<IUserFlashCardsService, UserFlashCardsService>();
+        services.AddScoped<IUserTestService, UserTestService>();
+        
         services.AddScoped<ILLMService, LLMService>();
         //Controllers
         services.AddControllers();

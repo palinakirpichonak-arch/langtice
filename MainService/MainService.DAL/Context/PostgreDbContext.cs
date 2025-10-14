@@ -18,6 +18,7 @@ public class PostgreDbContext(DbContextOptions<PostgreDbContext> options) : DbCo
     public DbSet<Lesson> Lessons { get; set; }
     public DbSet<UserWord> UserWords { get; set; }
     public DbSet<UserCourse> UserCourses { get; set; }
+    public DbSet<UserTest> UserTests { get; set; }
     public DbSet<Translation> Translations { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

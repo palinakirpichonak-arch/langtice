@@ -1,6 +1,5 @@
 ﻿using MainService.AL.Features.Words.DTO.Request;
 using MainService.AL.Features.Words.DTO.Response;
-using MainService.DAL.Abstractions;
 
 namespace MainService.AL.Features.Words.Services;
 

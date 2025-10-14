@@ -66,7 +66,7 @@ public class TestController : ControllerBase
     }
 
     [HttpPost("{id}/submit")]
-    public async Task<IActionResult> SubmitTest(string id, [FromBody] UserTestDto userTest, CancellationToken cancellationToken)
+    public async Task<IActionResult> SubmitTest(string id, [FromBody] UserAnswerDto userTest, CancellationToken cancellationToken)
     {
         var result = await _testService.CheckTest(id, userTest, cancellationToken);
         return Ok(new { Correct = result.correct, Mistakes = result.mistake });

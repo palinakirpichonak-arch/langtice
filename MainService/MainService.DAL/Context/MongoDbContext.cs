@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
 using MainService.DAL.Features.Courses.Models;
 using MainService.DAL.Features.Lessons;
+using MainService.DAL.Features.Users.Models;
 
 namespace MainService.DAL.Context
 {
@@ -18,7 +19,6 @@ namespace MainService.DAL.Context
             return _database.GetCollection<T>(collectionName);
         }
         public IMongoCollection<Test> Tests => _database.GetCollection<Test>("tests");
-        public IMongoCollection<UserFlashCards> Flashcards => _database.GetCollection<UserFlashCards>("flashcards");
-        
+        public IMongoCollection<UserFlashCards> Flashcards => _database.GetCollection<UserFlashCards>("userflashcards");
     }
 }

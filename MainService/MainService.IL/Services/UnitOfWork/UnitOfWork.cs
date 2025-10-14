@@ -18,6 +18,7 @@ namespace MainService.BLL.Services
         public IWordRepository Words { get; }
         public IUserWordRepository UserWords { get; }
         public IUserCourseRepository UserCourses { get; }
+        public IUserTestRepository UserTests { get; }
 
         public UnitOfWork(PostgreDbContext dbContext)
         {
@@ -30,6 +31,7 @@ namespace MainService.BLL.Services
             Words = new WordRepository(_dbContext);
             UserWords = new UserWordRepository(_dbContext);
             UserCourses = new UserCourseRepository(_dbContext);
+            UserTests = new UserTestRepository(_dbContext);
         }
 
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

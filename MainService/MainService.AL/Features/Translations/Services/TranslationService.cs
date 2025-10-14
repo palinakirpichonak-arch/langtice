@@ -4,7 +4,6 @@ using MainService.AL.Features.Words.DTO.Response;
 using MainService.BLL.Services;
 using MainService.DAL.Abstractions;
 using MainService.DAL.Features.Translations.Models;
-using Mapster;
 using MapsterMapper;
 
 namespace MainService.AL.Features.Translations.Services;

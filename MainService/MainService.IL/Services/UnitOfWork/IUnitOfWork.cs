@@ -14,6 +14,7 @@ namespace MainService.BLL.Services
         public IWordRepository Words { get; }
         public IUserWordRepository UserWords { get; }
         public IUserCourseRepository UserCourses { get; }
+        public IUserTestRepository UserTests { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

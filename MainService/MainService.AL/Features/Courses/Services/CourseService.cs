@@ -1,7 +1,6 @@
 ﻿using MainService.AL.Features.Courses.DTO.Request;
 using MainService.AL.Features.Courses.DTO.Response;
 using MainService.BLL.Services;
-using MainService.DAL.Abstractions;
 using MainService.DAL.Features.Courses.Models;
 using MapsterMapper;
 

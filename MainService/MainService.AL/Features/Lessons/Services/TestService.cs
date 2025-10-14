@@ -1,8 +1,6 @@
 ﻿using MainService.AL.Features.Lessons.DTO.Request;
 using MainService.BLL.Data.Courses;
 using MainService.BLL.Services;
-using MainService.DAL.Abstractions;
-using MainService.DAL.Features.Courses.Models;
 using MainService.DAL.Features.Lessons;
 using MapsterMapper;
 using MongoDB.Bson;
@@ -79,10 +77,18 @@ public class TestService : ITestService
             _unitOfWork.Lessons.UpdateItem(lesson);
         }
 
+        var userTests = await _unitOfWork.UserTests.GetAllItemsAsync(cancellationToken);
+        var userTestsToDelete = userTests.Where(ut => ut.TestId == id);
+
+        foreach (var ut in userTestsToDelete)
+        {
+            _unitOfWork.UserTests.DeleteItem(ut);
+        }
+        
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<(int correct, int mistake)> CheckTest(string testId, UserTestDto userTest, CancellationToken cancellationToken)
+    public async Task<(int correct, int mistake)> CheckTest(string testId, UserAnswerDto userTest, CancellationToken cancellationToken)
     {
         var test = await _testRepository.GetByIdAsync(testId, cancellationToken);
 

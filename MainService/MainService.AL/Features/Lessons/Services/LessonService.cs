@@ -3,7 +3,6 @@ using MainService.AL.Features.Lessons.DTO.Response;
 using MainService.BLL.Data.Courses;
 using MainService.BLL.Services;
 using MainService.DAL.Abstractions;
-using MainService.DAL.Features.Courses.Models;
 using MainService.DAL.Features.Lessons;
 using Mapster;
 using MapsterMapper;

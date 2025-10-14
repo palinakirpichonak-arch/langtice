@@ -20,5 +20,7 @@ public class User : IEntity<Guid>
     
     [JsonIgnore]
     public ICollection<UserWord> UserWords { get; set; } = new List<UserWord>();
+    [JsonIgnore]
+    public ICollection<UserTest> UserTests { get; set; } = new List<UserTest>();
 
 }

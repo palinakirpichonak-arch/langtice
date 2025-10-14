@@ -1,12 +1,11 @@
 ﻿using MainService.AL.Features.Lessons.DTO.Request;
-using MainService.DAL.Features.Courses.Models;
 using MainService.DAL.Features.Lessons;
 
 namespace MainService.AL.Features.Lessons.Services;
 
 public interface ITestService 
 {
-    public Task<(int correct, int mistake)> CheckTest(string testId, UserTestDto userTest, CancellationToken cancellationToken);
+    public Task<(int correct, int mistake)> CheckTest(string testId, UserAnswerDto userTest, CancellationToken cancellationToken);
     public Task<ActiveTestDto> GetActiveTest(string testId, CancellationToken cancellationToken);
     Task<Test?> GetByIdAsync(string id, CancellationToken cancellationToken);
     Task<IEnumerable<Test>> GetAllByLessonIdAsync(Guid lessonId, CancellationToken cancellationToken);

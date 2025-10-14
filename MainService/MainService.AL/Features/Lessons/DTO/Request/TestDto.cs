@@ -1,5 +1,4 @@
-﻿using MainService.DAL.Features.Courses.Models;
-using MainService.DAL.Features.Lessons;
+﻿using MainService.DAL.Features.Lessons;
 
 namespace MainService.AL.Features.Lessons.DTO.Request;
 
