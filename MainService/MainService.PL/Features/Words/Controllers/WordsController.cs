@@ -1,4 +1,5 @@
 ﻿using MainService.AL.Features.Words.DTO.Request;
+using MainService.AL.Features.Words.DTO.Response;
 using MainService.AL.Features.Words.Services;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -47,6 +48,13 @@ namespace MainService.PL.Features.Words.Controllers
         {
             await _wordService.DeleteAsync(id, cancellationToken);
             return NoContent();
+        }
+        
+        [HttpPost("translate")]
+        public async Task<IActionResult> TranslateWord([FromBody] RequestTranslateWordDto dto, CancellationToken cancellationToken)
+        {
+            var result = await _wordService.TranslateWordAsync(dto, cancellationToken);
+            return Ok(result);
         }
     }
 }

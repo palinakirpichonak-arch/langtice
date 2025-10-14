@@ -11,4 +11,6 @@ public interface IWordService
     Task<ResponseWordDto> CreateAsync(RequestWordDto dto, CancellationToken cancellationToken);
     Task<ResponseWordDto> UpdateAsync(Guid id, RequestWordDto dto, CancellationToken cancellationToken);
     Task DeleteAsync(Guid id, CancellationToken cancellationToken);
-}
+
+    Task<ResponseTranslateWordDto> TranslateWordAsync(RequestTranslateWordDto dto, CancellationToken cancellationToken);
+} 

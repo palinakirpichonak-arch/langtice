@@ -10,6 +10,7 @@ public class ResponseUserWordDto
 
 public class UserWordDto
 {
+    public Guid Id { get; set; }
     public string Word { get; set; } = null!;
     public DateTime? AddedAt { get; set; }
 }

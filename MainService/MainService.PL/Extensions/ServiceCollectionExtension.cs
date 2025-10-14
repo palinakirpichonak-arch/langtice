@@ -2,6 +2,7 @@
 using MainService.AL.Features.FlashCards.Services;
 using MainService.AL.Features.Languages.Services;
 using MainService.AL.Features.Lessons.Services;
+using MainService.AL.Features.LLM;
 using MainService.AL.Features.Translations.Services;
 using MainService.AL.Features.Words.Services;
 using MainService.AL.Mappers;
@@ -11,9 +12,9 @@ using MainService.BLL.Data.Translations.Repository;
 using MainService.BLL.Data.Users;
 using MainService.BLL.Data.Words.Repository;
 using MainService.BLL.Services;
+using MainService.BLL.Services.LLM;
 using MainService.DAL.Abstractions;
 using MainService.DAL.Context;
-using MainService.DAL.Features.Courses.Models;
 using MainService.DAL.Features.Lessons;
 using MainService.DAL.Services;
 using MainService.PL.Services;
@@ -45,6 +46,13 @@ public static class ServiceCollectionExtension
             options.Connection = configuration["MONGO_CONNECTION"];
             options.Database = configuration["MONGO_DB"];
         });
+        
+        services.Configure<LlmOptions>(options =>
+        {
+            options.ApiKey = configuration["API_KEY"];
+            options.BaseUrl = configuration["BASE_URL"];
+            options.Model = configuration["MODEL"];
+        });
     }
     
     public static void ConfigureDbContext(this IServiceCollection services)
@@ -66,6 +74,7 @@ public static class ServiceCollectionExtension
         services.AddScoped<IMigrationService, MigrationService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddHostedService<MigrationHostedService>();
+        services.AddHttpClient<ILlmClient, Llm>();
 
         //Repositories (DAL)
         services.AddScoped<IWordRepository, WordRepository>();
@@ -92,7 +101,7 @@ public static class ServiceCollectionExtension
         services.AddScoped<ILessonService, LessonService>();
         services.AddScoped<ITestService, TestService>();
         services.AddScoped<IUserFlashCardsService, UserFlashCardsService>();
-        
+        services.AddScoped<ILLMService, LLMService>();
         //Controllers
         services.AddControllers();
 

@@ -23,6 +23,7 @@ public static class MapsterConfig
             .Map(dest => dest.UserId, src => src.UserId)
             .Map(dest => dest.UserWords, src => new List<UserWordDto> { src.Adapt<UserWordDto>() });
         TypeAdapterConfig<UserWord, UserWordDto>.NewConfig()
+            .Map(dest=>dest.Id, src=>src.Id.WordId)
             .Map(dest => dest.Word, src => src.Word.Text)
             .Map(dest => dest.AddedAt, src => src.AddedAt);
         TypeAdapterConfig<(Guid UserId, PaginatedList<UserWord> UserWords), ResponseUserWordDto>.NewConfig()
