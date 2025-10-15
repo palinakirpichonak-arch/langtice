@@ -1,10 +1,8 @@
-﻿using MainService.DAL.Features.Courses.Models;
-using MainService.DAL.Features.Lessons;
-using MainService.DAL.Features.Users.Models;
+﻿using MainService.DAL.Features.Users.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace MainService.DAL.Configurations;
+namespace MainService.DAL.Configurations.PostgreSql;
 
 public class UserTestConfiguration :  IEntityTypeConfiguration<UserTest>
 {
@@ -13,7 +11,7 @@ public class UserTestConfiguration :  IEntityTypeConfiguration<UserTest>
         modelBuilder.HasKey(ut => ut.Id);
 
         modelBuilder.HasOne(ut => ut.User)
-            .WithMany(u => u.UserTests) // make sure User entity has ICollection<UserTest> UserTests
+            .WithMany(u => u.UserTests) 
             .HasForeignKey(ut => ut.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 

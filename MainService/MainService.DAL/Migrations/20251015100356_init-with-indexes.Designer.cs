@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MainService.DAL.Migrations
 {
     [DbContext(typeof(PostgreDbContext))]
-    [Migration("20251014123023_AddUserTest")]
-    partial class AddUserTest
+    [Migration("20251015100356_init-with-indexes")]
+    partial class initwithindexes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,9 +44,10 @@ namespace MainService.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BaseLanguageId");
-
                     b.HasIndex("LearningLanguageId");
+
+                    b.HasIndex("BaseLanguageId", "LearningLanguageId")
+                        .IsUnique();
 
                     b.ToTable("Courses");
 
@@ -86,6 +87,8 @@ namespace MainService.DAL.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name");
 
                     b.ToTable("Languages");
 
@@ -138,6 +141,10 @@ namespace MainService.DAL.Migrations
 
                     b.HasIndex("CourseId");
 
+                    b.HasIndex("Name");
+
+                    b.HasIndex("TestId");
+
                     b.ToTable("Lessons");
                 });
 
@@ -160,9 +167,10 @@ namespace MainService.DAL.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("FromWordId");
-
                     b.HasIndex("ToWordId");
+
+                    b.HasIndex("FromWordId", "ToWordId", "CourseId")
+                        .IsUnique();
 
                     b.ToTable("Translations");
 
@@ -215,6 +223,15 @@ namespace MainService.DAL.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("PasswordHash")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("Users");
 
@@ -349,7 +366,7 @@ namespace MainService.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("LanguageId")
+                    b.Property<Guid>("LanguageId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Text")
@@ -359,6 +376,9 @@ namespace MainService.DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("LanguageId");
+
+                    b.HasIndex("Text")
+                        .IsUnique();
 
                     b.ToTable("Words");
 
@@ -545,7 +565,8 @@ namespace MainService.DAL.Migrations
                     b.HasOne("MainService.DAL.Features.Languages.Models.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Language");
                 });

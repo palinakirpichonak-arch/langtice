@@ -2,6 +2,7 @@
 using MainService.AL.Features.Lessons.DTO.Response;
 using MainService.BLL.Services;
 using MainService.BLL.Services.LLM;
+using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Abstractions;
 using MainService.DAL.Features.Lessons;
 using MainService.DAL.Features.Users.Models;
@@ -74,7 +75,7 @@ public class UserTestService : IUserTestService
                 ? name
                 : "English";
             
-            var prompt = $"Generate 2 sentences where the word '{userWord.Word.Text}' is missing. " +
+            var prompt = $"Generate 2 sentences in '{langName}' where the word '{userWord.Word.Text}' is missing. " +
                          "Provide 3 options (one correct) for each sentence. " +
                          "Return as JSON array: [{\"Sentence\":..., \"AnswerOptions\": [...], \"CorrectAnswer\": ...}, ...]";
             

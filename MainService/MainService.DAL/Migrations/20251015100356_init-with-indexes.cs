@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MainService.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class InitData : Migration
+    public partial class initwithindexes : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -73,7 +73,7 @@ namespace MainService.DAL.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Text = table.Column<string>(type: "text", nullable: false),
-                    LanguageId = table.Column<Guid>(type: "uuid", nullable: true)
+                    LanguageId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -104,6 +104,28 @@ namespace MainService.DAL.Migrations
                     table.PrimaryKey("PK_UserInfo", x => x.Id);
                     table.ForeignKey(
                         name: "FK_UserInfo_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserTests",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    TestId = table.Column<string>(type: "text", nullable: true),
+                    OrderNum = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserTests_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -273,9 +295,10 @@ namespace MainService.DAL.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Courses_BaseLanguageId",
+                name: "IX_Courses_BaseLanguageId_LearningLanguageId",
                 table: "Courses",
-                column: "BaseLanguageId");
+                columns: new[] { "BaseLanguageId", "LearningLanguageId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Courses_LearningLanguageId",
@@ -283,9 +306,24 @@ namespace MainService.DAL.Migrations
                 column: "LearningLanguageId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Languages_Name",
+                table: "Languages",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Lessons_CourseId",
                 table: "Lessons",
                 column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Lessons_Name",
+                table: "Lessons",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Lessons_TestId",
+                table: "Lessons",
+                column: "TestId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Translations_CourseId",
@@ -293,9 +331,10 @@ namespace MainService.DAL.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Translations_FromWordId",
+                name: "IX_Translations_FromWordId_ToWordId_CourseId",
                 table: "Translations",
-                column: "FromWordId");
+                columns: new[] { "FromWordId", "ToWordId", "CourseId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Translations_ToWordId",
@@ -314,6 +353,29 @@ namespace MainService.DAL.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_PasswordHash",
+                table: "Users",
+                column: "PasswordHash",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Username",
+                table: "Users",
+                column: "Username",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTests_UserId",
+                table: "UserTests",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserWords_WordId",
                 table: "UserWords",
                 column: "WordId");
@@ -322,6 +384,12 @@ namespace MainService.DAL.Migrations
                 name: "IX_Words_LanguageId",
                 table: "Words",
                 column: "LanguageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Words_Text",
+                table: "Words",
+                column: "Text",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -338,6 +406,9 @@ namespace MainService.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserInfo");
+
+            migrationBuilder.DropTable(
+                name: "UserTests");
 
             migrationBuilder.DropTable(
                 name: "UserWords");

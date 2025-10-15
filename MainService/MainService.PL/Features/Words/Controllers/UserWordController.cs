@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Words.Controllers
 {
-    [Tags("Userwords")]
+    [Tags("UserWords")]
     [Route("user-words")]
     [ApiController]
     public class UserWordsController : ControllerBase

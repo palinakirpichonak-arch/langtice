@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace MainService.DAL.Configurations;
+namespace MainService.DAL.Configurations.PostgreSql;
 
 public class UserCourseConfiguration :  IEntityTypeConfiguration<UserCourse>
 {

@@ -6,7 +6,7 @@ namespace MainService.BLL.Data.Users;
 
 public class UserFlashCardsRepository : MongoRepository<UserFlashCards, string>, IUserFlashCardsRepository
 {
-    public UserFlashCardsRepository(MongoDbContext context) : base(context, "flashcards")
+    public UserFlashCardsRepository(MongoDbContext context) : base(context, "userflashcards")
     {
     }
 }

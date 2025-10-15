@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Courses.Controllers;
 
-[Tags("Usercourses")]
+[Tags("UserCourses")]
 [Route("user-courses")]
 [ApiController]
 public class UserCourseController : ControllerBase

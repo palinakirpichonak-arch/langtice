@@ -2,12 +2,16 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace MainService.DAL.Configurations;
+namespace MainService.DAL.Configurations.PostgreSql;
 
 public class LanguageConfiguration : IEntityTypeConfiguration<Language>
 {
     public void Configure(EntityTypeBuilder<Language> builder)
     {
+        builder.HasKey(t => t.Id);
+        
+        builder.HasIndex(l => l.Name);
+        
         builder.HasData(
             new Language { Id = Guid.Parse("8dc05007-6ed9-406a-9eeb-fbbf748283e2"), Name = "English" },
             new Language { Id = Guid.Parse("8e5a2463-e8d1-427a-bd84-9386e073999f"), Name = "German" },

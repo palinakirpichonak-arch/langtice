@@ -1,11 +1,11 @@
-﻿using MainService.BLL.Services;
-using MainService.AL.Features.Lessons.Services;
-using MainService.BLL.Data.Users;
+﻿using MainService.BLL.Data.Users;
+using MainService.BLL.Services;
+using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Features.Lessons;
 using MapsterMapper;
 using MongoDB.Bson;
 
-namespace MainService.AL.Features.FlashCards.Services
+namespace MainService.AL.Features.Lessons.Services
 {
     public class UserFlashCardsService : IUserFlashCardsService
     {
@@ -34,7 +34,7 @@ namespace MainService.AL.Features.FlashCards.Services
 
         public async Task<UserFlashCards> GenerateFromUserWordsAsync(Guid userId, string? title, int count, CancellationToken cancellationToken)
         {
-            var userWordsPage = await _unitOfWork.UserWords.GetAllByUserIdAsync(userId, 1, int.MaxValue, cancellationToken);
+            var userWordsPage = await _unitOfWork.UserWords.GetAllByUserIdAsync(userId, 1, count, cancellationToken);
             var translations = await _unitOfWork.Translations.GetAllItemsAsync(cancellationToken);
 
             var flashCards = userWordsPage.Items
@@ -58,7 +58,8 @@ namespace MainService.AL.Features.FlashCards.Services
                 Id = ObjectId.GenerateNewId().ToString(),
                 UserId = userId,
                 Title = title ?? "Generated Flashcards",
-                Items = flashCards
+                Items = flashCards,
+                CreatedAt = DateTime.UtcNow
             };
 
             await _flashCardsRepository.AddAsync(entity, cancellationToken);

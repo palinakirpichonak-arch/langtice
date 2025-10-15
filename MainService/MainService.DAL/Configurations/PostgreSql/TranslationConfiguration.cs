@@ -2,12 +2,18 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace MainService.DAL.Configurations;
+namespace MainService.DAL.Configurations.PostgreSql;
 
 public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
 {
     public void Configure(EntityTypeBuilder<Translation> builder)
     {
+        builder.HasKey(t => t.Id);
+        
+        builder
+            .HasIndex(t => new { t.FromWordId, t.ToWordId, t.CourseId })
+            .IsUnique();
+        
         builder
             .HasOne(t => t.FromWord)
             .WithMany()
@@ -25,7 +31,7 @@ public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
             .WithMany()
             .HasForeignKey(t => t.CourseId)
             .IsRequired(false);
-
+        
         var courseId = Guid.Parse("7ff9cff2-4cf1-45db-aa70-855bb69e507d");
         builder.HasData(
             // English to German translations
