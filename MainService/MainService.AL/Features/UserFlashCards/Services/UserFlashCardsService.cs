@@ -1,4 +1,5 @@
-﻿using MainService.BLL.Data.UserFlashCards;
+﻿using MainService.AL.Features.UserFlashCards.DTO.Request;
+using MainService.BLL.Data.UserFlashCards;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Features.UserFlashCard;
 using MapsterMapper;
@@ -31,9 +32,9 @@ namespace MainService.AL.Features.UserFlashCards.Services
             return await _flashCardsRepository.GetByIdAsync(id, cancellationToken);
         }
 
-        public async Task<DAL.Features.UserFlashCard.UserFlashCards> GenerateFromUserWordsAsync(Guid userId, string? title, int count, CancellationToken cancellationToken)
+        public async Task<DAL.Features.UserFlashCard.UserFlashCards> GenerateFromUserWordsAsync(RequestUserFlashCardDto dto, CancellationToken cancellationToken)
         {
-            var userWordsPage = await _unitOfWork.UserWords.GetAllByUserIdAsync(userId, 1, count, cancellationToken);
+            var userWordsPage = await _unitOfWork.UserWords.GetAllByUserIdAsync(dto.UserId, 1, dto.Count, cancellationToken);
             var translations = await _unitOfWork.Translations.GetAllItemsAsync(cancellationToken);
 
             var flashCards = userWordsPage.Items
@@ -49,14 +50,14 @@ namespace MainService.AL.Features.UserFlashCards.Services
                     };
                 })
                 .Where(fc => fc != null)
-                .Take(count)
+                .Take(dto.Count)
                 .ToList()!;
 
             var entity = new DAL.Features.UserFlashCard.UserFlashCards
             {
                 Id = ObjectId.GenerateNewId().ToString(),
-                UserId = userId,
-                Title = title ?? "Generated Flashcards",
+                UserId = dto.UserId,
+                Title = dto.Title ?? "Generated Flashcards",
                 Items = flashCards,
                 CreatedAt = DateTime.UtcNow
             };

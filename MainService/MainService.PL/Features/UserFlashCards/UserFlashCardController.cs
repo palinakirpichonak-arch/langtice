@@ -1,4 +1,5 @@
-﻿using MainService.AL.Features.UserFlashCards.Services;
+﻿using MainService.AL.Features.UserFlashCards.DTO.Request;
+using MainService.AL.Features.UserFlashCards.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.UserFlashCards;
@@ -14,16 +15,13 @@ public class UserFlashController : ControllerBase
     {
         _flashCardsService = flashCardsService;
     }
-
-    // GET: /flashcards/user/{userId}
+    
     [HttpGet("user/{userId}")]
     public async Task<IActionResult> GetAllByUser(Guid userId, CancellationToken cancellationToken)
     {
         var sets = await _flashCardsService.GetAllByUserAsync(userId, cancellationToken);
         return Ok(sets);
     }
-
-    // GET: /flashcards/{id}
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(string id, CancellationToken cancellationToken)
     {
@@ -32,15 +30,13 @@ public class UserFlashController : ControllerBase
         return Ok(set);
     }
     
-    // POST: /flashcards/generate/{userId}
     [HttpPost("generate/{userId}")]
-    public async Task<IActionResult> GenerateFromUserWords(Guid userId, [FromQuery] string? title, int count, CancellationToken cancellationToken)
+    public async Task<IActionResult> GenerateFromUserWords([FromBody] RequestUserFlashCardDto dto, CancellationToken cancellationToken)
     {
-        var set = await _flashCardsService.GenerateFromUserWordsAsync(userId, title, count, cancellationToken);
+        var set = await _flashCardsService.GenerateFromUserWordsAsync(dto, cancellationToken);
         return CreatedAtAction(nameof(GetById), new { id = set.Id }, set);
     }
-
-    // DELETE: /flashcards/{id}
+    
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id, CancellationToken cancellationToken)
     {

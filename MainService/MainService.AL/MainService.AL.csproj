@@ -9,7 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\UserFlashCards\DTO\Request\" />
     <Folder Include="Features\UserFlashCards\DTO\Response\" />
   </ItemGroup>
 
