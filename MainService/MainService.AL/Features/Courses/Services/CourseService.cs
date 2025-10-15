@@ -1,7 +1,7 @@
 ﻿using MainService.AL.Features.Courses.DTO.Request;
 using MainService.AL.Features.Courses.DTO.Response;
-using MainService.BLL.Services;
-using MainService.DAL.Features.Courses.Models;
+using MainService.BLL.Services.UnitOfWork;
+using MainService.DAL.Features.Courses;
 using MapsterMapper;
 
 namespace MainService.AL.Features.Courses.Services;

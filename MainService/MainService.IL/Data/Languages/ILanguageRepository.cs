@@ -1,5 +1,5 @@
 ﻿using MainService.DAL.Abstractions;
-using MainService.DAL.Features.Languages.Models;
+using MainService.DAL.Features.Languages;
 
 namespace MainService.BLL.Data.Languages;
 

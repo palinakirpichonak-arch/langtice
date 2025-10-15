@@ -1,10 +1,10 @@
 ﻿using MainService.AL.Features.Words.DTO.Request;
 using MainService.AL.Features.Words.DTO.Response;
-using MainService.BLL.Services;
 using MainService.BLL.Services.LLM;
+using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Abstractions;
-using MainService.DAL.Features.Translations.Models;
-using MainService.DAL.Features.Words.Models;
+using MainService.DAL.Features.Translations;
+using MainService.DAL.Features.Words;
 using Mapster;
 using MapsterMapper;
 

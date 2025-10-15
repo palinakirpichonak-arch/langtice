@@ -1,6 +1,4 @@
-using System.ComponentModel.DataAnnotations;
-
-namespace MainService.PL.Services.Options
+namespace MainService.BLL.Services.Options
 {
 	public class PostgresOptions
 	{

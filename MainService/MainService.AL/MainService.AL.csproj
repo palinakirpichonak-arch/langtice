@@ -8,6 +8,11 @@
     <PackageReference Include="Mapster" Version="7.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\UserFlashCards\DTO\Request\" />
+    <Folder Include="Features\UserFlashCards\DTO\Response\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

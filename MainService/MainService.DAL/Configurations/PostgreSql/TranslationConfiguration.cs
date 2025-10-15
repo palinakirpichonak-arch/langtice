@@ -1,4 +1,4 @@
-﻿using MainService.DAL.Features.Translations.Models;
+﻿using MainService.DAL.Features.Translations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

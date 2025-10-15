@@ -1,11 +1,14 @@
 using MainService.BLL.Data.Courses;
 using MainService.BLL.Data.Languages;
-using MainService.BLL.Data.Translations.Repository;
-using MainService.BLL.Data.Users;
-using MainService.BLL.Data.Words.Repository;
-using MainService.DAL.Context;
+using MainService.BLL.Data.Lessons;
+using MainService.BLL.Data.Translations;
+using MainService.BLL.Data.UserCourses;
+using MainService.BLL.Data.UserTest;
+using MainService.BLL.Data.UserWord;
+using MainService.BLL.Data.Words;
+using MainService.DAL.Context.PostgreSql;
 
-namespace MainService.BLL.Services
+namespace MainService.BLL.Services.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork, IDisposable
     {

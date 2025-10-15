@@ -1,8 +1,8 @@
 ﻿using MainService.AL.Features.Languages.DTO.Request;
 using MainService.AL.Features.Languages.DTO.Response;
-using MainService.BLL.Services;
+using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Abstractions;
-using MainService.DAL.Features.Languages.Models;
+using MainService.DAL.Features.Languages;
 using Mapster;
 using MapsterMapper;
 

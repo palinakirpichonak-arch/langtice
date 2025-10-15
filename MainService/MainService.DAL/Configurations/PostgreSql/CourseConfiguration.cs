@@ -1,4 +1,4 @@
-﻿using MainService.DAL.Features.Courses.Models;
+﻿using MainService.DAL.Features.Courses;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

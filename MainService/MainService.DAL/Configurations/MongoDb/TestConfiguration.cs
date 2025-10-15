@@ -1,5 +1,5 @@
 ﻿using MainService.DAL.Abstractions;
-using MainService.DAL.Features.Lessons;
+using MainService.DAL.Features.Test;
 using MongoDB.Driver;
 
 namespace MainService.DAL.Configurations.MongoDb;

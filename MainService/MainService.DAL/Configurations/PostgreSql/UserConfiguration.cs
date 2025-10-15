@@ -1,4 +1,4 @@
-﻿using MainService.DAL.Features.Users.Models;
+﻿using MainService.DAL.Features.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
