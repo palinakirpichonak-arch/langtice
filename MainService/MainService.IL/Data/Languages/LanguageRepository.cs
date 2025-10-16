@@ -1,6 +1,6 @@
 ﻿using MainService.DAL.Abstractions;
-using MainService.DAL.Context;
-using MainService.DAL.Features.Languages.Models;
+using MainService.DAL.Context.PostgreSql;
+using MainService.DAL.Features.Languages;
 
 namespace MainService.BLL.Data.Languages;
 

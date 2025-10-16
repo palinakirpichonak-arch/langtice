@@ -1,8 +1,10 @@
 ﻿using MainService.AL.Features.Words.DTO.Request;
 using MainService.AL.Features.Words.DTO.Response;
-using MainService.BLL.Services;
+using MainService.BLL.Services.LLM;
+using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Abstractions;
-using MainService.DAL.Features.Words.Models;
+using MainService.DAL.Features.Translations;
+using MainService.DAL.Features.Words;
 using Mapster;
 using MapsterMapper;
 
@@ -12,11 +14,13 @@ public class WordService : IWordService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly ILlmClient _llm;
 
-    public WordService(IUnitOfWork unitOfWork, IMapper mapper)
+    public WordService(IUnitOfWork unitOfWork, IMapper mapper,  ILlmClient llm)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _llm = llm;
     }
 
     public async Task<ResponseWordDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -63,4 +67,86 @@ public class WordService : IWordService
         _unitOfWork.Words.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<ResponseTranslateWordDto> TranslateWordAsync(RequestTranslateWordDto dto, CancellationToken cancellationToken)
+{
+    var course = await _unitOfWork.Courses.GetItemByIdAsync(dto.CourseId, cancellationToken);
+    if (course is null)
+        throw new KeyNotFoundException($"Course {dto.CourseId} not found");
+
+    Word? sourceWord = null;
+
+    if (dto.WordId.HasValue)
+    {
+        sourceWord = await _unitOfWork.Words.GetItemByIdAsync(dto.WordId.Value, cancellationToken);
+    }
+    else if (!string.IsNullOrWhiteSpace(dto.Text))
+    {
+        var allWords = await _unitOfWork.Words.GetAllItemsAsync(cancellationToken);
+        sourceWord = allWords.FirstOrDefault(w => w.Text.ToLower() == dto.Text.ToLower());
+    }
+
+    if (sourceWord is null)
+    {
+        sourceWord = new Word
+        {
+            Id = Guid.NewGuid(),
+            Text = dto.Text ?? throw new ArgumentException("Text must be provided"),
+            LanguageId = course.BaseLanguageId
+        };
+        _unitOfWork.Words.AddItem(sourceWord);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+
+    var translations = await _unitOfWork.Translations.GetAllItemsAsync(cancellationToken);
+    var existingTranslation = translations.FirstOrDefault(t =>
+        t.CourseId == course.Id && t.FromWordId == sourceWord.Id);
+
+    if (existingTranslation != null)
+    {
+        var targetWord = await _unitOfWork.Words.GetItemByIdAsync(existingTranslation.ToWordId, cancellationToken);
+        return new ResponseTranslateWordDto
+        {
+            FromWordId = sourceWord.Id,
+            FromText = sourceWord.Text,
+            ToWordId = targetWord!.Id,
+            ToText = targetWord.Text,
+            CourseId = course.Id
+        };
+    }
+
+    var baseLang = course.BaseLanguage.Name;
+    var learnLang = course.LearningLanguage.Name;
+    
+    var prompt = $"Translate the word \"{sourceWord.Text}\" from {baseLang} to {learnLang}. Respond with only the translated word.";
+    var translatedText = await _llm.SendRequestAsync(prompt);
+
+    var targetWordEntity = new Word
+    {
+        Id = Guid.NewGuid(),
+        Text = translatedText.Trim(),
+        LanguageId = course.LearningLanguageId
+    };
+    _unitOfWork.Words.AddItem(targetWordEntity);
+
+    var translation = new Translation
+    {
+        Id = Guid.NewGuid(),
+        CourseId = course.Id,
+        FromWordId = sourceWord.Id,
+        ToWordId = targetWordEntity.Id
+    };
+
+    _unitOfWork.Translations.AddItem(translation);
+    await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+    return new ResponseTranslateWordDto
+    {
+        FromWordId = sourceWord.Id,
+        FromText = sourceWord.Text,
+        ToWordId = targetWordEntity.Id,
+        ToText = targetWordEntity.Text,
+        CourseId = course.Id
+    };
+}
 }

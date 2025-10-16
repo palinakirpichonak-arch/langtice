@@ -1,5 +1,5 @@
 using MainService.DAL.Abstractions;
-using MainService.DAL.Context;
+using MainService.DAL.Context.PostgreSql;
 using Microsoft.EntityFrameworkCore;
 
 namespace MainService.DAL.Services;
