@@ -1,11 +1,14 @@
 using MainService.BLL.Data.Courses;
 using MainService.BLL.Data.Languages;
-using MainService.BLL.Data.Translations.Repository;
-using MainService.BLL.Data.Users;
-using MainService.BLL.Data.Words.Repository;
-using MainService.DAL.Context;
+using MainService.BLL.Data.Lessons;
+using MainService.BLL.Data.Translations;
+using MainService.BLL.Data.UserCourses;
+using MainService.BLL.Data.UserTest;
+using MainService.BLL.Data.UserWord;
+using MainService.BLL.Data.Words;
+using MainService.DAL.Context.PostgreSql;
 
-namespace MainService.BLL.Services
+namespace MainService.BLL.Services.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
@@ -18,6 +21,7 @@ namespace MainService.BLL.Services
         public IWordRepository Words { get; }
         public IUserWordRepository UserWords { get; }
         public IUserCourseRepository UserCourses { get; }
+        public IUserTestRepository UserTests { get; }
 
         public UnitOfWork(PostgreDbContext dbContext)
         {
@@ -30,6 +34,7 @@ namespace MainService.BLL.Services
             Words = new WordRepository(_dbContext);
             UserWords = new UserWordRepository(_dbContext);
             UserCourses = new UserCourseRepository(_dbContext);
+            UserTests = new UserTestRepository(_dbContext);
         }
 
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

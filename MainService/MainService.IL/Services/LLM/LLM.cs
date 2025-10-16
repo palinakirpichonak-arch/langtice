@@ -1,4 +1,4 @@
-﻿using MainService.PL.Services.Options;
+﻿using MainService.BLL.Services.Options;
 using Microsoft.Extensions.Options;
 
 namespace MainService.BLL.Services.LLM;

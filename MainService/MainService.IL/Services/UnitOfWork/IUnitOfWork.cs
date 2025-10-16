@@ -1,10 +1,13 @@
 using MainService.BLL.Data.Courses;
 using MainService.BLL.Data.Languages;
-using MainService.BLL.Data.Translations.Repository;
-using MainService.BLL.Data.Users;
-using MainService.BLL.Data.Words.Repository;
+using MainService.BLL.Data.Lessons;
+using MainService.BLL.Data.Translations;
+using MainService.BLL.Data.UserCourses;
+using MainService.BLL.Data.UserTest;
+using MainService.BLL.Data.UserWord;
+using MainService.BLL.Data.Words;
 
-namespace MainService.BLL.Services
+namespace MainService.BLL.Services.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable
     {   public ICourseRepository Courses { get; }
@@ -14,6 +17,7 @@ namespace MainService.BLL.Services
         public IWordRepository Words { get; }
         public IUserWordRepository UserWords { get; }
         public IUserCourseRepository UserCourses { get; }
+        public IUserTestRepository UserTests { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

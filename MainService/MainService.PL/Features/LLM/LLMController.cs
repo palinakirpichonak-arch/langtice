@@ -1,6 +1,8 @@
 ﻿using MainService.AL.Features.LLM;
 using Microsoft.AspNetCore.Mvc;
 
+namespace MainService.PL.Features.LLM;
+
 [ApiController]
 [Route("api/[controller]")]
 public class LLMController : ControllerBase
