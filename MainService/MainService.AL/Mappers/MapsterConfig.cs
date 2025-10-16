@@ -1,12 +1,14 @@
-﻿using MainService.AL.Features.Courses.DTO.Request;
-using MainService.AL.Features.Courses.DTO.Response;
-using MainService.AL.Features.Translations.DTO.Response;
-using MainService.AL.Features.Words.DTO.Request;
+﻿using MainService.AL.Features.Translations.DTO.Response;
+using MainService.AL.Features.UserCourse.DTO.Request;
+using MainService.AL.Features.UserCourse.DTO.Response;
+using MainService.AL.Features.UserWords.DTO.Request;
+using MainService.AL.Features.UserWords.DTO.Response;
 using MainService.AL.Features.Words.DTO.Response;
 using MainService.DAL.Abstractions;
-using MainService.DAL.Features.Courses.Models;
-using MainService.DAL.Features.Translations.Models;
-using MainService.DAL.Features.Words.Models;
+using MainService.DAL.Features.Translations;
+using MainService.DAL.Features.UserCourse;
+using MainService.DAL.Features.UserWord;
+using MainService.DAL.Features.Words;
 using Mapster;
 
 namespace MainService.AL.Mappers;
@@ -23,6 +25,7 @@ public static class MapsterConfig
             .Map(dest => dest.UserId, src => src.UserId)
             .Map(dest => dest.UserWords, src => new List<UserWordDto> { src.Adapt<UserWordDto>() });
         TypeAdapterConfig<UserWord, UserWordDto>.NewConfig()
+            .Map(dest=>dest.Id, src=>src.Id.WordId)
             .Map(dest => dest.Word, src => src.Word.Text)
             .Map(dest => dest.AddedAt, src => src.AddedAt);
         TypeAdapterConfig<(Guid UserId, PaginatedList<UserWord> UserWords), ResponseUserWordDto>.NewConfig()

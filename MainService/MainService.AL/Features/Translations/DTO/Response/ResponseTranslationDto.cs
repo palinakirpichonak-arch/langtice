@@ -1,5 +1,4 @@
 ﻿using MainService.AL.Features.Words.DTO.Response;
-using MainService.DAL.Features.Words.Models;
 
 namespace MainService.AL.Features.Translations.DTO.Response;
 
