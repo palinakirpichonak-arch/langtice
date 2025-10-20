@@ -1,7 +1,6 @@
 ﻿using MainService.AL.Features.Courses.Services;
 using MainService.AL.Features.Languages.Services;
 using MainService.AL.Features.Lessons.Services;
-using MainService.AL.Features.LLM;
 using MainService.AL.Features.Tests.Services;
 using MainService.AL.Features.Translations.Services;
 using MainService.AL.Features.UserCourse.Service;
@@ -16,20 +15,17 @@ using MainService.BLL.Data.Lessons;
 using MainService.BLL.Data.Tests;
 using MainService.BLL.Data.Translations;
 using MainService.BLL.Data.UserCourses;
-using MainService.BLL.Data.UserFlashCards;
-using MainService.BLL.Data.UserTest;
 using MainService.BLL.Data.UserWord;
 using MainService.BLL.Data.Words;
-using MainService.BLL.Services.LLM;
 using MainService.BLL.Services.Options;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Abstractions;
 using MainService.DAL.Context.MongoDb;
 using MainService.DAL.Context.PostgreSql;
 using MainService.DAL.Features.Test;
-using MainService.DAL.Features.UserFlashCard;
 using MainService.DAL.Services;
 using MainService.PL.Services;
+using MainService.PL.Services.Options;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -42,42 +38,27 @@ public static class ServiceCollectionExtension
     public static void ConfigureAppOptions(this IServiceCollection services, IConfiguration configuration)
     {
         // PostgreSQL
-        services.Configure<PostgresOptions>(options =>
-        {
-            options.Host = configuration["DB_HOST"];
-            options.Port = configuration["DB_PORT"];
-            options.Database = configuration["DB_NAME"];
-            options.User = configuration["DB_USER"];
-            options.Password = configuration["DB_PASS"];
-        });
+        services.Configure<PostgreOptions>(configuration);
 
         // MongoDB
-        services.Configure<MongoOptions>(options =>
-        {
-            options.Connection = configuration["MONGO_CONNECTION"];
-            options.Database = configuration["MONGO_DB"];
-        });
+        services.Configure<MongoOptions>(configuration);
         
-        services.Configure<LlmOptions>(options =>
-        {
-            options.ApiKey = configuration["API_KEY"];
-            options.BaseUrl = configuration["BASE_URL"];
-            options.Model = configuration["MODEL"];
-        });
+        //LLM
+        services.Configure<LlmOptions>(configuration);
     }
     
     public static void ConfigureDbContext(this IServiceCollection services)
     {
         services.AddDbContext<PostgreDbContext>((sp, options) =>
         {
-            var pgOptions = sp.GetRequiredService<IOptions<PostgresOptions>>().Value;
+            var pgOptions = sp.GetRequiredService<IOptions<PostgreOptions>>().Value;
             options.UseNpgsql(pgOptions.ConnectionString);
         });
 
         services.AddSingleton<MongoDbContext>(sp =>
         {
             var mongoOptions = sp.GetRequiredService<IOptions<MongoOptions>>().Value;
-            return new MongoDbContext(mongoOptions.Connection, mongoOptions.Database);
+            return new MongoDbContext(mongoOptions.MongoConnection, mongoOptions.MongoDatabase);
         });
     }
     public static void ConfigureServices(this IServiceCollection services)
@@ -85,7 +66,6 @@ public static class ServiceCollectionExtension
         services.AddScoped<IMigrationService, MigrationService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddHostedService<MigrationHostedService>();
-        services.AddHttpClient<ILlmClient, Llm>();
 
         //Repositories (DAL)
         services.AddScoped<IWordRepository, WordRepository>();
@@ -96,12 +76,8 @@ public static class ServiceCollectionExtension
         services.AddScoped<ILanguageRepository, LanguageRepository>();
         services.AddScoped<ILessonRepository, LessonRepository>();
         services.AddScoped<ITestRepository, TestRepository>();
-        services.AddScoped<IUserFlashCardsRepository, UserFlashCardsRepository>();
-        services.AddScoped<IUserTestRepository, UserTestRepository>();
         services.AddScoped<IMongoRepository<Test, string>>(sp =>
             new MongoRepository<Test, string>(sp.GetRequiredService<MongoDbContext>(), "tests"));
-        services.AddScoped<IMongoRepository<UserFlashCards, string>>(sp =>
-            new MongoRepository<UserFlashCards, string>(sp.GetRequiredService<MongoDbContext>(), "userflashcards"));
 
         // Services (AL)
         services.AddScoped<IWordService, WordService>();
@@ -115,7 +91,6 @@ public static class ServiceCollectionExtension
         services.AddScoped<IUserFlashCardsService, UserFlashCardsService>();
         services.AddScoped<IUserTestService, UserTestService>();
         
-        services.AddScoped<ILLMService, LLMService>();
         //Controllers
         services.AddControllers();
 

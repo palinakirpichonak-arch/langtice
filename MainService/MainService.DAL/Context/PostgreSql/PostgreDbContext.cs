@@ -23,12 +23,7 @@ public class PostgreDbContext(DbContextOptions<PostgreDbContext> options) : DbCo
     public DbSet<UserCourse> UserCourses { get; set; }
     public DbSet<UserTest> UserTests { get; set; }
     public DbSet<Translation> Translations { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseNpgsql();
-    }
-
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {}
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

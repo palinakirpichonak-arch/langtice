@@ -1,6 +1,6 @@
 ﻿using MainService.AL.Features.Lessons.DTO.Request;
 using MainService.AL.Features.Lessons.DTO.Response;
-using MainService.BLL.Data.Courses;
+using MainService.BLL.Data.Lessons;
 using MainService.BLL.Data.Tests;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Abstractions;
@@ -12,39 +12,41 @@ namespace MainService.AL.Features.Lessons.Services;
 
 public class LessonService : ILessonService
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly ILessonRepository _lessonRepository;
     private readonly ITestRepository _testRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public LessonService(IUnitOfWork unitOfWork, ITestRepository testRepository, IMapper mapper)
+    public LessonService(ILessonRepository lessonRepository, ITestRepository testRepository,IUnitOfWork unitOfWork, IMapper mapper)
     {
-        _unitOfWork = unitOfWork;
+        _lessonRepository = lessonRepository;
         _testRepository = testRepository;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
     public async Task<IEnumerable<Lesson>> GetAllByCourseIdAsync(Guid courseId, CancellationToken cancellationToken)
     {
-        var lessons = await _unitOfWork.Lessons.GetAllItemsAsync(cancellationToken);
+        var lessons = await _lessonRepository.GetAllItemsAsync(cancellationToken);
         return lessons.Where(l => l.CourseId == courseId);
     }
 
     public async Task<ResponseLessonDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var entity = await _unitOfWork.Lessons.GetItemByIdAsync(id, cancellationToken);
+        var entity = await _lessonRepository.GetItemByIdAsync(id, cancellationToken);
         return entity is null ? null : _mapper.Map<ResponseLessonDto>(entity);
     }
 
     public async Task<PaginatedList<ResponseLessonDto>> GetAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
-        var entities = await _unitOfWork.Lessons.GetAllItemsAsync(pageIndex, pageSize, cancellationToken);
+        var entities = await _lessonRepository.GetAllItemsAsync(pageIndex, pageSize, cancellationToken);
         var list = entities.Items.Adapt<List<ResponseLessonDto>>();
         return new PaginatedList<ResponseLessonDto>(list, pageIndex, pageSize);
     }
 
     public async Task<PaginatedList<ResponseLessonDto>> GetAllWithCourseIdAsync(Guid courseId, int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
-        var entities = await _unitOfWork.Lessons.GetAllItemsWithIdAsync(courseId, pageIndex, pageSize, cancellationToken);
+        var entities = await _lessonRepository.GetAllItemsWithIdAsync(courseId, pageIndex, pageSize, cancellationToken);
         var list = entities.Items.Adapt<List<ResponseLessonDto>>();
         return new PaginatedList<ResponseLessonDto>(list, pageIndex, pageSize);
     }
@@ -54,7 +56,7 @@ public class LessonService : ILessonService
         var entity = _mapper.Map<Lesson>(dto);
         entity.Id = Guid.NewGuid();
 
-        _unitOfWork.Lessons.AddItem(entity);
+        _lessonRepository.AddItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return _mapper.Map<ResponseLessonDto>(entity);
@@ -62,11 +64,11 @@ public class LessonService : ILessonService
 
     public async Task<ResponseLessonDto> UpdateAsync(Guid id, RequestLessonDto dto, CancellationToken cancellationToken)
     {
-        var entity = await _unitOfWork.Lessons.GetItemByIdAsync(id, cancellationToken);
+        var entity = await _lessonRepository.GetItemByIdAsync(id, cancellationToken);
         if (entity is null) throw new KeyNotFoundException($"Lesson {id} not found");
 
         _mapper.Map(dto, entity);
-        _unitOfWork.Lessons.UpdateItem(entity);
+        _lessonRepository.UpdateItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return _mapper.Map<ResponseLessonDto>(entity);
@@ -74,12 +76,12 @@ public class LessonService : ILessonService
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var entity = await _unitOfWork.Lessons.GetItemByIdAsync(id, cancellationToken);
+        var entity = await _lessonRepository.GetItemByIdAsync(id, cancellationToken);
         if (entity is null) throw new KeyNotFoundException($"Lesson {id} not found");
 
         await _testRepository.DeleteAsync(entity.TestId, cancellationToken);
 
-        _unitOfWork.Lessons.DeleteItem(entity);
+        _lessonRepository.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

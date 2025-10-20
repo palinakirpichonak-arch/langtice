@@ -1,5 +1,6 @@
 ﻿using MainService.AL.Features.UserWords.DTO.Request;
 using MainService.AL.Features.UserWords.DTO.Response;
+using MainService.BLL.Data.UserWord;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Abstractions;
 using MainService.DAL.Features.UserWord;
@@ -10,18 +11,20 @@ namespace MainService.AL.Features.UserWords.Services;
 
 public class UserWordService : IUserWordService
 {
+    private readonly IUserWordRepository _userWordRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
 
-    public UserWordService(IUnitOfWork unitOfWork, IMapper mapper)
+    public UserWordService(
+        IUserWordRepository userWordRepository,
+        IUnitOfWork unitOfWork)
     {
+        _userWordRepository = userWordRepository;
         _unitOfWork = unitOfWork;
-        _mapper = mapper;
     }
 
     public async Task<ResponseUserWordDto> GetAllByUserIdAsync(Guid userId, CancellationToken cancellationToken)
     {
-        var entities = await _unitOfWork.UserWords.GetAllItemsAsync(cancellationToken);
+        var entities = await _userWordRepository.GetAllItemsAsync(cancellationToken);
 
         var userWordDtos = entities
             .Where(e => e.UserId == userId)
@@ -43,7 +46,7 @@ public class UserWordService : IUserWordService
 
     public async Task<ResponseUserWordDto> GetAllWithUserIdAsync(Guid userId, int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
-        var paginatedEntities = await _unitOfWork.UserWords.GetAllByUserIdAsync(userId, pageIndex, pageSize, cancellationToken);
+        var paginatedEntities = await _userWordRepository.GetAllByUserIdAsync(userId, pageIndex, pageSize, cancellationToken);
 
         var result = (userId, paginatedEntities).Adapt<ResponseUserWordDto>();
 
@@ -53,7 +56,7 @@ public class UserWordService : IUserWordService
     public async Task<ResponseUserWordDto?> GetByIdsAsync(Guid userId, Guid wordId, CancellationToken cancellationToken)
     {
         var key = new UserWordKey(userId, wordId);
-        var entity = await _unitOfWork.UserWords.GetItemByIdAsync(key, cancellationToken);
+        var entity = await _userWordRepository.GetItemByIdAsync(key, cancellationToken);
 
         if (entity is null) return null;
 
@@ -72,7 +75,7 @@ public class UserWordService : IUserWordService
         var entity = dto.Adapt<UserWord>();
         entity.AddedAt = DateTime.UtcNow;
 
-        _unitOfWork.UserWords.AddItem(entity);
+        _userWordRepository.AddItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         var userWordDto = entity.Adapt<UserWordDto>();
@@ -88,10 +91,10 @@ public class UserWordService : IUserWordService
     public async Task DeleteAsync(Guid userId, Guid wordId, CancellationToken cancellationToken)
     {
         var key = new UserWordKey(userId, wordId);
-        var entity = await _unitOfWork.UserWords.GetItemByIdAsync(key, cancellationToken);
+        var entity = await _userWordRepository.GetItemByIdAsync(key, cancellationToken);
         if (entity is null) throw new KeyNotFoundException($"UserWord {key} not found");
 
-        _unitOfWork.UserWords.DeleteItem(entity);
+        _userWordRepository.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }

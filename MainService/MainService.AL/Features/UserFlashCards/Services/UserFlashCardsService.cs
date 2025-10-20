@@ -1,5 +1,8 @@
 ﻿using MainService.AL.Features.UserFlashCards.DTO.Request;
+using MainService.BLL.Data.Translations;
+using MainService.BLL.Data.UserCourses;
 using MainService.BLL.Data.UserFlashCards;
+using MainService.BLL.Data.UserWord;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Features.UserFlashCard;
 using MapsterMapper;
@@ -9,15 +12,21 @@ namespace MainService.AL.Features.UserFlashCards.Services
 {
     public class UserFlashCardsService : IUserFlashCardsService
     {
+        private readonly IUserWordRepository  _userWordRepository;
+        private readonly ITranslationRepository  _translationRepository;
         private readonly IUserFlashCardsRepository _flashCardsRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public UserFlashCardsService(
+            IUserWordRepository  userWordRepository,
+            ITranslationRepository  translationRepository,
             IUserFlashCardsRepository flashCardsRepository,
             IUnitOfWork unitOfWork,
             IMapper mapper)
         {
+            _userWordRepository = userWordRepository;
+            _translationRepository = translationRepository;
             _flashCardsRepository = flashCardsRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -34,8 +43,8 @@ namespace MainService.AL.Features.UserFlashCards.Services
 
         public async Task<DAL.Features.UserFlashCard.UserFlashCards> GenerateFromUserWordsAsync(RequestUserFlashCardDto dto, CancellationToken cancellationToken)
         {
-            var userWordsPage = await _unitOfWork.UserWords.GetAllByUserIdAsync(dto.UserId, 1, dto.Count, cancellationToken);
-            var translations = await _unitOfWork.Translations.GetAllItemsAsync(cancellationToken);
+            var userWordsPage = await _userWordRepository.GetAllByUserIdAsync(dto.UserId, 1, dto.Count, cancellationToken);
+            var translations = await _translationRepository.GetAllItemsAsync(cancellationToken);
 
             var flashCards = userWordsPage.Items
                 .Select(uw =>

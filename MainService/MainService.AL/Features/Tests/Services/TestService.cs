@@ -1,7 +1,8 @@
 ﻿using MainService.AL.Features.Tests.DTO.Request;
 using MainService.AL.Features.Tests.DTO.Response;
-using MainService.BLL.Data.Courses;
+using MainService.BLL.Data.Lessons;
 using MainService.BLL.Data.Tests;
+using MainService.BLL.Data.UserTest;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Features.Test;
 using MapsterMapper;
@@ -11,15 +12,21 @@ namespace MainService.AL.Features.Tests.Services;
 
 public class TestService : ITestService
 {
+    private readonly ILessonRepository _lessonRepository;
+    private readonly IUserTestRepository _userTestRepository;
     private readonly ITestRepository _testRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
     public TestService(
+        ILessonRepository lessonRepository,
+        IUserTestRepository userTestRepository,
         ITestRepository testRepository, 
         IUnitOfWork unitOfWork, 
         IMapper mapper)
     {
+        _lessonRepository = lessonRepository;
+        _userTestRepository = userTestRepository;
         _testRepository = testRepository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
@@ -39,7 +46,7 @@ public class TestService : ITestService
     public async Task<IEnumerable<Test>> GetAllByLessonIdAsync(Guid lessonId, CancellationToken cancellationToken)
     {
         var allTests = await _testRepository.GetAllAsync(cancellationToken);
-        var lesson = await _unitOfWork.Lessons.GetItemByIdAsync(lessonId, cancellationToken);
+        var lesson = await _lessonRepository.GetItemByIdAsync(lessonId, cancellationToken);
         return allTests.Where(t => t.Id == lesson.TestId);
     }
 
@@ -70,21 +77,21 @@ public class TestService : ITestService
     {
         await _testRepository.DeleteAsync(id, cancellationToken);
 
-        var lessons = await _unitOfWork.Lessons.GetAllItemsAsync(cancellationToken);
+        var lessons = await _lessonRepository.GetAllItemsAsync(cancellationToken);
         var lessonsToUpdate = lessons.Where(l => l.TestId == id);
 
         foreach (var lesson in lessonsToUpdate)
         {
             lesson.TestId = null;
-            _unitOfWork.Lessons.UpdateItem(lesson);
+            _lessonRepository.UpdateItem(lesson);
         }
 
-        var userTests = await _unitOfWork.UserTests.GetAllItemsAsync(cancellationToken);
+        var userTests = await _userTestRepository.GetAllItemsAsync(cancellationToken);
         var userTestsToDelete = userTests.Where(ut => ut.TestId == id);
 
         foreach (var ut in userTestsToDelete)
         {
-            _unitOfWork.UserTests.DeleteItem(ut);
+            _userTestRepository.DeleteItem(ut);
         }
         
         await _unitOfWork.SaveChangesAsync(cancellationToken);

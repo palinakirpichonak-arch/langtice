@@ -2,8 +2,8 @@ namespace MainService.BLL.Services.Options
 {
 	public class MongoOptions
 	{
-		public string Connection { get; set; } = null!;
-		public string Database { get; set; } = null!;
+		public string MongoConnection { get; set; } = null!;
+		public string MongoDatabase { get; set; } = null!;
 	}
 }
 

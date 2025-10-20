@@ -17,7 +17,7 @@ public class Llm : ILlmClient
         _llmOptions = llmOptions;
     }
 
-    public async Task<string> SendRequestAsync(string prompt)
+    public async Task<string> SendRequestAsync(string prompt, CancellationToken cancellationToken)
     {
         var requestBody = new
         {
@@ -42,10 +42,10 @@ public class Llm : ILlmClient
         
         request.Headers.Add("Authorization", $"Bearer {_llmOptions.Value.ApiKey}");
         
-        var response = await _httpClient.SendAsync(request);
+        var response = await _httpClient.SendAsync(request, cancellationToken);
         
         // using var doc = JsonDocument.Parse(result);
-        var result = await response.Content.ReadAsStringAsync();
+        var result = await response.Content.ReadAsStringAsync(cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {

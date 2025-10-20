@@ -1,5 +1,10 @@
-﻿using MainService.AL.Features.Words.DTO.Request;
+﻿using MainService.AL.Features.LLM;
+using MainService.AL.Features.Words.DTO.Request;
 using MainService.AL.Features.Words.DTO.Response;
+using MainService.BLL.Data.Courses;
+using MainService.BLL.Data.Languages;
+using MainService.BLL.Data.Translations;
+using MainService.BLL.Data.Words;
 using MainService.BLL.Services.LLM;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Abstractions;
@@ -12,26 +17,38 @@ namespace MainService.AL.Features.Words.Services;
 
 public class WordService : IWordService
 {
+    private readonly IWordRepository _wordRepository;
+    private readonly ICourseRepository _courseRepository;
+    private readonly ITranslationRepository  _translationRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
-    private readonly ILlmClient _llm;
+    private readonly ILlmService _llmService;
 
-    public WordService(IUnitOfWork unitOfWork, IMapper mapper,  ILlmClient llm)
+    public WordService(
+        IWordRepository wordRepository,
+        ICourseRepository courseRepository,
+        ITranslationRepository translationRepository,
+        IUnitOfWork unitOfWork, 
+        IMapper mapper,  
+        ILlmService llmService)
     {
+        _wordRepository = wordRepository;
+        _courseRepository = courseRepository;
+        _translationRepository = translationRepository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
-        _llm = llm;
+        _llmService = llmService;
     }
 
     public async Task<ResponseWordDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var entity = await _unitOfWork.Words.GetItemByIdAsync(id, cancellationToken);
+        var entity = await _wordRepository.GetItemByIdAsync(id, cancellationToken);
         return entity is null ? null : _mapper.Map<ResponseWordDto>(entity);
     }
 
     public async Task<PaginatedList<ResponseWordDto>> GetAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
-        var entities = await _unitOfWork.Words.GetAllItemsAsync(pageIndex, pageSize, cancellationToken);
+        var entities = await _wordRepository.GetAllItemsAsync(pageIndex, pageSize, cancellationToken);
         var list = entities.Items.Adapt<List<ResponseWordDto>>();
         return new PaginatedList<ResponseWordDto>(list, pageIndex, pageSize);
     }
@@ -41,7 +58,7 @@ public class WordService : IWordService
         var entity = _mapper.Map<Word>(dto);
         entity.Id = Guid.NewGuid();
 
-        _unitOfWork.Words.AddItem(entity);
+        _wordRepository.AddItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return _mapper.Map<ResponseWordDto>(entity);
@@ -49,11 +66,11 @@ public class WordService : IWordService
 
     public async Task<ResponseWordDto> UpdateAsync(Guid id, RequestWordDto dto, CancellationToken cancellationToken)
     {
-        var entity = await _unitOfWork.Words.GetItemByIdAsync(id, cancellationToken);
+        var entity = await _wordRepository.GetItemByIdAsync(id, cancellationToken);
         if (entity is null) throw new KeyNotFoundException($"Word {id} not found");
 
         _mapper.Map(dto, entity);
-        _unitOfWork.Words.UpdateItem(entity);
+        _wordRepository.UpdateItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return _mapper.Map<ResponseWordDto>(entity);
@@ -61,16 +78,16 @@ public class WordService : IWordService
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var entity = await _unitOfWork.Words.GetItemByIdAsync(id, cancellationToken);
+        var entity = await _wordRepository.GetItemByIdAsync(id, cancellationToken);
         if (entity is null) throw new KeyNotFoundException($"Word {id} not found");
 
-        _unitOfWork.Words.DeleteItem(entity);
+        _wordRepository.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<ResponseTranslateWordDto> TranslateWordAsync(RequestTranslateWordDto dto, CancellationToken cancellationToken)
 {
-    var course = await _unitOfWork.Courses.GetItemByIdAsync(dto.CourseId, cancellationToken);
+    var course = await _courseRepository.GetItemByIdAsync(dto.CourseId, cancellationToken);
     if (course is null)
         throw new KeyNotFoundException($"Course {dto.CourseId} not found");
 
@@ -78,11 +95,11 @@ public class WordService : IWordService
 
     if (dto.WordId.HasValue)
     {
-        sourceWord = await _unitOfWork.Words.GetItemByIdAsync(dto.WordId.Value, cancellationToken);
+        sourceWord = await _wordRepository.GetItemByIdAsync(dto.WordId.Value, cancellationToken);
     }
     else if (!string.IsNullOrWhiteSpace(dto.Text))
     {
-        var allWords = await _unitOfWork.Words.GetAllItemsAsync(cancellationToken);
+        var allWords = await _wordRepository.GetAllItemsAsync(cancellationToken);
         sourceWord = allWords.FirstOrDefault(w => w.Text.ToLower() == dto.Text.ToLower());
     }
 
@@ -94,17 +111,17 @@ public class WordService : IWordService
             Text = dto.Text ?? throw new ArgumentException("Text must be provided"),
             LanguageId = course.BaseLanguageId
         };
-        _unitOfWork.Words.AddItem(sourceWord);
+        _wordRepository.AddItem(sourceWord);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    var translations = await _unitOfWork.Translations.GetAllItemsAsync(cancellationToken);
+    var translations = await _translationRepository.GetAllItemsAsync(cancellationToken);
     var existingTranslation = translations.FirstOrDefault(t =>
         t.CourseId == course.Id && t.FromWordId == sourceWord.Id);
 
     if (existingTranslation != null)
     {
-        var targetWord = await _unitOfWork.Words.GetItemByIdAsync(existingTranslation.ToWordId, cancellationToken);
+        var targetWord = await _wordRepository.GetItemByIdAsync(existingTranslation.ToWordId, cancellationToken);
         return new ResponseTranslateWordDto
         {
             FromWordId = sourceWord.Id,
@@ -119,7 +136,7 @@ public class WordService : IWordService
     var learnLang = course.LearningLanguage.Name;
     
     var prompt = $"Translate the word \"{sourceWord.Text}\" from {baseLang} to {learnLang}. Respond with only the translated word.";
-    var translatedText = await _llm.SendRequestAsync(prompt);
+    var translatedText = await _llmService.ProcessPromptAsync(prompt, cancellationToken);
 
     var targetWordEntity = new Word
     {
@@ -127,7 +144,7 @@ public class WordService : IWordService
         Text = translatedText.Trim(),
         LanguageId = course.LearningLanguageId
     };
-    _unitOfWork.Words.AddItem(targetWordEntity);
+    _wordRepository.AddItem(targetWordEntity);
 
     var translation = new Translation
     {
@@ -137,7 +154,7 @@ public class WordService : IWordService
         ToWordId = targetWordEntity.Id
     };
 
-    _unitOfWork.Translations.AddItem(translation);
+    _translationRepository.AddItem(translation);
     await _unitOfWork.SaveChangesAsync(cancellationToken);
 
     return new ResponseTranslateWordDto

@@ -2,5 +2,5 @@
 
 public interface ILlmClient
 {
-    Task<string> SendRequestAsync(string prompt);
+    Task<string> SendRequestAsync(string prompt, CancellationToken cancellationToken);
 }
