@@ -6,7 +6,7 @@ public static class HttpClientConfiguration
 {
     public static IServiceCollection ConfigureHttpClient(this IServiceCollection services)
     {
-        services.AddHttpClient<ILlmClient, Llm>();
+        services.AddHttpClient<ILlmClient, Llm>().AddStandardResilienceHandler();
         
         return services;
     }

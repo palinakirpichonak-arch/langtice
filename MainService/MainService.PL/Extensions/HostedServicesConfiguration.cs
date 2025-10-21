@@ -7,7 +7,8 @@ public static class HostedServicesConfiguration
     public static IServiceCollection ConfigureHostedServices(this IServiceCollection services)
     {
         services.AddHostedService<MigrationHostedService>();
-        services.AddHostedService<MongoDbHosterService>();
+        services.AddHostedService<MongoDbHostedService>();
+       
         return services;
     }
 }

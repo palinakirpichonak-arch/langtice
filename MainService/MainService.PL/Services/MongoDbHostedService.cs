@@ -2,11 +2,11 @@
 
 namespace MainService.PL.Services;
 
-public class MongoDbHosterService : IHostedService
+public class MongoDbHostedService : IHostedService
 {
     private readonly MongoDbContext _mongoDbContext;
 
-    public MongoDbHosterService(MongoDbContext mongoDbContext)
+    public MongoDbHostedService(MongoDbContext mongoDbContext)
     {
         _mongoDbContext = mongoDbContext;
     }
