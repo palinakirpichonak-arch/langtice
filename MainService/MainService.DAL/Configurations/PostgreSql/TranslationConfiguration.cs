@@ -31,27 +31,5 @@ public class TranslationConfiguration : IEntityTypeConfiguration<Translation>
             .WithMany()
             .HasForeignKey(t => t.CourseId)
             .IsRequired(false);
-        
-        var courseId = Guid.Parse("7ff9cff2-4cf1-45db-aa70-855bb69e507d");
-        builder.HasData(
-            // English to German translations
-            new Translation
-            {
-                Id = Guid.Parse("b1b2c3d4-e5f6-4789-abc1-123456789001"),
-                FromWordId = Guid.Parse("a1b2c3d4-e5f6-4789-abc1-123456789001"),
-                ToWordId = Guid.Parse("a1b2c3d4-e5f6-4789-abc1-123456789006"), CourseId = courseId
-            },
-            new Translation
-            {
-                Id = Guid.Parse("b1b2c3d4-e5f6-4789-abc1-123456789002"),
-                FromWordId = Guid.Parse("a1b2c3d4-e5f6-4789-abc1-123456789002"),
-                ToWordId = Guid.Parse("a1b2c3d4-e5f6-4789-abc1-123456789007"), CourseId = courseId
-            },
-            new Translation
-            {
-                Id = Guid.Parse("b1b2c3d4-e5f6-4789-abc1-123456789003"),
-                FromWordId = Guid.Parse("a1b2c3d4-e5f6-4789-abc1-123456789003"),
-                ToWordId = Guid.Parse("a1b2c3d4-e5f6-4789-abc1-123456789008"), CourseId = courseId
-            });
     }
 }

@@ -1,10 +1,9 @@
 ﻿using MainService.BLL.Services.Options;
 using Microsoft.Extensions.Options;
-
-namespace MainService.BLL.Services.LLM;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+
+namespace MainService.BLL.Services.LLM;
 
 public class Llm : ILlmClient
 {

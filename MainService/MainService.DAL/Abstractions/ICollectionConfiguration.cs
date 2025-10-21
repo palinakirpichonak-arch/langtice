@@ -4,5 +4,5 @@ namespace MainService.DAL.Abstractions;
 
 public interface ICollectionConfiguration<TCollection>
 {
-    IMongoCollection<TCollection> Initialize(IMongoDatabase database);
+    Task<IMongoCollection<TCollection>> InitializeAsync(IMongoDatabase database, CancellationToken cancellationToken);
 }

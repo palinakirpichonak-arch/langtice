@@ -1,11 +1,3 @@
-using MainService.BLL.Data.Courses;
-using MainService.BLL.Data.Languages;
-using MainService.BLL.Data.Lessons;
-using MainService.BLL.Data.Translations;
-using MainService.BLL.Data.UserCourses;
-using MainService.BLL.Data.UserTest;
-using MainService.BLL.Data.UserWord;
-using MainService.BLL.Data.Words;
 using MainService.DAL.Context.PostgreSql;
 
 namespace MainService.BLL.Services.UnitOfWork

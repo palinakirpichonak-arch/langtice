@@ -1,0 +1,13 @@
+﻿using MainService.PL.Services;
+
+namespace MainService.PL.Extensions;
+
+public static class HostedServicesConfiguration
+{
+    public static IServiceCollection ConfigureHostedServices(this IServiceCollection services)
+    {
+        services.AddHostedService<MigrationHostedService>();
+        services.AddHostedService<MongoDbHosterService>();
+        return services;
+    }
+}

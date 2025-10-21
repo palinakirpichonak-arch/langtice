@@ -1,10 +1,25 @@
+using MainService.AL.Extensions;
+using MainService.BLL;
+using MainService.DAL.Extensions;
 using MainService.PL.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
-builder.Services.ConfigureAppOptions(builder.Configuration);
-builder.Services.ConfigureDbContext();
-builder.Services.ConfigureServices();
+services
+    .ConfigureOptions(builder.Configuration)
+    .ConfigureDbContext()
+    .ConfigureMigrations()
+    .ConfigureUnitOfWork()
+    .ConfigureHostedServices()
+    .ConfigureRepositories()
+    .ConfigureInfrastructureServices()
+    .ConfigureApplicationServices()
+    .ConfigureControllers()
+    .ConfigureMappers()
+    .ConfigureSwagger();
+
+builder.Services.ConfigureApplicationServices();
 
 var app = builder.Build();
 

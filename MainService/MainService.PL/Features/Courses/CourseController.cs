@@ -7,11 +7,11 @@ namespace MainService.PL.Features.Courses
     [Tags("Courses")]
     [Route("courses")]
     [ApiController]
-    public class CoursesController : ControllerBase
+    public class CourseController : ControllerBase
     {
         private readonly ICourseService _courseService;
 
-        public CoursesController(ICourseService courseService)
+        public CourseController(ICourseService courseService)
         {
             _courseService = courseService;
         }
@@ -24,8 +24,8 @@ namespace MainService.PL.Features.Courses
             return Ok(course);
         }
         
-        [HttpGet("/active")]
-        public async Task<IActionResult> GetActiveCourseById(CancellationToken cancellationToken)
+        [HttpGet("active")]
+        public async Task<IActionResult> GetActiveCoursesById(CancellationToken cancellationToken)
         {
             var course = await _courseService.GetActiveCourses(cancellationToken);
             if (course == null) return NotFound();

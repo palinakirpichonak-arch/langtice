@@ -1,13 +1,11 @@
 ﻿using MainService.AL.Features.LLM;
 using MainService.AL.Features.Words.DTO.Request;
 using MainService.AL.Features.Words.DTO.Response;
-using MainService.BLL.Data.Courses;
-using MainService.BLL.Data.Languages;
-using MainService.BLL.Data.Translations;
-using MainService.BLL.Data.Words;
-using MainService.BLL.Services.LLM;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Abstractions;
+using MainService.DAL.Data.Courses;
+using MainService.DAL.Data.Translations;
+using MainService.DAL.Data.Words;
 using MainService.DAL.Features.Translations;
 using MainService.DAL.Features.Words;
 using Mapster;

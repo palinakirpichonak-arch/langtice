@@ -1,8 +1,8 @@
 ﻿using MainService.AL.Features.Courses.DTO.Request;
 using MainService.AL.Features.Courses.DTO.Response;
-using MainService.BLL.Data.Courses;
-using MainService.BLL.Data.Languages;
 using MainService.BLL.Services.UnitOfWork;
+using MainService.DAL.Data.Courses;
+using MainService.DAL.Data.Languages;
 using MainService.DAL.Features.Courses;
 using MapsterMapper;
 

@@ -1,9 +1,9 @@
 ﻿using MainService.AL.Features.Tests.DTO.Request;
 using MainService.AL.Features.Tests.DTO.Response;
-using MainService.BLL.Data.Lessons;
-using MainService.BLL.Data.Tests;
-using MainService.BLL.Data.UserTest;
 using MainService.BLL.Services.UnitOfWork;
+using MainService.DAL.Data.Lessons;
+using MainService.DAL.Data.Tests;
+using MainService.DAL.Data.UserTest;
 using MainService.DAL.Features.Test;
 using MapsterMapper;
 using MongoDB.Bson;

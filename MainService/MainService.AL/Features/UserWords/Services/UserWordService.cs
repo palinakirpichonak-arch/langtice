@@ -1,11 +1,10 @@
 ﻿using MainService.AL.Features.UserWords.DTO.Request;
 using MainService.AL.Features.UserWords.DTO.Response;
-using MainService.BLL.Data.UserWord;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Abstractions;
+using MainService.DAL.Data.UserWord;
 using MainService.DAL.Features.UserWord;
 using Mapster;
-using MapsterMapper;
 
 namespace MainService.AL.Features.UserWords.Services;
 

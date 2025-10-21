@@ -15,11 +15,12 @@ namespace MainService.DAL.Context.MongoDb
         {
             var client = new MongoClient(connectionString);
             _database = client.GetDatabase(databaseName);
-            
-            Tests = new TestConfiguration().Initialize(_database);
-            Flashcards = new UserFlashCardsConfiguration().Initialize(_database);
         }
-
+        public async Task InitializeDbContext(CancellationToken cancellationToken)
+        {
+            Tests = await new TestConfiguration().InitializeAsync(_database, cancellationToken);
+            Flashcards = await new UserFlashCardsConfiguration().InitializeAsync(_database, cancellationToken);
+        }
         public IMongoCollection<T> GetCollection<T>(string collectionName) 
             => _database.GetCollection<T>(collectionName);
     }

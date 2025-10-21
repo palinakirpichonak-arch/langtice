@@ -1,9 +1,8 @@
 ﻿using MainService.AL.Features.UserFlashCards.DTO.Request;
-using MainService.BLL.Data.Translations;
-using MainService.BLL.Data.UserCourses;
-using MainService.BLL.Data.UserFlashCards;
-using MainService.BLL.Data.UserWord;
 using MainService.BLL.Services.UnitOfWork;
+using MainService.DAL.Data.Translations;
+using MainService.DAL.Data.UserFlashCards;
+using MainService.DAL.Data.UserWord;
 using MainService.DAL.Features.UserFlashCard;
 using MapsterMapper;
 using MongoDB.Bson;

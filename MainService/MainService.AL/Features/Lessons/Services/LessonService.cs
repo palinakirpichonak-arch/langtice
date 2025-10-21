@@ -1,9 +1,9 @@
 ﻿using MainService.AL.Features.Lessons.DTO.Request;
 using MainService.AL.Features.Lessons.DTO.Response;
-using MainService.BLL.Data.Lessons;
-using MainService.BLL.Data.Tests;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Abstractions;
+using MainService.DAL.Data.Lessons;
+using MainService.DAL.Data.Tests;
 using MainService.DAL.Features.Lessons;
 using Mapster;
 using MapsterMapper;

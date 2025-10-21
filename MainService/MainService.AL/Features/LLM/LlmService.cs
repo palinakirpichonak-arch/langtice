@@ -1,5 +1,4 @@
 ﻿using MainService.BLL.Services.LLM;
-using MainService.BLL.Services.UnitOfWork;
 
 namespace MainService.AL.Features.LLM;
 

@@ -14,17 +14,5 @@ public class UserConfiguration :  IEntityTypeConfiguration<User>
             .HasIndex(u => u.Username).IsUnique();
         builder
             .HasIndex(u => u.Email).IsUnique();
-        
-        builder.HasData(
-            new User
-            {
-                Id = Guid.Parse("a1b2c3d4-e5f6-4a7b-8c9d-1234567890ab"),
-                Username = "testuser",
-                Email = "testuser@example.com",
-                PasswordHash = "AQAAAAIAAYagAAAAEFakeHashedPassword1234567890", // placeholder hash
-                AvatarUrl = null,
-                Status = true
-            }
-        );
     }
 }

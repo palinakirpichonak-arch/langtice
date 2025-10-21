@@ -2,7 +2,7 @@
 using MainService.AL.Features.Lessons.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MainService.PL.Features.Lessons.Controllers
+namespace MainService.PL.Features.Lessons
 {
     [Tags("Lessons")]
     [Route("lessons")]
