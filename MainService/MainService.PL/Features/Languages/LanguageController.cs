@@ -27,8 +27,11 @@ namespace MainService.PL.Features.Languages
         public async Task<IActionResult> GetLanguageById(Guid id, CancellationToken cancellationToken)
         {
             var language = await _languageService.GetByIdAsync(id, cancellationToken);
+            
             if (language == null)
+            {
                 return NotFound();
+            }
 
             return Ok(language);
         }
@@ -38,7 +41,7 @@ namespace MainService.PL.Features.Languages
         {
             var created = await _languageService.CreateAsync(dto, cancellationToken);
             return CreatedAtAction
-            (nameof(GetLanguageById), new { id = created.Id }, created);
+            (nameof(GetLanguageById), new { id = created.Id }, created); //TODO: fix
         }
 
         [HttpDelete("{id:guid}")]

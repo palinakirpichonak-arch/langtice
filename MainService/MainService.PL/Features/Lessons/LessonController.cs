@@ -34,8 +34,6 @@ namespace MainService.PL.Features.Lessons
         [HttpPost]
         public async Task<IActionResult> CreateLesson([FromBody] RequestLessonDto dto, CancellationToken cancellationToken)
         {
-            if (dto == null) return BadRequest();
-
             var created = await _lessonService.CreateAsync(dto, cancellationToken);
             return CreatedAtAction(nameof(GetLessonById), new { id = created.Id}, created);
         }
@@ -43,8 +41,6 @@ namespace MainService.PL.Features.Lessons
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateLesson(Guid id, [FromBody] RequestLessonDto dto, CancellationToken cancellationToken)
         {
-            if (dto == null) return BadRequest();
-
             var updated = await _lessonService.UpdateAsync(id, dto, cancellationToken);
             return Ok(updated);
         }

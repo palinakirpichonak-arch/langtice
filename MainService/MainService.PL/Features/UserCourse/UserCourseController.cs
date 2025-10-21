@@ -19,8 +19,11 @@ public class UserCourseController : ControllerBase
     [HttpGet("user/{userId}")]
     public async Task<IActionResult> GetAllUserCourses(Guid userId, CancellationToken cancellationToken)
     {
-        if(userId == Guid.Empty)
+        if (userId == Guid.Empty)
+        {
             return BadRequest();
+        }
+        
         var courses = await _userCourseService.GetAllByUserIdAsync(userId, cancellationToken);
         return Ok(courses);
     }
@@ -29,7 +32,12 @@ public class UserCourseController : ControllerBase
     public async Task<IActionResult> GetUserCourseByIds(Guid userId, Guid courseId, CancellationToken cancellationToken)
     {
         var course = await _userCourseService.GetByIdsAsync(userId, courseId, cancellationToken);
-        if (course == null) return NotFound();
+       
+        if (course == null)
+        {
+            return NotFound();
+        }
+        
         return Ok(course);
     }
 

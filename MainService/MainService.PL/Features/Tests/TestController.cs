@@ -20,7 +20,12 @@ public class TestController : ControllerBase
     public async Task<IActionResult> GetAllTests(CancellationToken cancellationToken)
     {
         var test = await _testService.GetAllAsync(cancellationToken);
-        if (test == null) return NotFound();
+        
+        if (test == null)
+        {
+            return NotFound();
+        }
+        
         return Ok(test);
     }
     
@@ -28,7 +33,12 @@ public class TestController : ControllerBase
     public async Task<IActionResult> GetTestById(string id, CancellationToken cancellationToken)
     {
         var test = await _testService.GetByIdAsync(id, cancellationToken);
-        if (test == null) return NotFound();
+        
+        if (test == null)
+        {
+            return NotFound();
+        }
+        
         return Ok(test);
     }
     
@@ -36,15 +46,18 @@ public class TestController : ControllerBase
     public async Task<IActionResult> GetActiveTestById(string id, CancellationToken cancellationToken)
     {
         var test = await _testService.GetActiveTest(id, cancellationToken);
-        if (test == null) return NotFound();
+       
+        if (test == null)
+        {
+            return NotFound();
+        }
+        
         return Ok(test);
     }
     
     [HttpPost]
     public async Task<IActionResult> CreateTest([FromBody] TestDto dto, CancellationToken cancellationToken)
     {
-        if (dto == null) return BadRequest();
-
         var test = await _testService.CreateAsync(dto, cancellationToken);
         return CreatedAtAction(nameof(GetTestById), new { id = test.Id }, test);
     }
@@ -52,8 +65,6 @@ public class TestController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTest(string id, [FromBody] TestDto dto, CancellationToken cancellationToken)
     {
-        if (dto == null) return BadRequest();
-
         var test = await _testService.UpdateAsync(id, dto, cancellationToken);
         return Ok(test);
     }

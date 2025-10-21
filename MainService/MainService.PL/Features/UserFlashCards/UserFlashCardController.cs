@@ -26,7 +26,12 @@ public class UserFlashController : ControllerBase
     public async Task<IActionResult> GetById(string id, CancellationToken cancellationToken)
     {
         var set = await _flashCardsService.GetByIdAsync(id, cancellationToken);
-        if (set == null) return NotFound();
+        
+        if (set == null)
+        {
+            return NotFound();
+        }
+        
         return Ok(set);
     }
     

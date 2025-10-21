@@ -1,6 +1,7 @@
 ﻿using MainService.AL.Features.Courses.Services;
 using MainService.AL.Features.Languages.Services;
 using MainService.AL.Features.Lessons.Services;
+using MainService.AL.Features.LLM;
 using MainService.AL.Features.Tests.Services;
 using MainService.AL.Features.Translations.Services;
 using MainService.AL.Features.UserCourse.Service;
@@ -26,6 +27,7 @@ public static class ApplicationServicesConfiguration
         services.AddScoped<ITestService, TestService>();
         services.AddScoped<IUserFlashCardsService, UserFlashCardsService>();
         services.AddScoped<IUserTestService, UserTestService>();
+        services.AddScoped<ILlmService, LlmService>();
         
         return services;
     }

@@ -20,7 +20,10 @@ namespace MainService.PL.Features.Courses
         public async Task<IActionResult> GetCourseById(Guid id, CancellationToken cancellationToken)
         {
             var course = await _courseService.GetByIdAsync(id, cancellationToken);
-            if (course == null) return NotFound();
+            if (course == null)
+            {
+                return NotFound();
+            }
             return Ok(course);
         }
         
@@ -28,7 +31,10 @@ namespace MainService.PL.Features.Courses
         public async Task<IActionResult> GetActiveCoursesById(CancellationToken cancellationToken)
         {
             var course = await _courseService.GetActiveCourses(cancellationToken);
-            if (course == null) return NotFound();
+            if (course == null)
+            {
+                return NotFound();
+            }
             return Ok(course);
         }
         
@@ -42,17 +48,13 @@ namespace MainService.PL.Features.Courses
         [HttpPost]
         public async Task<IActionResult> CreateCourse([FromBody] RequestCourseDto dto, CancellationToken cancellationToken)
         {
-            if (dto == null) return BadRequest("Invalid course data.");
-
             var course = await _courseService.CreateAsync(dto, cancellationToken);
-            return CreatedAtAction(nameof(GetCourseById), new { id = course.Id }, course);
+            return CreatedAtAction(nameof(GetCourseById), new { id = course.Id }, course); //TODO: fix
         }
         
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateCourse(Guid id, [FromBody] RequestCourseDto dto, CancellationToken cancellationToken)
         {
-            if (dto == null) return BadRequest("Invalid course data.");
-
             var updatedCourse = await _courseService.UpdateAsync(id, dto, cancellationToken);
             return Ok(updatedCourse);
         }

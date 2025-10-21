@@ -7,6 +7,8 @@ using MainService.DAL.Data.Lessons;
 using MainService.DAL.Data.Tests;
 using MainService.DAL.Data.Translations;
 using MainService.DAL.Data.UserCourses;
+using MainService.DAL.Data.UserFlashCards;
+using MainService.DAL.Data.UserTest;
 using MainService.DAL.Data.UserWord;
 using MainService.DAL.Data.Words;
 using MainService.DAL.Features.Test;
@@ -27,7 +29,8 @@ public static class RepositoriesConfiguration
         services.AddScoped<ILanguageRepository, LanguageRepository>();
         services.AddScoped<ILessonRepository, LessonRepository>();
         services.AddScoped<ITestRepository, TestRepository>();
-        
+        services.AddScoped<IUserTestRepository, UserTestRepository>();
+        services.AddScoped<IUserFlashCardsRepository, UserFlashCardsRepository>();
         services.AddScoped<IMongoRepository<Test, string>>(sp =>
             new MongoRepository<Test, string>(sp.GetRequiredService<MongoDbContext>(), MongoDbCollections.TestsCollectionName)); 
         services.AddScoped<IMongoRepository<UserFlashCards, string>>(sp =>

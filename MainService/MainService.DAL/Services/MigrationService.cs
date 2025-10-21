@@ -1,16 +1,22 @@
 using MainService.DAL.Abstractions;
 using MainService.DAL.Context.PostgreSql;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace MainService.DAL.Services;
 
 public class MigrationService : IMigrationService
 {
     private readonly PostgreDbContext _dbContext;
-
-    public MigrationService(PostgreDbContext dbcontext)
+    private readonly ILogger<MigrationService> _logger;
+    
+    public MigrationService(
+        PostgreDbContext dbcontext,
+        ILogger<MigrationService> logger
+        )
     {
         _dbContext = dbcontext;
+        _logger = logger;
     }
 
     public async Task ApplyMigrationsAsync(CancellationToken cancellationToken)
@@ -24,14 +30,13 @@ public class MigrationService : IMigrationService
             }
             else
             {
-                Console.WriteLine("No pending migrations found.");
+                _logger.LogInformation("No pending migrations found.");
             }
         }
         catch (Exception e)
         {
-            Console.WriteLine($"Exception while applying migrations: {e.Message}");
+            _logger.LogError($"Exception while applying migrations: {e.Message}");
             throw;
         }
     }
-    
 }

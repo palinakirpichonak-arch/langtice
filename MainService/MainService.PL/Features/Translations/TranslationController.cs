@@ -27,17 +27,18 @@ public class TranslationsController : ControllerBase
     public async Task<IActionResult> GetTranslationById(Guid id, CancellationToken cancellationToken)
     {
         var translation = await _translationService.GetByIdAsync(id, cancellationToken);
+        
         if (translation == null)
+        {
             return NotFound();
-
+        }
+        
         return Ok(translation);
     }
     
     [HttpPost]
     public async Task<IActionResult> CreateTranslation([FromBody] RequestTranslationDto translation, CancellationToken cancellationToken)
     {
-        if (translation == null) return BadRequest();
-
         var created = await _translationService.CreateAsync(translation, cancellationToken);
         return CreatedAtAction(nameof(GetTranslationById), new { id = created.Id }, created);
     }

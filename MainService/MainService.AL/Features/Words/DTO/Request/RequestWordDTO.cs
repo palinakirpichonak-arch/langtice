@@ -1,7 +1,10 @@
-﻿namespace MainService.AL.Features.Words.DTO.Request;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MainService.AL.Features.Words.DTO.Request;
 
 public class RequestWordDto
 {
-    public Guid Id { get; set; }
+    [Required]
+    [StringLength(20, MinimumLength = 2, ErrorMessage = "Word Name must be between 2 and 20 characters")]
     public string Text { get; set; } = null!;
 }

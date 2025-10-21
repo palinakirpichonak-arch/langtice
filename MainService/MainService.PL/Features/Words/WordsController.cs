@@ -21,7 +21,12 @@ namespace MainService.PL.Features.Words
         public async Task<IActionResult> GetAllWords(int pageIndex, int pageCount, CancellationToken cancellationToken)
         {
             var words = await _wordService.GetAllAsync(pageIndex,pageCount, cancellationToken);
-            if (words == null) return NotFound();
+            
+            if (words == null)
+            {
+                return NotFound();
+            }
+            
             return Ok(words);
         }
         
@@ -29,17 +34,19 @@ namespace MainService.PL.Features.Words
         public async Task<IActionResult> GetWordById(Guid id, CancellationToken cancellationToken)
         {
             var word = await _wordService.GetByIdAsync(id, cancellationToken);
-            if (word == null) return NotFound();
+            
+            if (word == null)
+            {
+                return NotFound();
+            }
+            
             return Ok(word);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateWord([FromBody] RequestWordDto dto, CancellationToken cancellationToken)
         {
-            if (dto == null) return BadRequest();
-            
             var created = await _wordService.CreateAsync(dto, cancellationToken);
-            
             return CreatedAtAction(nameof(GetWordById), new { id = created.Id }, created);
         }
 

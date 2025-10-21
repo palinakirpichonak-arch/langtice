@@ -27,15 +27,18 @@ namespace MainService.PL.Features.UserTests
         public async Task<IActionResult> GetUserTestById(Guid id, CancellationToken cancellationToken)
         {
             var test = await _userTestService.GetByIdAsync(id, cancellationToken);
-            if (test == null) return NotFound();
+            
+            if (test == null)
+            {
+                return NotFound();
+            }
+            
             return Ok(test);
         }
         
         [HttpPost]
         public async Task<IActionResult> CreateUserTest([FromBody] RequestUserTestDto dto, CancellationToken cancellationToken)
         {
-            if (dto == null) return BadRequest();
-
             var createdTest = await _userTestService.CreateAsync(dto, cancellationToken);
             return CreatedAtAction(nameof(GetUserTestById), new { id = createdTest.Id }, createdTest);
         }

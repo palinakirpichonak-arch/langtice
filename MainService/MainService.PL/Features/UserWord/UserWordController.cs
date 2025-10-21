@@ -27,14 +27,18 @@ namespace MainService.PL.Features.UserWord
         public async Task<IActionResult> GetUserWord(Guid userId, Guid wordId, CancellationToken cancellationToken)
         {
             var userWord = await _userWordService.GetByIdsAsync(userId, wordId, cancellationToken);
-            if (userWord == null) return NotFound();
+            
+            if (userWord == null)
+            {
+                return NotFound();
+            }
+            
             return Ok(userWord);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddUserWord([FromBody] RequestUserWordDto dto, CancellationToken cancellationToken)
         {
-            if (dto == null) return BadRequest();
             var created = await _userWordService.CreateAsync(dto, cancellationToken);
             return Ok(created);
         }

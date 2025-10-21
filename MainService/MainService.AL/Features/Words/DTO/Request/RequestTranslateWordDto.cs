@@ -1,9 +1,14 @@
-﻿namespace MainService.AL.Features.Words.DTO.Request;
-public class ResponseTranslateWordDto
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MainService.AL.Features.Words.DTO.Response;
+
+public class RequestTranslateWordDto
 {
-    public Guid FromWordId { get; set; }
-    public string FromText { get; set; } = string.Empty;
-    public Guid ToWordId { get; set; }
-    public string ToText { get; set; } = string.Empty;
+    [Required(ErrorMessage = "WordId is required")]
+    public Guid? WordId { get; set; }
+    [Required(ErrorMessage = "Text is required")]
+    [StringLength(25,MinimumLength = 2, ErrorMessage = "Text must be between 2 and 25 characters")]
+    public string Text { get; set; } = null!;
+    [Required(ErrorMessage = "CourseId is required")]
     public Guid CourseId { get; set; }
 }

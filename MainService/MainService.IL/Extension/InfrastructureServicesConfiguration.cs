@@ -7,6 +7,7 @@ public static class InfrastructureServicesConfiguration
 {
     public static IServiceCollection ConfigureInfrastructureServices(this IServiceCollection services)
     {
-        return services.AddScoped<ILlmClient, Llm>();
+        services.AddScoped<ILlmClient, Llm>();
+        return services;
     }
 }

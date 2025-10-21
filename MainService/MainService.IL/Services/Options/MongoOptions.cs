@@ -4,7 +4,7 @@ namespace MainService.BLL.Services.Options
 {
 	public class MongoOptions
 	{
-		[Required, Url]
+		[Required]
 		public string MongoConnection { get; set; } = null!;
 		
 		[Required]
