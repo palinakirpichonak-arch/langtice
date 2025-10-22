@@ -1,4 +1,5 @@
-﻿using MainService.AL.Features.LLM;
+﻿using MainService.AL.Exceptions;
+using MainService.AL.Features.LLM;
 using MainService.AL.Features.Words.DTO.Request;
 using MainService.AL.Features.Words.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
@@ -41,7 +42,9 @@ public class WordService : IWordService
     public async Task<ResponseWordDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var entity = await _wordRepository.GetItemByIdAsync(id, cancellationToken);
-        return entity is null ? null : _mapper.Map<ResponseWordDto>(entity);
+        if (entity == null)
+            throw new NotFoundException("Word not found");
+        return _mapper.Map<ResponseWordDto>(entity);
     }
 
     public async Task<PaginatedList<ResponseWordDto>> GetAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
@@ -65,7 +68,8 @@ public class WordService : IWordService
     public async Task<ResponseWordDto> UpdateAsync(Guid id, RequestWordDto dto, CancellationToken cancellationToken)
     {
         var entity = await _wordRepository.GetItemByIdAsync(id, cancellationToken);
-        if (entity is null) throw new KeyNotFoundException($"Word {id} not found");
+        if (entity is null) 
+            throw new NotFoundException($"Word {id} not found");
 
         _mapper.Map(dto, entity);
         _wordRepository.UpdateItem(entity);
@@ -77,7 +81,8 @@ public class WordService : IWordService
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var entity = await _wordRepository.GetItemByIdAsync(id, cancellationToken);
-        if (entity is null) throw new KeyNotFoundException($"Word {id} not found");
+        if (entity is null) 
+            throw new NotFoundException($"Word {id} not found");
 
         _wordRepository.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -87,7 +92,7 @@ public class WordService : IWordService
 {
     var course = await _courseRepository.GetItemByIdAsync(dto.CourseId, cancellationToken);
     if (course is null)
-        throw new KeyNotFoundException($"Course {dto.CourseId} not found");
+        throw new NotFoundException($"Course {dto.CourseId} not found");
 
     Word? sourceWord = null;
 
@@ -106,7 +111,7 @@ public class WordService : IWordService
         sourceWord = new Word
         {
             Id = Guid.NewGuid(),
-            Text = dto.Text ?? throw new ArgumentException("Text must be provided"),
+            Text = dto.Text ?? throw new BadArgumentException("Text must be provided"),
             LanguageId = course.BaseLanguageId
         };
         _wordRepository.AddItem(sourceWord);

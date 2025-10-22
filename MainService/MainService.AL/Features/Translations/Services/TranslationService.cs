@@ -1,4 +1,5 @@
-﻿using MainService.AL.Features.Translations.DTO.Request;
+﻿using MainService.AL.Exceptions;
+using MainService.AL.Features.Translations.DTO.Request;
 using MainService.AL.Features.Translations.DTO.Response;
 using MainService.AL.Features.Words.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
@@ -28,7 +29,9 @@ public class TranslationService : ITranslationService
     public async Task<ResponseTranslationDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var entity = await _translationRepository.GetItemByIdAsync(id, cancellationToken);
-        return entity is null ? null : _mapper.Map<ResponseTranslationDto>(entity);
+        if (entity == null)
+            throw new NotFoundException("Translation not found");
+        return _mapper.Map<ResponseTranslationDto>(entity);
     }
 
     public async Task<PaginatedList<ResponseTranslationDto>> GetAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
@@ -72,7 +75,8 @@ public class TranslationService : ITranslationService
     public async Task<ResponseTranslationDto> UpdateAsync(Guid id, RequestTranslationDto dto, CancellationToken cancellationToken)
     {
         var entity = await _translationRepository.GetItemByIdAsync(id, cancellationToken);
-        if (entity is null) throw new KeyNotFoundException($"Translation {id} not found");
+        if (entity is null) 
+            throw new NotFoundException($"Translation {id} not found");
 
         _mapper.Map(dto, entity);
         _translationRepository.UpdateItem(entity);
@@ -83,7 +87,8 @@ public class TranslationService : ITranslationService
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var entity = await _translationRepository.GetItemByIdAsync(id, cancellationToken);
-        if (entity is null) throw new KeyNotFoundException($"Translation {id} not found");
+        if (entity is null) 
+            throw new NotFoundException($"Translation {id} not found");
 
         _translationRepository.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

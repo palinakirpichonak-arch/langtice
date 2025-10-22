@@ -1,4 +1,5 @@
-﻿using MainService.AL.Features.LLM;
+﻿using MainService.AL.Exceptions;
+using MainService.AL.Features.LLM;
 using MainService.AL.Features.Tests.DTO.Request;
 using MainService.AL.Features.Tests.Services;
 using MainService.AL.Features.UserTests.DTO.Request;
@@ -56,7 +57,9 @@ public class UserTestService : IUserTestService
     public async Task<ResponseUserTestDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var entity = await _userTestRepository.GetItemByIdAsync(id, cancellationToken);
-        return entity is null ? null : _mapper.Map<ResponseUserTestDto>(entity);
+        if (entity == null)
+            throw new NotFoundException("User test not found");
+        return _mapper.Map<ResponseUserTestDto>(entity);
     }
 
     public async Task<PaginatedList<ResponseUserTestDto>> GetAllAsync(
@@ -88,7 +91,7 @@ public class UserTestService : IUserTestService
         var userWords = userWordsPaginated.Items.ToList();
 
         if (!userWords.Any())
-            throw new InvalidOperationException("No user words available to generate test.");
+            throw new NotFoundException("No user words available to generate test.");
 
         var languageIds = userWords.Select(uw => uw.Word.LanguageId).Distinct().ToList();
         var allLanguages = await _languageRepository.GetAllItemsAsync(cancellationToken);
@@ -112,7 +115,7 @@ public class UserTestService : IUserTestService
 
         var llmResponse = await _llmService.ProcessPromptAsync(prompt, cancellationToken);
 
-        Dictionary<string, List<Question>>? generatedTests = null;
+        Dictionary<string, List<Question>>? generatedTests;
         try
         {
             generatedTests = System.Text.Json.JsonSerializer
@@ -185,7 +188,7 @@ public class UserTestService : IUserTestService
     {
         var userTest = await _userTestRepository.GetItemByIdAsync(id, cancellationToken);
         if (userTest is null)
-            throw new KeyNotFoundException($"UserTest {id} not found");
+            throw new NotFoundException($"UserTest {id} not found");
 
         if (!string.IsNullOrEmpty(userTest.TestId))
         {

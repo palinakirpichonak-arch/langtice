@@ -1,5 +1,6 @@
 ﻿using MainService.AL.Features.Courses.DTO.Request;
 using MainService.AL.Features.Courses.Services;
+using MainService.PL.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Courses
@@ -17,13 +18,10 @@ namespace MainService.PL.Features.Courses
         }
         
         [HttpGet("{id:guid}")]
+        [ValidateParameters(nameof(id))]
         public async Task<IActionResult> GetCourseById(Guid id, CancellationToken cancellationToken)
         {
             var course = await _courseService.GetByIdAsync(id, cancellationToken);
-            if (course == null)
-            {
-                return NotFound();
-            }
             return Ok(course);
         }
         
@@ -31,10 +29,6 @@ namespace MainService.PL.Features.Courses
         public async Task<IActionResult> GetActiveCoursesById(CancellationToken cancellationToken)
         {
             var course = await _courseService.GetActiveCourses(cancellationToken);
-            if (course == null)
-            {
-                return NotFound();
-            }
             return Ok(course);
         }
         
@@ -49,10 +43,11 @@ namespace MainService.PL.Features.Courses
         public async Task<IActionResult> CreateCourse([FromBody] RequestCourseDto dto, CancellationToken cancellationToken)
         {
             var course = await _courseService.CreateAsync(dto, cancellationToken);
-            return CreatedAtAction(nameof(GetCourseById), new { id = course.Id }, course); //TODO: fix
+            return Ok(course); 
         }
         
         [HttpPut("{id:guid}")]
+        [ValidateParameters(nameof(id))]
         public async Task<IActionResult> UpdateCourse(Guid id, [FromBody] RequestCourseDto dto, CancellationToken cancellationToken)
         {
             var updatedCourse = await _courseService.UpdateAsync(id, dto, cancellationToken);

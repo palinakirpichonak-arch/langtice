@@ -1,4 +1,5 @@
-﻿using MainService.AL.Features.Languages.DTO.Request;
+﻿using MainService.AL.Exceptions;
+using MainService.AL.Features.Languages.DTO.Request;
 using MainService.AL.Features.Languages.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Abstractions;
@@ -25,7 +26,11 @@ public class LanguageService : ILanguageService
     public async Task<ResponseLanguageDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var entity = await _languageRepository.GetItemByIdAsync(id, cancellationToken);
-        return entity is null ? null : _mapper.Map<ResponseLanguageDto>(entity);
+       
+        if(entity == null)
+            throw new NotFoundException("Language not found");
+        
+        return _mapper.Map<ResponseLanguageDto>(entity);
     }
 
     public async Task<IEnumerable<ResponseLanguageDto>> GetAllAsync(CancellationToken cancellationToken)
@@ -56,7 +61,7 @@ public class LanguageService : ILanguageService
     {
         var entity = await _languageRepository.GetItemByIdAsync(id, cancellationToken);
         if (entity is null)
-            throw new KeyNotFoundException($"Language with id {id} not found");
+            throw new NotFoundException($"Language not found");
 
         _mapper.Map(dto, entity);
         _languageRepository.UpdateItem(entity);
@@ -68,8 +73,9 @@ public class LanguageService : ILanguageService
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var entity = await _languageRepository.GetItemByIdAsync(id, cancellationToken);
+        
         if (entity is null)
-            throw new KeyNotFoundException($"Language with id {id} not found");
+            throw new NotFoundException($"Language not found");
 
         _languageRepository.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

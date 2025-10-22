@@ -9,11 +9,16 @@ public class ExceptionHandlingMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ProblemDetailsFactory _problemDetailsFactory;
+    private readonly ILogger<ExceptionHandlingMiddleware> _logger;
    
-    public ExceptionHandlingMiddleware(RequestDelegate next, ProblemDetailsFactory problemDetailsFactory)
+    public ExceptionHandlingMiddleware(
+        RequestDelegate next, 
+        ProblemDetailsFactory problemDetailsFactory,
+        ILogger<ExceptionHandlingMiddleware> logger)
     {
         _next = next;
         _problemDetailsFactory = problemDetailsFactory;
+        _logger = logger;
     }
     
     public async Task InvokeAsync(HttpContext context)
@@ -30,41 +35,40 @@ public class ExceptionHandlingMiddleware
     
     private async Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
     {
-        var problem = new ProblemDetails
-        {
-            Instance = httpContext.Request.Path,
-            Detail = exception?.Message
-        };
+        
+        ProblemDetails problem;
 
         switch (exception)
         {
-            case BadRequestException badRequestException:
-                problem.Status = (int)HttpStatusCode.InternalServerError;
-                foreach (var validationResult in badRequestException.Errors)
+            case DomainException domainEx:
+                _logger.LogWarning(domainEx, "Handled domain exception");
+                problem = _problemDetailsFactory.CreateProblemDetails(
+                    httpContext,
+                    statusCode: domainEx.StatusCode,
+                    title: domainEx.GetType().Name.Replace("Exception", ""),
+                    detail: domainEx.Message,
+                    instance: httpContext.Request.Path);
+                if (domainEx is BadRequestException badReq && badReq.Errors.Any())
                 {
-                    problem.Extensions.Add(validationResult.Key, validationResult.Value);
+                    foreach (var err in badReq.Errors)
+                        problem.Extensions[err.Key] = err.Value;
                 }
                 break;
-            case NotFoundException notFoundException:
-                problem.Status = (int)HttpStatusCode.NotFound;
-                break;
+
             default:
-                problem.Status = (int)HttpStatusCode.InternalServerError;
+                _logger.LogError(exception, "Unhandled exception");
+                problem = _problemDetailsFactory.CreateProblemDetails(
+                    httpContext,
+                    statusCode: (int)HttpStatusCode.InternalServerError,
+                    title: "Internal Server Error",
+                    detail: "An unexpected error occurred.",
+                    instance: httpContext.Request.Path);
                 break;
         }
 
-        if (_problemDetailsFactory != null)
-        {
-            var problemDetails = _problemDetailsFactory.CreateProblemDetails(httpContext, statusCode: problem.Status);
-            problem.Title = problemDetails.Title;
-            problem.Type = problemDetails.Type;
-        }
+        httpContext.Response.ContentType = "application/problem+json";
+        httpContext.Response.StatusCode = problem.Status ?? (int)HttpStatusCode.InternalServerError;
 
-        var result = new ObjectResult(problem)
-        {
-            StatusCode = problem.Status
-        };
-
-        await httpContext.Response.WriteAsJsonAsync(result);
+        await httpContext.Response.WriteAsJsonAsync(problem);
     }
 }

@@ -1,4 +1,5 @@
-﻿using MainService.AL.Features.UserCourse.DTO.Request;
+﻿using MainService.AL.Exceptions;
+using MainService.AL.Features.UserCourse.DTO.Request;
 using MainService.AL.Features.UserCourse.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Data.UserCourses;
@@ -35,7 +36,11 @@ public class UserCourseService : IUserCourseService
     {
         var key = new UserCourseKey(userId, courseId);
         var entity = await _userCourseRepository.GetItemByIdAsync(key, cancellationToken);
-        return entity is null ? null : _mapper.Map<ResponseUserCourseDto>(entity);
+       
+        if (entity == null)
+            throw new NotFoundException("User course not found");
+        
+        return _mapper.Map<ResponseUserCourseDto>(entity);
     }
 
     public async Task<ResponseUserCourseDto> CreateAsync(RequestUserCourseDto dto, CancellationToken cancellationToken)
@@ -51,7 +56,8 @@ public class UserCourseService : IUserCourseService
     {
         var key = new UserCourseKey(userId, courseId);
         var entity = await _userCourseRepository.GetItemByIdAsync(key, cancellationToken);
-        if (entity is null) throw new KeyNotFoundException($"UserCourse {userId}-{courseId} not found");
+        if (entity is null) 
+            throw new NotFoundException($"UserCourse not found");
 
         _userCourseRepository.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

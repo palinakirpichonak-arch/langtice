@@ -1,5 +1,6 @@
 ﻿using MainService.AL.Features.Translations.DTO.Request;
 using MainService.AL.Features.Translations.Services;
+using MainService.PL.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Translations;
@@ -17,6 +18,7 @@ public class TranslationsController : ControllerBase
     }
 
     [HttpGet]
+    [ValidateParameters(nameof(pageIndex), nameof(pageSize))]
     public async Task<IActionResult> GetPaginatedTranslations(int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
         var translations = await _translationService.GetAllAsync(pageIndex, pageSize, cancellationToken);
@@ -24,15 +26,10 @@ public class TranslationsController : ControllerBase
     }
     
     [HttpGet("{id}")]
+    [ValidateParameters(nameof(id))]
     public async Task<IActionResult> GetTranslationById(Guid id, CancellationToken cancellationToken)
     {
         var translation = await _translationService.GetByIdAsync(id, cancellationToken);
-        
-        if (translation == null)
-        {
-            return NotFound();
-        }
-        
         return Ok(translation);
     }
     
@@ -40,13 +37,13 @@ public class TranslationsController : ControllerBase
     public async Task<IActionResult> CreateTranslation([FromBody] RequestTranslationDto translation, CancellationToken cancellationToken)
     {
         var created = await _translationService.CreateAsync(translation, cancellationToken);
-        return CreatedAtAction(nameof(GetTranslationById), new { id = created.Id }, created);
+        return Ok(created);
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteTranslation(Guid id, CancellationToken cancellationToken)
+    [ValidateParameters(nameof(id))]
+    public async Task DeleteTranslation(Guid id, CancellationToken cancellationToken)
     {
         await _translationService.DeleteAsync(id, cancellationToken);
-        return NoContent();
     }
 }

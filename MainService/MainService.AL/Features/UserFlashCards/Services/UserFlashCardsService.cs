@@ -1,4 +1,5 @@
-﻿using MainService.AL.Features.UserFlashCards.DTO.Request;
+﻿using MainService.AL.Exceptions;
+using MainService.AL.Features.UserFlashCards.DTO.Request;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Data.Translations;
 using MainService.DAL.Data.UserFlashCards;
@@ -37,7 +38,10 @@ namespace MainService.AL.Features.UserFlashCards.Services
         }
         public async Task<DAL.Features.UserFlashCard.UserFlashCards?> GetByIdAsync(string id, CancellationToken cancellationToken)
         {
-            return await _flashCardsRepository.GetByIdAsync(id, cancellationToken);
+            var flashCards = await _flashCardsRepository.GetByIdAsync(id, cancellationToken);
+            if (flashCards == null)
+                throw new NotFoundException("Flash card not found");
+            return flashCards;
         }
 
         public async Task<DAL.Features.UserFlashCard.UserFlashCards> GenerateFromUserWordsAsync(RequestUserFlashCardDto dto, CancellationToken cancellationToken)

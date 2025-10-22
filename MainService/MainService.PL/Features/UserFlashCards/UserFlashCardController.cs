@@ -1,5 +1,6 @@
 ﻿using MainService.AL.Features.UserFlashCards.DTO.Request;
 using MainService.AL.Features.UserFlashCards.Services;
+using MainService.PL.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.UserFlashCards;
@@ -17,6 +18,7 @@ public class UserFlashController : ControllerBase
     }
     
     [HttpGet("user/{userId}")]
+    [ValidateParameters(nameof(userId))]
     public async Task<IActionResult> GetAllByUser(Guid userId, CancellationToken cancellationToken)
     {
         var sets = await _flashCardsService.GetAllByUserAsync(userId, cancellationToken);
@@ -26,12 +28,6 @@ public class UserFlashController : ControllerBase
     public async Task<IActionResult> GetById(string id, CancellationToken cancellationToken)
     {
         var set = await _flashCardsService.GetByIdAsync(id, cancellationToken);
-        
-        if (set == null)
-        {
-            return NotFound();
-        }
-        
         return Ok(set);
     }
     
@@ -39,13 +35,13 @@ public class UserFlashController : ControllerBase
     public async Task<IActionResult> GenerateFromUserWords([FromBody] RequestUserFlashCardDto dto, CancellationToken cancellationToken)
     {
         var set = await _flashCardsService.GenerateFromUserWordsAsync(dto, cancellationToken);
-        return CreatedAtAction(nameof(GetById), new { id = set.Id }, set);
+        return Ok(set);
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(string id, CancellationToken cancellationToken)
+    [ValidateParameters(nameof(id))]
+    public async Task Delete(string id, CancellationToken cancellationToken)
     {
         await _flashCardsService.DeleteAsync(id, cancellationToken);
-        return NoContent();
     }
 }

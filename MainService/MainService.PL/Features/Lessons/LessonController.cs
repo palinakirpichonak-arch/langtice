@@ -1,5 +1,6 @@
 ﻿using MainService.AL.Features.Lessons.DTO.Request;
 using MainService.AL.Features.Lessons.Services;
+using MainService.PL.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Lessons
@@ -17,6 +18,7 @@ namespace MainService.PL.Features.Lessons
         }
         
         [HttpGet("course/{courseId}")]
+        [ValidateParameters(nameof(courseId), nameof(pageIndex), nameof(pageCount))]
         public async Task<IActionResult> GetLessonsByCourseId(Guid courseId, int pageIndex, int pageCount, CancellationToken cancellationToken)
         {
             var lessons = await _lessonService.GetAllWithCourseIdAsync(courseId, pageIndex, pageCount, cancellationToken);
@@ -24,10 +26,10 @@ namespace MainService.PL.Features.Lessons
         }
         
         [HttpGet("{id}")]
+        [ValidateParameters(nameof(id))]
         public async Task<IActionResult> GetLessonById(Guid id, CancellationToken cancellationToken)
         {
             var lesson = await _lessonService.GetByIdAsync(id, cancellationToken);
-            if (lesson == null) return NotFound();
             return Ok(lesson);
         }
         
@@ -35,10 +37,11 @@ namespace MainService.PL.Features.Lessons
         public async Task<IActionResult> CreateLesson([FromBody] RequestLessonDto dto, CancellationToken cancellationToken)
         {
             var created = await _lessonService.CreateAsync(dto, cancellationToken);
-            return CreatedAtAction(nameof(GetLessonById), new { id = created.Id}, created);
+            return Ok(created);
         }
         
         [HttpPut("{id}")]
+        [ValidateParameters(nameof(id))]
         public async Task<IActionResult> UpdateLesson(Guid id, [FromBody] RequestLessonDto dto, CancellationToken cancellationToken)
         {
             var updated = await _lessonService.UpdateAsync(id, dto, cancellationToken);
@@ -46,10 +49,10 @@ namespace MainService.PL.Features.Lessons
         }
         
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLesson(Guid id, CancellationToken cancellationToken)
+        [ValidateParameters(nameof(id))]
+        public async Task DeleteLesson(Guid id, CancellationToken cancellationToken)
         {
             await _lessonService.DeleteAsync(id, cancellationToken);
-            return NoContent();
         }
     }
 }

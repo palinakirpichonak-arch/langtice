@@ -1,4 +1,5 @@
-﻿using MainService.AL.Features.Tests.DTO.Request;
+﻿using MainService.AL.Exceptions;
+using MainService.AL.Features.Tests.DTO.Request;
 using MainService.AL.Features.Tests.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Data.Lessons;
@@ -35,12 +36,19 @@ public class TestService : ITestService
     public async Task<ActiveTestDto> GetActiveTest(string testId, CancellationToken cancellationToken)
     {
         var test = await _testRepository.GetByIdAsync(testId, cancellationToken);
+        if (test is null)
+            throw new NotFoundException($"Test not found");
         return _mapper.Map<ActiveTestDto>(test);
     }
 
     public async Task<Test?> GetByIdAsync(string id, CancellationToken cancellationToken)
     {
-        return await _testRepository.GetByIdAsync(id, cancellationToken);
+        var test =  await _testRepository.GetByIdAsync(id, cancellationToken);
+        
+        if (test is null)
+            throw new NotFoundException($"Test not found");
+        
+        return test;
     }
 
     public async Task<IEnumerable<Test>> GetAllByLessonIdAsync(Guid lessonId, CancellationToken cancellationToken)
@@ -66,7 +74,9 @@ public class TestService : ITestService
     public async Task<Test> UpdateAsync(string id, TestDto dto, CancellationToken cancellationToken)
     {
         var test = await _testRepository.GetByIdAsync(id, cancellationToken);
-        if (test is null) throw new KeyNotFoundException($"Test {id} not found");
+        
+        if (test is null) 
+            throw new NotFoundException($"Test {id} not found");
 
         _mapper.Map(dto, test);
         await _testRepository.UpdateAsync(id, test, cancellationToken);

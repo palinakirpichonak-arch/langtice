@@ -1,4 +1,5 @@
-﻿using MainService.AL.Features.Courses.DTO.Request;
+﻿using MainService.AL.Exceptions;
+using MainService.AL.Features.Courses.DTO.Request;
 using MainService.AL.Features.Courses.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Data.Courses;
@@ -26,7 +27,11 @@ public class CourseService : ICourseService
     public async Task<ResponseCourseDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var course = await _courseRepository.GetItemByIdAsync(id, cancellationToken);
-        return course is null ? null : _mapper.Map<ResponseCourseDto>(course);
+       
+        if(course == null)
+            throw new NotFoundException("Course not found");
+        
+        return _mapper.Map<ResponseCourseDto>(course);
     }
 
     public async Task<IEnumerable<ResponseCourseDto>> GetAllItemsAdminAsync(CancellationToken cancellationToken)
@@ -51,7 +56,7 @@ public class CourseService : ICourseService
         entity.LearningLanguage = await _languageRepository.GetItemByIdAsync(dto.LearningLanguageId, cancellationToken);
 
         if (entity.BaseLanguage is null || entity.LearningLanguage is null)
-            throw new KeyNotFoundException("One of the languages was not found");
+            throw new NotFoundException("One of the languages was not found");
 
         _courseRepository.AddItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -63,7 +68,7 @@ public class CourseService : ICourseService
     {
         var entity = await _courseRepository.GetItemByIdAsync(id, cancellationToken);
         if (entity is null)
-            throw new KeyNotFoundException($"Course with id {id} not found");
+            throw new NotFoundException($"Course found");
 
         _mapper.Map(dto, entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -75,7 +80,7 @@ public class CourseService : ICourseService
     {
         var entity = await _courseRepository.GetItemByIdAsync(id, cancellationToken);
         if (entity is null)
-            throw new KeyNotFoundException($"Course with id {id} not found");
+            throw new NotFoundException($"Course not found");
 
         _courseRepository.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

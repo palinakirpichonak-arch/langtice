@@ -1,4 +1,5 @@
-﻿using MainService.AL.Features.Lessons.DTO.Request;
+﻿using MainService.AL.Exceptions;
+using MainService.AL.Features.Lessons.DTO.Request;
 using MainService.AL.Features.Lessons.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Abstractions;
@@ -34,7 +35,11 @@ public class LessonService : ILessonService
     public async Task<ResponseLessonDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var entity = await _lessonRepository.GetItemByIdAsync(id, cancellationToken);
-        return entity is null ? null : _mapper.Map<ResponseLessonDto>(entity);
+        
+        if (entity is null)
+            throw new NotFoundException($"Lesson with id {id} not found");
+        
+        return _mapper.Map<ResponseLessonDto>(entity);
     }
 
     public async Task<PaginatedList<ResponseLessonDto>> GetAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
@@ -65,7 +70,8 @@ public class LessonService : ILessonService
     public async Task<ResponseLessonDto> UpdateAsync(Guid id, RequestLessonDto dto, CancellationToken cancellationToken)
     {
         var entity = await _lessonRepository.GetItemByIdAsync(id, cancellationToken);
-        if (entity is null) throw new KeyNotFoundException($"Lesson {id} not found");
+        if (entity is null) 
+            throw new NotFoundException($"Lesson {id} not found");
 
         _mapper.Map(dto, entity);
         _lessonRepository.UpdateItem(entity);
@@ -77,7 +83,9 @@ public class LessonService : ILessonService
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var entity = await _lessonRepository.GetItemByIdAsync(id, cancellationToken);
-        if (entity is null) throw new KeyNotFoundException($"Lesson {id} not found");
+        
+        if (entity is null) 
+            throw new NotFoundException($"Lesson {id} not found");
 
         await _testRepository.DeleteAsync(entity.TestId, cancellationToken);
 

@@ -1,5 +1,6 @@
 ﻿using MainService.AL.Features.UserWords.DTO.Request;
 using MainService.AL.Features.UserWords.Services;
+using MainService.PL.Filters;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,12 +12,13 @@ namespace MainService.PL.Features.UserWord
     public class UserWordsController : ControllerBase
     {
         private readonly IUserWordService _userWordService;
-        public UserWordsController(IUserWordService service,  IMapper mapper)
+        public UserWordsController(IUserWordService service)
         {
             _userWordService = service;
         }
         
         [HttpGet("user/{userId}")]
+        [ValidateParameters(nameof(userId), nameof(pageIndex), nameof(pageCount))]
         public async Task<IActionResult> GetUserWords(Guid userId, int pageIndex,int pageCount,  CancellationToken cancellationToken)
         {
             var words = await _userWordService.GetAllWithUserIdAsync(userId,pageIndex, pageCount, cancellationToken);
@@ -24,15 +26,10 @@ namespace MainService.PL.Features.UserWord
         }
 
         [HttpGet("{userId}/{wordId}")]
+        [ValidateParameters(nameof(userId), nameof(wordId))]
         public async Task<IActionResult> GetUserWord(Guid userId, Guid wordId, CancellationToken cancellationToken)
         {
             var userWord = await _userWordService.GetByIdsAsync(userId, wordId, cancellationToken);
-            
-            if (userWord == null)
-            {
-                return NotFound();
-            }
-            
             return Ok(userWord);
         }
 
@@ -44,10 +41,10 @@ namespace MainService.PL.Features.UserWord
         }
 
         [HttpDelete("{userId}/{wordId}")]
-        public async Task<IActionResult> DeleteUserWord(Guid userId, Guid wordId, CancellationToken cancellationToken)
+        [ValidateParameters(nameof(userId), nameof(wordId))]
+        public async Task DeleteUserWord(Guid userId, Guid wordId, CancellationToken cancellationToken)
         {
             await _userWordService.DeleteAsync(userId, wordId, cancellationToken);
-            return NoContent();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using MainService.AL.Features.UserWords.DTO.Request;
+﻿using MainService.AL.Exceptions;
+using MainService.AL.Features.UserWords.DTO.Request;
 using MainService.AL.Features.UserWords.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Abstractions;
@@ -57,8 +58,9 @@ public class UserWordService : IUserWordService
         var key = new UserWordKey(userId, wordId);
         var entity = await _userWordRepository.GetItemByIdAsync(key, cancellationToken);
 
-        if (entity is null) return null;
-
+        if (entity is null) 
+            throw new NotFoundException("User word not found");
+        
         var dto = entity.Adapt<UserWordDto>();
         var paginated = new PaginatedList<UserWordDto>(new List<UserWordDto> { dto }, 1, 1);
 
@@ -91,7 +93,8 @@ public class UserWordService : IUserWordService
     {
         var key = new UserWordKey(userId, wordId);
         var entity = await _userWordRepository.GetItemByIdAsync(key, cancellationToken);
-        if (entity is null) throw new KeyNotFoundException($"UserWord {key} not found");
+        if (entity is null) 
+            throw new NotFoundException($"UserWord {key} not found");
 
         _userWordRepository.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

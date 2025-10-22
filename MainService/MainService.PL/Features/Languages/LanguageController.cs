@@ -1,5 +1,6 @@
 ﻿using MainService.AL.Features.Languages.DTO.Request;
 using MainService.AL.Features.Languages.Services;
+using MainService.PL.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Languages
@@ -17,6 +18,7 @@ namespace MainService.PL.Features.Languages
         }
 
         [HttpGet]
+        [ValidateParameters(nameof(pageIndex), nameof(pageSize))]
         public async Task<IActionResult> GetAllLanguages(int pageIndex, int pageSize, CancellationToken cancellationToken)
         {
             var languages = await _languageService.GetAllAsync(pageIndex, pageSize, cancellationToken);
@@ -24,15 +26,10 @@ namespace MainService.PL.Features.Languages
         }
 
         [HttpGet("{id:guid}")]
+        [ValidateParameters(nameof(id))]
         public async Task<IActionResult> GetLanguageById(Guid id, CancellationToken cancellationToken)
         {
             var language = await _languageService.GetByIdAsync(id, cancellationToken);
-            
-            if (language == null)
-            {
-                return NotFound();
-            }
-
             return Ok(language);
         }
 
@@ -40,15 +37,14 @@ namespace MainService.PL.Features.Languages
         public async Task<IActionResult> CreateLanguage([FromBody] RequestLanguageDto dto, CancellationToken cancellationToken)
         {
             var created = await _languageService.CreateAsync(dto, cancellationToken);
-            return CreatedAtAction
-            (nameof(GetLanguageById), new { id = created.Id }, created); //TODO: fix
+            return Ok(created);
         }
 
         [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> DeleteLanguage(Guid id, CancellationToken cancellationToken)
+        [ValidateParameters(nameof(id))]
+        public async Task DeleteLanguage(Guid id, CancellationToken cancellationToken)
         {
             await _languageService.DeleteAsync(id, cancellationToken);
-            return NoContent();
         }
     }
 }

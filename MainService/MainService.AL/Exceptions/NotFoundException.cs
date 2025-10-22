@@ -1,3 +1,8 @@
-﻿namespace MainService.AL.Exceptions;
+﻿using System.Net;
 
-public class NotFoundException(string name, string key) : Exception($"{name} ({key}) was not found");
+namespace MainService.AL.Exceptions;
+
+public class NotFoundException(string message) : DomainException(message)
+{
+    public override int StatusCode => (int)HttpStatusCode.NotFound;
+}
