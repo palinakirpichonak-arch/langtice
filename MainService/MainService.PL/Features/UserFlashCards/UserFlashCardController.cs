@@ -19,12 +19,19 @@ public class UserFlashController : ControllerBase
     
     [HttpGet("user/{userId}")]
     [ValidateParameters(nameof(userId))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllByUser(Guid userId, CancellationToken cancellationToken)
     {
         var sets = await _flashCardsService.GetAllByUserAsync(userId, cancellationToken);
         return Ok(sets);
     }
+    
     [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(string id, CancellationToken cancellationToken)
     {
         var set = await _flashCardsService.GetByIdAsync(id, cancellationToken);
@@ -32,6 +39,9 @@ public class UserFlashController : ControllerBase
     }
     
     [HttpPost("generate/{userId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GenerateFromUserWords([FromBody] RequestUserFlashCardDto dto, CancellationToken cancellationToken)
     {
         var set = await _flashCardsService.GenerateFromUserWordsAsync(dto, cancellationToken);
@@ -40,6 +50,10 @@ public class UserFlashController : ControllerBase
     
     [HttpDelete("{id}")]
     [ValidateParameters(nameof(id))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task Delete(string id, CancellationToken cancellationToken)
     {
         await _flashCardsService.DeleteAsync(id, cancellationToken);

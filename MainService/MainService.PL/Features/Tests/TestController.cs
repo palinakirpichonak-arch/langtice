@@ -1,5 +1,7 @@
-﻿using MainService.AL.Features.Tests.DTO.Request;
+﻿using MainService.AL.Features.Languages.DTO.Response;
+using MainService.AL.Features.Tests.DTO.Request;
 using MainService.AL.Features.Tests.Services;
+using MainService.DAL.Features.Test;
 using MainService.PL.Filters;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +20,9 @@ public class TestController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllTests(CancellationToken cancellationToken)
     {
         var test = await _testService.GetAllAsync(cancellationToken);
@@ -26,6 +31,9 @@ public class TestController : ControllerBase
     
     [HttpGet("{id}")]
     [ValidateParameters(nameof(id))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetTestById(string id, CancellationToken cancellationToken)
     {
         var test = await _testService.GetByIdAsync(id, cancellationToken);
@@ -34,6 +42,9 @@ public class TestController : ControllerBase
     
     [HttpGet("{id}/active")]
     [ValidateParameters(nameof(id))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetActiveTestById(string id, CancellationToken cancellationToken)
     {
         var test = await _testService.GetActiveTest(id, cancellationToken);
@@ -41,6 +52,9 @@ public class TestController : ControllerBase
     }
     
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateTest([FromBody] TestDto dto, CancellationToken cancellationToken)
     {
         var test = await _testService.CreateAsync(dto, cancellationToken);
@@ -49,6 +63,8 @@ public class TestController : ControllerBase
 
     [HttpPut("{id}")]
     [ValidateParameters(nameof(id))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateTest(string id, [FromBody] TestDto dto, CancellationToken cancellationToken)
     {
         var test = await _testService.UpdateAsync(id, dto, cancellationToken);
@@ -57,6 +73,9 @@ public class TestController : ControllerBase
 
     [HttpDelete("{id}")]
     [ValidateParameters(nameof(id))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task DeleteTest(string id, CancellationToken cancellationToken)
     {
         await _testService.DeleteAsync(id, cancellationToken);
@@ -64,6 +83,9 @@ public class TestController : ControllerBase
 
     [HttpPost("{id}/submit")]
     [ValidateParameters(nameof(id))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SubmitTest(string id, [FromBody] UserAnswerDto userTest, CancellationToken cancellationToken)
     {
         var result = await _testService.CheckTest(id, userTest, cancellationToken);

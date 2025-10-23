@@ -19,6 +19,9 @@ namespace MainService.PL.Features.UserTests
         
         [HttpGet("user/{userId}")]
         [ValidateParameters(nameof(userId))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllByUserId(Guid userId, CancellationToken cancellationToken = default)
         {
             var tests = await _userTestService.GetAllByUserIdAsync(userId, cancellationToken);
@@ -27,6 +30,9 @@ namespace MainService.PL.Features.UserTests
         
         [HttpGet("{id}")]
         [ValidateParameters(nameof(id))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUserTestById(Guid id, CancellationToken cancellationToken)
         {
             var test = await _userTestService.GetByIdAsync(id, cancellationToken);
@@ -34,6 +40,9 @@ namespace MainService.PL.Features.UserTests
         }
         
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateUserTest([FromBody] RequestUserTestDto dto, CancellationToken cancellationToken)
         {
             var createdTest = await _userTestService.CreateAsync(dto, cancellationToken);
@@ -42,6 +51,10 @@ namespace MainService.PL.Features.UserTests
         
         [HttpDelete("{id}")]
         [ValidateParameters(nameof(id))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task DeleteUserTest(Guid id, CancellationToken cancellationToken)
         {
             await _userTestService.DeleteAsync(id, cancellationToken);

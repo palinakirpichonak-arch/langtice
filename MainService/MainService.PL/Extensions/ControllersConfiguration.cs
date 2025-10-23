@@ -6,6 +6,7 @@ public static class ControllersConfiguration
 {
     public static IServiceCollection ConfigureControllers(this IServiceCollection services)
     {
+        services.AddHealthChecks();
         services.AddControllers(options =>
         {
             options.Filters.Add<ValidationFilter>();

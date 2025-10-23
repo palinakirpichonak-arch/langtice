@@ -1,7 +1,6 @@
 ﻿using MainService.DAL.Abstractions;
 using MainService.DAL.Context.PostgreSql;
 using MainService.DAL.Features.Courses;
-using Microsoft.EntityFrameworkCore;
 
 namespace MainService.DAL.Data.Courses;
 

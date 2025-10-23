@@ -2,11 +2,9 @@
 using MainService.AL.Features.Lessons.DTO.Request;
 using MainService.AL.Features.Lessons.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
-using MainService.DAL.Abstractions;
 using MainService.DAL.Data.Lessons;
 using MainService.DAL.Data.Tests;
 using MainService.DAL.Features.Lessons;
-using Mapster;
 using MapsterMapper;
 
 namespace MainService.AL.Features.Lessons.Services;
@@ -53,21 +51,8 @@ public class LessonService : ILessonService
 
         return _mapper.Map<ResponseLessonDto>(entity);
     }
-
-    public async Task<PaginatedList<ResponseLessonDto>> GetAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
-    {
-        var entities = await _lessonRepository.GetAsync(
-            tracking: false,
-            pageIndex: pageIndex,
-            pageSize: pageSize,
-            cancellationToken: cancellationToken);
-
-        var list = entities.Select(_mapper.Map<ResponseLessonDto>).ToList();
-
-        return new PaginatedList<ResponseLessonDto>(list, pageIndex, pageSize);
-    }
-
-    public async Task<PaginatedList<ResponseLessonDto>> GetAllWithCourseIdAsync(Guid courseId, int pageIndex, int pageSize, CancellationToken cancellationToken)
+    
+    public async Task<IEnumerable<ResponseLessonDto>> GetAllWithCourseIdAsync(Guid courseId, int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
         var entities = await _lessonRepository.GetAsync(
             filter: l => l.CourseId == courseId,
@@ -78,7 +63,7 @@ public class LessonService : ILessonService
 
         var list = entities.Select(_mapper.Map<ResponseLessonDto>).ToList();
 
-        return new PaginatedList<ResponseLessonDto>(list, pageIndex, pageSize);
+        return list;
     }
 
     public async Task<ResponseLessonDto> CreateAsync(RequestLessonDto dto, CancellationToken cancellationToken)

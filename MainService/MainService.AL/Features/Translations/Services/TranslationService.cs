@@ -3,7 +3,6 @@ using MainService.AL.Features.Translations.DTO.Request;
 using MainService.AL.Features.Translations.DTO.Response;
 using MainService.AL.Features.Words.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
-using MainService.DAL.Abstractions;
 using MainService.DAL.Data.Translations;
 using MainService.DAL.Features.Translations;
 using MapsterMapper;

@@ -19,6 +19,9 @@ public class TranslationsController : ControllerBase
 
     [HttpGet]
     [ValidateParameters(nameof(pageIndex), nameof(pageSize))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetPaginatedTranslations(int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
         var translations = await _translationService.GetAllAsync(pageIndex, pageSize, cancellationToken);
@@ -27,6 +30,9 @@ public class TranslationsController : ControllerBase
     
     [HttpGet("{id}")]
     [ValidateParameters(nameof(id))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetTranslationById(Guid id, CancellationToken cancellationToken)
     {
         var translation = await _translationService.GetByIdAsync(id, cancellationToken);
@@ -34,6 +40,9 @@ public class TranslationsController : ControllerBase
     }
     
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateTranslation([FromBody] RequestTranslationDto translation, CancellationToken cancellationToken)
     {
         var created = await _translationService.CreateAsync(translation, cancellationToken);
@@ -42,6 +51,10 @@ public class TranslationsController : ControllerBase
     
     [HttpDelete("{id}")]
     [ValidateParameters(nameof(id))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task DeleteTranslation(Guid id, CancellationToken cancellationToken)
     {
         await _translationService.DeleteAsync(id, cancellationToken);

@@ -1,6 +1,4 @@
-﻿using MainService.DAL.Abstractions;
-
-namespace MainService.AL.Features.UserWords.DTO.Response;
+﻿namespace MainService.AL.Features.UserWords.DTO.Response;
 
 public class ResponseUserWordDto 
 {

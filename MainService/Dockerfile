@@ -1,13 +1,19 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-USER $APP_UID
+USER root
 WORKDIR /app
+
+ENV ASPNETCORE_URLS=http://+:8080 \
+    ASPNETCORE_ENVIRONMENT=Development
+
 EXPOSE 8080
 EXPOSE 8081
 
+ HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+    
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-
+WORKDIR /src   
 
 COPY ["MainService.PL/MainService.PL.csproj", "MainService.PL/"]
 COPY ["MainService.AL/MainService.AL.csproj", "MainService.AL/"]

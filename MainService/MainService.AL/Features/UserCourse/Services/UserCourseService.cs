@@ -3,7 +3,6 @@ using MainService.AL.Features.UserCourse.DTO.Request;
 using MainService.AL.Features.UserCourse.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Data.UserCourses;
-using MainService.DAL.Features.UserCourse;
 using MapsterMapper;
 
 namespace MainService.AL.Features.UserCourse.Service;

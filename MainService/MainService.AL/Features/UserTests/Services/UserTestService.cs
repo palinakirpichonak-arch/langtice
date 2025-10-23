@@ -13,7 +13,6 @@ using MainService.DAL.Data.UserTest;
 using MainService.DAL.Data.UserWord;
 using MainService.DAL.Features.Test;
 using MainService.DAL.Features.UserTest;
-using Mapster;
 using MapsterMapper;
 
 namespace MainService.AL.Features.UserTests.Services;

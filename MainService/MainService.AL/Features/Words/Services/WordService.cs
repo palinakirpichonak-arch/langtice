@@ -9,7 +9,6 @@ using MainService.DAL.Data.Translations;
 using MainService.DAL.Data.Words;
 using MainService.DAL.Features.Translations;
 using MainService.DAL.Features.Words;
-using Mapster;
 using MapsterMapper;
 
 namespace MainService.AL.Features.Words.Services;

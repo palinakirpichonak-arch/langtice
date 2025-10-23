@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using MainService.AL.Exceptions;
+﻿using MainService.AL.Exceptions;
 using MainService.AL.Features.Courses.DTO.Request;
 using MainService.AL.Features.Courses.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;

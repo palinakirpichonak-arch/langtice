@@ -2,7 +2,6 @@
 using MainService.AL.Features.UserWords.DTO.Request;
 using MainService.AL.Features.UserWords.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
-using MainService.DAL.Abstractions;
 using MainService.DAL.Data.UserWord;
 using MainService.DAL.Features.UserWord;
 using Mapster;

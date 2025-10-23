@@ -19,6 +19,9 @@ public class UserCourseController : ControllerBase
 
     [HttpGet("user/{userId}")]
     [ValidateParameters(nameof(userId))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllUserCourses(Guid userId, CancellationToken cancellationToken)
     {
         var courses = await _userCourseService.GetAllByUserIdAsync(userId, cancellationToken);
@@ -27,6 +30,9 @@ public class UserCourseController : ControllerBase
 
     [HttpGet("{userId}/{courseId}")]
     [ValidateParameters(nameof(userId), nameof(courseId))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetUserCourseByIds(Guid userId, Guid courseId, CancellationToken cancellationToken)
     {
         var course = await _userCourseService.GetByIdsAsync(userId, courseId, cancellationToken);
@@ -34,7 +40,10 @@ public class UserCourseController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddUserCourse([FromBody] RequestUserCourseDto dto, CancellationToken cancellationToken)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateUserCourse([FromBody] RequestUserCourseDto dto, CancellationToken cancellationToken)
     {
         var entity = await _userCourseService.CreateAsync(dto, cancellationToken);
         return Ok(entity);
@@ -42,6 +51,10 @@ public class UserCourseController : ControllerBase
 
     [HttpDelete("{userId}/{courseId}")]
     [ValidateParameters(nameof(userId), nameof(courseId))]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task DeleteUserCourse(Guid userId, Guid courseId, CancellationToken cancellationToken)
     {
         await _userCourseService.DeleteAsync(userId, courseId, cancellationToken);

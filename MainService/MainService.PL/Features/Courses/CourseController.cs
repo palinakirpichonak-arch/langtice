@@ -1,4 +1,5 @@
 ﻿using MainService.AL.Features.Courses.DTO.Request;
+using MainService.AL.Features.Courses.DTO.Response;
 using MainService.AL.Features.Courses.Services;
 using MainService.PL.Filters;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,9 @@ namespace MainService.PL.Features.Courses
         
         [HttpGet("{id:guid}")]
         [ValidateParameters(nameof(id))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetCourseById(Guid id, CancellationToken cancellationToken)
         {
             var course = await _courseService.GetByIdAsync(id, cancellationToken);
@@ -26,6 +30,9 @@ namespace MainService.PL.Features.Courses
         }
         
         [HttpGet("active")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetActiveCoursesById(CancellationToken cancellationToken)
         {
             var course = await _courseService.GetActiveCourses(cancellationToken);
@@ -33,6 +40,9 @@ namespace MainService.PL.Features.Courses
         }
         
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllCourses(CancellationToken cancellationToken)
         {
             var courses = await _courseService.GetAllItemsAdminAsync(cancellationToken);
@@ -40,6 +50,9 @@ namespace MainService.PL.Features.Courses
         }
         
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateCourse([FromBody] RequestCourseDto dto, CancellationToken cancellationToken)
         {
             var course = await _courseService.CreateAsync(dto, cancellationToken);
@@ -48,6 +61,9 @@ namespace MainService.PL.Features.Courses
         
         [HttpPut("{id:guid}")]
         [ValidateParameters(nameof(id))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateCourse(Guid id, [FromBody] RequestCourseDto dto, CancellationToken cancellationToken)
         {
             var updatedCourse = await _courseService.UpdateAsync(id, dto, cancellationToken);

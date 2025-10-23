@@ -1,6 +1,5 @@
 ﻿using MainService.AL.Features.Translations.DTO.Request;
 using MainService.AL.Features.Translations.DTO.Response;
-using MainService.DAL.Abstractions;
 
 namespace MainService.AL.Features.Translations.Services;
 

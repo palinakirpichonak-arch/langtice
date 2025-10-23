@@ -1,7 +1,6 @@
 ﻿using MainService.AL.Features.UserWords.DTO.Request;
 using MainService.AL.Features.UserWords.Services;
 using MainService.PL.Filters;
-using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.UserWord
@@ -18,6 +17,9 @@ namespace MainService.PL.Features.UserWord
         }
         
         [HttpGet("user/{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ValidateParameters(nameof(userId), nameof(pageIndex), nameof(pageCount))]
         public async Task<IActionResult> GetUserWords(Guid userId, int pageIndex,int pageCount,  CancellationToken cancellationToken)
         {
@@ -27,6 +29,9 @@ namespace MainService.PL.Features.UserWord
 
         [HttpGet("{userId}/{wordId}")]
         [ValidateParameters(nameof(userId), nameof(wordId))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUserWord(Guid userId, Guid wordId, CancellationToken cancellationToken)
         {
             var userWord = await _userWordService.GetByIdsAsync(userId, wordId, cancellationToken);
@@ -34,6 +39,9 @@ namespace MainService.PL.Features.UserWord
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddUserWord([FromBody] RequestUserWordDto dto, CancellationToken cancellationToken)
         {
             var created = await _userWordService.CreateAsync(dto, cancellationToken);
@@ -42,6 +50,10 @@ namespace MainService.PL.Features.UserWord
 
         [HttpDelete("{userId}/{wordId}")]
         [ValidateParameters(nameof(userId), nameof(wordId))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task DeleteUserWord(Guid userId, Guid wordId, CancellationToken cancellationToken)
         {
             await _userWordService.DeleteAsync(userId, wordId, cancellationToken);
