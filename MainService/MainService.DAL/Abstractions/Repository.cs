@@ -1,10 +1,10 @@
-﻿using MainService.DAL.Context.PostgreSql;
+﻿using System.Linq.Expressions;
+using MainService.DAL.Context.PostgreSql;
 using Microsoft.EntityFrameworkCore;
 
 namespace MainService.DAL.Abstractions;
 
-public abstract class Repository<TEntity, TKey> : 
-        IRepository<TEntity, TKey>  where TEntity : class, IEntity<TKey>
+public abstract class Repository<TEntity, TKey> : IRepository<TEntity, TKey>  where TEntity : class, IEntity<TKey>
 {
     protected readonly PostgreDbContext _dbContext;
 
@@ -13,42 +13,38 @@ public abstract class Repository<TEntity, TKey> :
         _dbContext = dbContext;   
     }
 
-    public virtual async Task<TEntity?> GetItemByIdAsync(TKey id, CancellationToken cancellationToken)
+    public async Task<IEnumerable<TEntity>> GetAsync(
+        Expression<Func<TEntity, bool>>? filter = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        int? pageIndex = null,
+        int? pageSize = null,
+        bool tracking = false,
+        CancellationToken cancellationToken = default,
+        params Expression<Func<TEntity, object>>[]? includes)
     {
-        return await _dbContext.Set<TEntity>().FindAsync([id], cancellationToken);
-    }
+        IQueryable<TEntity> query = tracking 
+            ? _dbContext.Set<TEntity>() 
+            : _dbContext.Set<TEntity>().AsNoTracking();
+        
+        if (includes != null && includes.Length > 0)
+        {
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+        }
+        
+        if(filter != null)
+            query = query.Where(filter);
+        
+        if(orderBy != null)
+            query = orderBy(query);
 
-    public virtual async Task<IEnumerable<TEntity>> GetAllItemsAsync(CancellationToken cancellationToken)
-    {
-        return await _dbContext.Set<TEntity>().ToListAsync(cancellationToken);
-    }
-
-    public async Task<PaginatedList<TEntity>> GetAllItemsAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
-    {
-        var entities = await _dbContext.Set<TEntity>()
-            .OrderBy(b => b.Id)
-            .Skip((pageIndex - 1) * pageSize)
-            .Take(pageSize)
-            .ToListAsync(cancellationToken);
-
-        var count = await _dbContext.Set<TEntity>().CountAsync(cancellationToken);
-        var totalPages = (int)Math.Ceiling(count / (double)pageSize);
-
-        return new PaginatedList<TEntity>(entities, pageIndex, totalPages);
-    }
-
-    public async Task<PaginatedList<TEntity>> GetAllItemsWithIdAsync(TKey id, int pageIndex, int pageSize, CancellationToken cancellationToken)
-    {
-        var entities = await _dbContext.Set<TEntity>()
-            .OrderBy(b => b.Id)
-            .Skip((pageIndex - 1) * pageSize)
-            .Take(pageSize).Where(e => e.Id.Equals(id))
-            .ToListAsync(cancellationToken);
-
-        var count = await _dbContext.Set<TEntity>().CountAsync(cancellationToken);
-        var totalPages = (int)Math.Ceiling(count / (double)pageSize);
-
-        return new PaginatedList<TEntity>(entities, pageIndex, totalPages);
+        if (pageIndex.HasValue && pageSize.HasValue)
+        {
+            query = query.Skip((pageIndex.Value - 1) * pageSize.Value);
+        }
+        return await query.ToListAsync(cancellationToken);
     }
 
     public virtual void AddItem(TEntity item)

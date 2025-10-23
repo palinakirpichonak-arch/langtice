@@ -22,47 +22,41 @@ public class UserWordService : IUserWordService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<ResponseUserWordDto> GetAllByUserIdAsync(Guid userId, CancellationToken cancellationToken)
+    public async Task<ResponseUserWordDto> GetAllWithUserIdAsync(
+        Guid userId,
+        int pageIndex,
+        int pageSize,
+        CancellationToken cancellationToken)
     {
-        var entities = await _userWordRepository.GetAllItemsAsync(cancellationToken);
+        var entities = await _userWordRepository.GetAsync(
+            filter: uw => uw.UserId == userId,
+            tracking: false,
+            pageIndex: pageIndex,
+            pageSize: pageSize,
+            cancellationToken: cancellationToken);
 
-        var userWordDtos = entities
-            .Where(e => e.UserId == userId)
-            .Select(e => e.Adapt<UserWordDto>())
-            .ToList();
-        
-        var paginated = new PaginatedList<UserWordDto>(
-            items: userWordDtos,
-            pageIndex: 1,
-            totalPages: userWordDtos.Count == 0 ? 1 : userWordDtos.Count
-        );
+        var userWordDtos = entities.Adapt<List<UserWordDto>>();
 
         return new ResponseUserWordDto
         {
             UserId = userId,
-            UserWords = paginated
+            UserWords = userWordDtos
         };
-    }
-
-    public async Task<ResponseUserWordDto> GetAllWithUserIdAsync(Guid userId, int pageIndex, int pageSize, CancellationToken cancellationToken)
-    {
-        var paginatedEntities = await _userWordRepository.GetAllByUserIdAsync(userId, pageIndex, pageSize, cancellationToken);
-
-        var result = (userId, paginatedEntities).Adapt<ResponseUserWordDto>();
-
-        return result;
     }
 
     public async Task<ResponseUserWordDto?> GetByIdsAsync(Guid userId, Guid wordId, CancellationToken cancellationToken)
     {
-        var key = new UserWordKey(userId, wordId);
-        var entity = await _userWordRepository.GetItemByIdAsync(key, cancellationToken);
+        var entities = await _userWordRepository.GetAsync(
+            filter: uw => uw.UserId == userId && uw.WordId == wordId,
+            tracking: false,
+            cancellationToken: cancellationToken);
 
-        if (entity is null) 
+        var entity = entities.FirstOrDefault();
+        if (entity is null)
             throw new NotFoundException("User word not found");
-        
-        var dto = entity.Adapt<UserWordDto>();
-        var paginated = new PaginatedList<UserWordDto>(new List<UserWordDto> { dto }, 1, 1);
+
+        var userWordDto = entity.Adapt<UserWordDto>();
+        var paginated = new List<UserWordDto> {userWordDto};
 
         return new ResponseUserWordDto
         {
@@ -80,7 +74,7 @@ public class UserWordService : IUserWordService
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         var userWordDto = entity.Adapt<UserWordDto>();
-        var paginated = new PaginatedList<UserWordDto>(new List<UserWordDto> { userWordDto }, 1, 1);
+        var paginated = new List<UserWordDto> {userWordDto};
 
         return new ResponseUserWordDto
         {
@@ -91,10 +85,14 @@ public class UserWordService : IUserWordService
 
     public async Task DeleteAsync(Guid userId, Guid wordId, CancellationToken cancellationToken)
     {
-        var key = new UserWordKey(userId, wordId);
-        var entity = await _userWordRepository.GetItemByIdAsync(key, cancellationToken);
-        if (entity is null) 
-            throw new NotFoundException($"UserWord {key} not found");
+        var entities = await _userWordRepository.GetAsync(
+            filter: uw => uw.UserId == userId && uw.WordId == wordId,
+            tracking: false,
+            cancellationToken: cancellationToken);
+
+        var entity = entities.FirstOrDefault();
+        if (entity is null)
+            throw new NotFoundException($"UserWord not found");
 
         _userWordRepository.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

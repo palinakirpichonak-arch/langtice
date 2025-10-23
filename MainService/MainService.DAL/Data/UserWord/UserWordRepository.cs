@@ -13,7 +13,7 @@ public class UserWordRepository : Repository<DAL.Features.UserWord.UserWord, Use
         _dbContext = dbContext;
     }
     
-    public override async Task<IEnumerable<Features.UserWord.UserWord>> GetAllItemsAsync(CancellationToken ct)
+    public async Task<IEnumerable<Features.UserWord.UserWord>> GetAllItemsAsync(CancellationToken ct)
     {
         return await _dbContext.UserWords.Include(uw => uw.Word).ToListAsync(ct);
     }
@@ -35,7 +35,7 @@ public class UserWordRepository : Repository<DAL.Features.UserWord.UserWord, Use
         return new PaginatedList<DAL.Features.UserWord.UserWord>(items, pageIndex, totalPages);
     }
 
-    public override async Task<DAL.Features.UserWord.UserWord?> GetItemByIdAsync(UserWordKey id, CancellationToken ct)
+    public async Task<DAL.Features.UserWord.UserWord?> GetItemByIdAsync(UserWordKey id, CancellationToken ct)
     {
         return await _dbContext.UserWords
             .Include(uw => uw.Word)

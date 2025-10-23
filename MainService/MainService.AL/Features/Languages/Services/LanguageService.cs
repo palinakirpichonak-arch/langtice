@@ -2,10 +2,8 @@
 using MainService.AL.Features.Languages.DTO.Request;
 using MainService.AL.Features.Languages.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
-using MainService.DAL.Abstractions;
 using MainService.DAL.Data.Languages;
 using MainService.DAL.Features.Languages;
-using Mapster;
 using MapsterMapper;
 
 namespace MainService.AL.Features.Languages.Services;
@@ -16,7 +14,10 @@ public class LanguageService : ILanguageService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public LanguageService(ILanguageRepository languageRepository, IUnitOfWork unitOfWork, IMapper mapper)
+    public LanguageService(
+        ILanguageRepository languageRepository,
+        IUnitOfWork unitOfWork,
+        IMapper mapper)
     {
         _languageRepository = languageRepository;
         _unitOfWork = unitOfWork;
@@ -25,25 +26,27 @@ public class LanguageService : ILanguageService
 
     public async Task<ResponseLanguageDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var entity = await _languageRepository.GetItemByIdAsync(id, cancellationToken);
-       
-        if(entity == null)
+        var entity = (await _languageRepository.GetAsync(
+            filter: l => l.Id == id,
+            tracking: false,
+            cancellationToken: cancellationToken))
+            .FirstOrDefault();
+
+        if (entity is null)
             throw new NotFoundException("Language not found");
-        
+
         return _mapper.Map<ResponseLanguageDto>(entity);
     }
 
-    public async Task<IEnumerable<ResponseLanguageDto>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<ResponseLanguageDto>> GetAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
-        var entities = await _languageRepository.GetAllItemsAsync(cancellationToken);
-        return _mapper.Map<IEnumerable<ResponseLanguageDto>>(entities);
-    }
+        var entities = await _languageRepository.GetAsync(
+            tracking: false,
+            pageIndex:  pageIndex,
+            pageSize: pageSize,
+            cancellationToken: cancellationToken);
 
-    public async Task<PaginatedList<ResponseLanguageDto>> GetAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
-    {
-        var entities = await _languageRepository.GetAllItemsAsync(pageIndex, pageSize, cancellationToken);
-        var list = entities.Items.Adapt<List<ResponseLanguageDto>>();
-        return new PaginatedList<ResponseLanguageDto>(list, pageIndex, pageSize);
+        return _mapper.Map<IEnumerable<ResponseLanguageDto>>(entities);
     }
 
     public async Task<ResponseLanguageDto> CreateAsync(RequestLanguageDto dto, CancellationToken cancellationToken)
@@ -59,9 +62,14 @@ public class LanguageService : ILanguageService
 
     public async Task<ResponseLanguageDto> UpdateAsync(Guid id, ResponseLanguageDto dto, CancellationToken cancellationToken)
     {
-        var entity = await _languageRepository.GetItemByIdAsync(id, cancellationToken);
+        var entity = (await _languageRepository.GetAsync(
+                filter: l => l.Id == id,
+                tracking: true,
+                cancellationToken: cancellationToken))
+            .FirstOrDefault();
+
         if (entity is null)
-            throw new NotFoundException($"Language not found");
+            throw new NotFoundException("Language not found");
 
         _mapper.Map(dto, entity);
         _languageRepository.UpdateItem(entity);
@@ -69,13 +77,17 @@ public class LanguageService : ILanguageService
 
         return _mapper.Map<ResponseLanguageDto>(entity);
     }
-
+    
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var entity = await _languageRepository.GetItemByIdAsync(id, cancellationToken);
-        
+        var entity = (await _languageRepository.GetAsync(
+            filter: l => l.Id == id,
+            tracking: false,
+            cancellationToken: cancellationToken))
+            .FirstOrDefault();
+
         if (entity is null)
-            throw new NotFoundException($"Language not found");
+            throw new NotFoundException("Language not found");
 
         _languageRepository.DeleteItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

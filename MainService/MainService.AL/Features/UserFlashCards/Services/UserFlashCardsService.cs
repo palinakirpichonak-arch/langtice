@@ -47,7 +47,9 @@ namespace MainService.AL.Features.UserFlashCards.Services
         public async Task<DAL.Features.UserFlashCard.UserFlashCards> GenerateFromUserWordsAsync(RequestUserFlashCardDto dto, CancellationToken cancellationToken)
         {
             var userWordsPage = await _userWordRepository.GetAllByUserIdAsync(dto.UserId, 1, dto.Count, cancellationToken);
-            var translations = await _translationRepository.GetAllItemsAsync(cancellationToken);
+            var translations = await _translationRepository.GetAsync(
+                tracking:false,
+                cancellationToken:cancellationToken);
 
             var flashCards = userWordsPage.Items
                 .Select(uw =>

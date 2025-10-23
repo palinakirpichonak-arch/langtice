@@ -1,11 +1,4 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "langtice.MainService", "langtice.MainService\langtice.MainService.csproj", "{E46623A4-13C0-49B4-9BB3-F88F2DC22CB7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "langtice.AuthService", "langtice.AuthService\langtice.AuthService.csproj", "{A112F805-29BF-40E2-AFB6-9DE45AA4953E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "langtice.NotificationService", "langtice.NotificationService\langtice.NotificationService.csproj", "{1EF85461-213A-4B58-BBDE-BBC0351DE61F}"
-EndProject
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

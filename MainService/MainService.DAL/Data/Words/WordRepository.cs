@@ -14,7 +14,7 @@ public class WordRepository : Repository<Word, Guid>, IWordRepository
         _dbContext = dbContext;
     }
 
-    public override async Task<Word?> GetItemByIdAsync(Guid id, CancellationToken ct)
+    public async Task<Word?> GetItemByIdAsync(Guid id, CancellationToken ct)
     {
         return await _dbContext.Words
             .Include(w => w.Language)

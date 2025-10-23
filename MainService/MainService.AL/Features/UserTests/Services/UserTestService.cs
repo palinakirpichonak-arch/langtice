@@ -1,4 +1,5 @@
-﻿using MainService.AL.Exceptions;
+﻿using System.Text.Json;
+using MainService.AL.Exceptions;
 using MainService.AL.Features.LLM;
 using MainService.AL.Features.Tests.DTO.Request;
 using MainService.AL.Features.Tests.Services;
@@ -20,10 +21,10 @@ namespace MainService.AL.Features.UserTests.Services;
 public class UserTestService : IUserTestService
 {
     private readonly IUserTestRepository _userTestRepository;
-    private readonly  IUserWordRepository  _userWordRepository;
-    private readonly  ILanguageRepository _languageRepository;
+    private readonly IUserWordRepository _userWordRepository;
+    private readonly ILanguageRepository _languageRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly ITestRepository  _testRepository;
+    private readonly ITestRepository _testRepository;
     private readonly IMapper _mapper;
     private readonly ILlmService _llmService;
     private readonly ITestService _testService;
@@ -32,10 +33,10 @@ public class UserTestService : IUserTestService
         IUserTestRepository userTestRepository,
         IUserWordRepository userWordRepository,
         ILanguageRepository languageRepository,
-        IUnitOfWork unitOfWork, 
-        IMapper mapper, 
-        ILlmService llmService, 
-        ITestService testService, 
+        IUnitOfWork unitOfWork,
+        IMapper mapper,
+        ILlmService llmService,
+        ITestService testService,
         ITestRepository testRepository)
     {
         _userTestRepository = userTestRepository;
@@ -50,15 +51,25 @@ public class UserTestService : IUserTestService
 
     public async Task<IEnumerable<UserTest>> GetAllByUserIdAsync(Guid userId, CancellationToken cancellationToken)
     {
-        var userTests = await _userTestRepository.GetAllItemsAsync(cancellationToken);
-        return userTests.Where(ut => ut.UserId == userId);
+        var userTests = await _userTestRepository.GetAsync(
+            filter: ut => ut.UserId == userId,
+            tracking: false,
+            cancellationToken: cancellationToken);
+
+        return userTests;
     }
 
     public async Task<ResponseUserTestDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var entity = await _userTestRepository.GetItemByIdAsync(id, cancellationToken);
-        if (entity == null)
+        var entity = (await _userTestRepository.GetAsync(
+            filter: ut => ut.Id == id,
+            tracking: false,
+            cancellationToken: cancellationToken))
+            .FirstOrDefault();
+
+        if (entity is null)
             throw new NotFoundException("User test not found");
+
         return _mapper.Map<ResponseUserTestDto>(entity);
     }
 
@@ -67,8 +78,13 @@ public class UserTestService : IUserTestService
         int pageSize,
         CancellationToken cancellationToken)
     {
-        var entities = await _userTestRepository.GetAllItemsAsync(pageIndex, pageSize, cancellationToken);
-        var list = entities.Items.Adapt<List<ResponseUserTestDto>>();
+        var entities = await _userTestRepository.GetAsync(
+            tracking: false,
+            pageIndex: pageIndex,
+            pageSize: pageSize,
+            cancellationToken: cancellationToken);
+
+        var list = entities.Select(_mapper.Map<ResponseUserTestDto>).ToList();
         return new PaginatedList<ResponseUserTestDto>(list, pageIndex, pageSize);
     }
 
@@ -78,23 +94,35 @@ public class UserTestService : IUserTestService
         int pageSize,
         CancellationToken cancellationToken)
     {
-        var entities =
-            await _userTestRepository.GetAllItemsWithIdAsync(userId, pageIndex, pageSize, cancellationToken);
-        var list = entities.Items.Adapt<List<ResponseUserTestDto>>();
+        var entities = await _userTestRepository.GetAsync(
+            filter: ut => ut.UserId == userId,
+            tracking: false,
+            pageIndex: pageIndex,
+            pageSize: pageSize,
+            cancellationToken: cancellationToken);
+
+        var list = entities.Select(_mapper.Map<ResponseUserTestDto>).ToList();
         return new PaginatedList<ResponseUserTestDto>(list, pageIndex, pageSize);
     }
 
     public async Task<ResponseUserTestDto> CreateAsync(RequestUserTestDto dto, CancellationToken cancellationToken)
     {
-        var userWordsPaginated =
-            await _userWordRepository.GetAllByUserIdAsync(dto.UserId, 1, dto.Count, cancellationToken);
-        var userWords = userWordsPaginated.Items.ToList();
+        var userWords = (await _userWordRepository.GetAsync(
+            filter: uw => uw.UserId == dto.UserId,
+            tracking: false,
+            pageIndex: 1,
+            pageSize: dto.Count,
+            cancellationToken: cancellationToken))
+            .ToList();
 
         if (!userWords.Any())
             throw new NotFoundException("No user words available to generate test.");
 
         var languageIds = userWords.Select(uw => uw.Word.LanguageId).Distinct().ToList();
-        var allLanguages = await _languageRepository.GetAllItemsAsync(cancellationToken);
+        var allLanguages = await _languageRepository.GetAsync(
+            tracking: false,
+            cancellationToken: cancellationToken);
+
         var languageMap = allLanguages
             .Where(l => languageIds.Contains(l.Id))
             .ToDictionary(l => l.Id, l => l.Name);
@@ -118,8 +146,7 @@ public class UserTestService : IUserTestService
         Dictionary<string, List<Question>>? generatedTests;
         try
         {
-            generatedTests = System.Text.Json.JsonSerializer
-                .Deserialize<Dictionary<string, List<Question>>>(llmResponse);
+            generatedTests = JsonSerializer.Deserialize<Dictionary<string, List<Question>>>(llmResponse);
         }
         catch
         {
@@ -156,9 +183,9 @@ public class UserTestService : IUserTestService
             Title = dto.Name,
             Questions = questions
         };
-        
+
         var testEntity = await _testService.CreateAsync(test, cancellationToken);
-    
+
         var userTest = new UserTest
         {
             Id = Guid.NewGuid(),
@@ -168,25 +195,29 @@ public class UserTestService : IUserTestService
             OrderNum = dto.OrderNum,
             TestId = testEntity.Id
         };
-        
+
         try
         {
             _userTestRepository.AddItem(userTest);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
-        catch (Exception)
+        catch
         {
             await _testService.DeleteAsync(testEntity.Id, CancellationToken.None);
             throw;
         }
-        
+
         return _mapper.Map<ResponseUserTestDto>(userTest);
     }
 
-
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var userTest = await _userTestRepository.GetItemByIdAsync(id, cancellationToken);
+        var userTest = (await _userTestRepository.GetAsync(
+            filter: ut => ut.Id == id,
+            tracking: false,
+            cancellationToken: cancellationToken))
+            .FirstOrDefault();
+
         if (userTest is null)
             throw new NotFoundException($"UserTest {id} not found");
 

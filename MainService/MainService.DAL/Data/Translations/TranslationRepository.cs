@@ -22,7 +22,7 @@ public class TranslationRepository : Repository<Translation,Guid>, ITranslationR
                 .SingleAsync(cancellationToken);
     }
 
-    public override async Task<IEnumerable<Translation>> GetAllItemsAsync(CancellationToken ct)
+    public async Task<IEnumerable<Translation>> GetAllItemsAsync(CancellationToken ct)
     {
         return await _dbContext.Translations
             .Include(t=>t.FromWord)
@@ -30,7 +30,7 @@ public class TranslationRepository : Repository<Translation,Guid>, ITranslationR
             .ToListAsync(ct);
     }
 
-    public override async Task<Translation?> GetItemByIdAsync(Guid id, CancellationToken ct)
+    public async Task<Translation?> GetItemByIdAsync(Guid id, CancellationToken ct)
     {
         return await _dbContext.Translations
             .Include(t => t.FromWord)

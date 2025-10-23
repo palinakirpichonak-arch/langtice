@@ -14,14 +14,14 @@ public class UserCourseRepository : Repository<UserCourse, UserCourseKey>, IUser
         _dbContext = dbContext;
     }
 
-    public override async Task<IEnumerable<UserCourse>> GetAllItemsAsync(CancellationToken ct)
+    public async Task<IEnumerable<UserCourse>> GetAllItemsAsync(CancellationToken ct)
     {
         return await _dbContext.UserCourses
             .Include(uc => uc.Course)
             .ToListAsync(ct);
     }
 
-    public override async Task<UserCourse?> GetItemByIdAsync(UserCourseKey id, CancellationToken ct)
+    public async Task<UserCourse?> GetItemByIdAsync(UserCourseKey id, CancellationToken ct)
     {
         return await _dbContext.UserCourses
             .Include(uc => uc.Course)

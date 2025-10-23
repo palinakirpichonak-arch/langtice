@@ -53,8 +53,11 @@ public class TestService : ITestService
 
     public async Task<IEnumerable<Test>> GetAllByLessonIdAsync(Guid lessonId, CancellationToken cancellationToken)
     {
+        var lesson = (await _lessonRepository.GetAsync(
+            filter: l => l.Id == lessonId,
+            tracking: false,
+            cancellationToken: cancellationToken)).FirstOrDefault();
         var allTests = await _testRepository.GetAllAsync(cancellationToken);
-        var lesson = await _lessonRepository.GetItemByIdAsync(lessonId, cancellationToken);
         return allTests.Where(t => t.Id == lesson.TestId);
     }
 
@@ -86,26 +89,31 @@ public class TestService : ITestService
     public async Task DeleteAsync(string id, CancellationToken cancellationToken)
     {
         await _testRepository.DeleteAsync(id, cancellationToken);
+        
+        var lessons = await _lessonRepository.GetAsync(
+            filter: l => l.TestId == id,
+            tracking: true,
+            cancellationToken: cancellationToken);
 
-        var lessons = await _lessonRepository.GetAllItemsAsync(cancellationToken);
-        var lessonsToUpdate = lessons.Where(l => l.TestId == id);
-
-        foreach (var lesson in lessonsToUpdate)
+        foreach (var lesson in lessons)
         {
             lesson.TestId = null;
             _lessonRepository.UpdateItem(lesson);
         }
+        
+        var userTests = await _userTestRepository.GetAsync(
+            filter: ut => ut.TestId == id,
+            tracking: true,
+            cancellationToken: cancellationToken);
 
-        var userTests = await _userTestRepository.GetAllItemsAsync(cancellationToken);
-        var userTestsToDelete = userTests.Where(ut => ut.TestId == id);
-
-        foreach (var ut in userTestsToDelete)
+        foreach (var ut in userTests)
         {
             _userTestRepository.DeleteItem(ut);
         }
-        
+
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
+
 
     public async Task<(int correct, int mistake)> CheckTest(string testId, UserAnswerDto userTest, CancellationToken cancellationToken)
     {

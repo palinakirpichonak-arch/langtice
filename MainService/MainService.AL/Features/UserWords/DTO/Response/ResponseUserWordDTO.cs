@@ -5,7 +5,7 @@ namespace MainService.AL.Features.UserWords.DTO.Response;
 public class ResponseUserWordDto 
 {
     public Guid UserId { get; set; }
-    public PaginatedList<UserWordDto> UserWords { get; set; } = null!;
+    public IEnumerable<UserWordDto> UserWords { get; set; } = null!;
 }
 
 public class UserWordDto
