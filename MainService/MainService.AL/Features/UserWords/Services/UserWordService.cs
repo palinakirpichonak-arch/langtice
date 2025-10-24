@@ -29,10 +29,9 @@ public class UserWordService : IUserWordService
     {
         var entities = await _userWordRepository.GetAsync(
             filter: uw => uw.UserId == userId,
-            tracking: false,
             pageIndex: pageIndex,
             pageSize: pageSize,
-            cancellationToken: cancellationToken);
+            tracking: false, cancellationToken: cancellationToken);
 
         var userWordDtos = entities.Adapt<List<UserWordDto>>();
 

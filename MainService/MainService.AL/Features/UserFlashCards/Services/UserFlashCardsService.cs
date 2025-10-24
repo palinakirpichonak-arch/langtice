@@ -48,8 +48,8 @@ namespace MainService.AL.Features.UserFlashCards.Services
         {
             var userWordsPage = await _userWordRepository.GetAllByUserIdAsync(dto.UserId, 1, dto.Count, cancellationToken);
             var translations = await _translationRepository.GetAsync(
-                tracking:false,
-                cancellationToken:cancellationToken);
+                tracking: false,
+                cancellationToken: cancellationToken);
 
             var flashCards = userWordsPage.Items
                 .Select(uw =>
