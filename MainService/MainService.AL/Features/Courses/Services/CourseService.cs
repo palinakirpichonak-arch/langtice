@@ -78,13 +78,13 @@ public class CourseService : ICourseService
         
         entity.BaseLanguage = (await _languageRepository.GetAsync(
                 filter: l => l.Id == dto.BaseLanguageId,
-                tracking: false,
+                tracking: true,
                 cancellationToken: cancellationToken))
             .FirstOrDefault()!;
 
         entity.LearningLanguage = (await _languageRepository.GetAsync(
                 filter: l => l.Id == dto.LearningLanguageId,
-                tracking: false,
+                tracking: true,
                 cancellationToken: cancellationToken))
             .FirstOrDefault()!;
 

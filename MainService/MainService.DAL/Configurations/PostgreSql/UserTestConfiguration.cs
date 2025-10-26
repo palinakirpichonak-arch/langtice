@@ -10,10 +10,8 @@ public class UserTestConfiguration :  IEntityTypeConfiguration<UserTest>
     {
         modelBuilder.HasKey(ut => ut.Id);
 
-        modelBuilder.HasOne(ut => ut.User)
-            .WithMany(u => u.UserTests) 
-            .HasForeignKey(ut => ut.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Property(ut => ut.UserId)
+            .IsRequired();
 
     }
 }

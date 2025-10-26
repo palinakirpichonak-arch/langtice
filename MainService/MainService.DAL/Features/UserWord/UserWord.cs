@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using MainService.DAL.Abstractions;
-using MainService.DAL.Features.Users;
 using MainService.DAL.Features.Words;
 
 namespace MainService.DAL.Features.UserWord;
@@ -8,7 +7,6 @@ namespace MainService.DAL.Features.UserWord;
 public class UserWord : IEntity<UserWordKey>
 {
     public Guid UserId { get; set; }
-    public User User { get; set; } = null!;
 
     public Guid WordId { get; set; }
     public Word Word { get; set; } = null!;
