@@ -24,6 +24,7 @@ public class CourseServiceTest
     [Fact]
     public async Task GetCourseById_ShouldReturnResponseCourseDto()
     {   
+        //Arrange
         var testCourse = new Course
         {
             Id = Guid.NewGuid(),
@@ -32,14 +33,14 @@ public class CourseServiceTest
         };
     
         _courseRepoMock
-            .Setup(r => r.GetAsync(
+            .Setup(r => r.GetAsync( //METHOD
                 It.IsAny<Expression<Func<Course, bool>>>(),
-                null,
+                It.IsAny< Func<IQueryable<Course>, IOrderedQueryable<Course>>?>(),
                 It.IsAny<int?>(),
                 It.IsAny<int?>(),
                 It.IsAny<bool>(),
                 It.IsAny<CancellationToken>(),
-                null))
+                It.IsAny<Expression<Func<Course, object>>[]?>()))
             .ReturnsAsync(new List<Course> { testCourse });
     
         _mapperMock
@@ -48,8 +49,11 @@ public class CourseServiceTest
         
         _courseService = new CourseService(_courseRepoMock.Object, _languageRepoMock.Object, _unitOfWorkMock.Object, _mapperMock.Object);
 
+        
+        //Act
         var result = await _courseService.GetByIdAsync(testCourse.Id, _cancellationToken);
-    
+        
+        //Assert
         Assert.NotNull(result);
         Assert.Equal(testCourse.Id, result.Id);
     }
