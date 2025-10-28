@@ -1,5 +1,4 @@
 ﻿using MainService.AL.Features.Courses.DTO.Request;
-using MainService.AL.Features.Courses.DTO.Response;
 using MainService.AL.Features.Courses.Services;
 using MainService.PL.Filters;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +24,7 @@ namespace MainService.PL.Features.Courses
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetCourseById(Guid id, CancellationToken cancellationToken)
         {
+            
             var course = await _courseService.GetByIdAsync(id, cancellationToken);
             return Ok(course);
         }

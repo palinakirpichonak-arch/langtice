@@ -19,6 +19,7 @@ services
     .ConfigureHostedServices()
     .ConfigureRepositories()
     .ConfigureApplicationServices()
+    .AddApiAuthentication(builder.Configuration)
     .ConfigureControllers()
     .ConfigureMappers()
     .ConfigureSwagger();
@@ -31,6 +32,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapHealthChecks("/health");
 app.MapControllers();

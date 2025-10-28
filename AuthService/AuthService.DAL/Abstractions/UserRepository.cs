@@ -9,7 +9,7 @@ public class UserRepository : IUserRepository
 {
     private readonly IDapperDbConnection _dbConnection;
 
-    public UserRepository(PostgreDbConnection dbConnection)
+    public UserRepository(IDapperDbConnection dbConnection)
     {
         _dbConnection = dbConnection;
     }
@@ -22,8 +22,17 @@ public class UserRepository : IUserRepository
         
         return await db.QueryFirstOrDefaultAsync(query, new { Id = id });
     }
+    
+    public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken)
+    {
+        using IDbConnection db = _dbConnection.CreateConnection();
+        
+        string query = "SELECT * FROM Users WHERE Email = @Email";
+        
+        return await db.QueryFirstOrDefaultAsync(query, new { Email = email });
+    }
 
-    public async Task CreateAsync(User newUser, CancellationToken cancellationToken)
+    public async Task AddAsync(User newUser, CancellationToken cancellationToken)
     {
         using IDbConnection db = _dbConnection.CreateConnection();
         string query = "INSERT INTO Users(Id, Username, Email, PasswordHash, AvatarUrl,Status)" +

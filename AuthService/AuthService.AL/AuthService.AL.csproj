@@ -12,8 +12,6 @@
 
     <ItemGroup>
       <Folder Include="Features\" />
-      <Folder Include="Features\User\Commands\" />
-      <Folder Include="Features\User\Serivices\" />
     </ItemGroup>
 
     <ItemGroup>
