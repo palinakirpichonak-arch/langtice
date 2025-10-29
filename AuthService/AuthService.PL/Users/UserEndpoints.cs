@@ -1,5 +1,7 @@
 using AuthService.AL.Features.Users.Dto;
 using AuthService.AL.Features.Users.Services;
+using AuthService.DAL.Users;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AuthService.PL.Users;
 
@@ -13,24 +15,22 @@ public  static class UserEndpoints
         return app;
     }
     private static async Task Register(
-        RegisterUserDto userDto, 
-        UserService userService,
+        [FromBody] RegisterUserDto userDto, 
+        [FromServices] IUserService userService,
         CancellationToken cancellationToken)
     {
         await userService.RegisterUser(userDto, cancellationToken);
     }
 
-    private static async Task<IResult> Login(
-        LoginUserDto userDto,
-        UserService userService, 
+    private static async Task Login(
+        [FromBody] LoginUserDto userDto,
+        [FromServices] IUserService userService, 
         HttpContext httpContext,
         CancellationToken cancellationToken)
     {
         var token = await userService.Login(userDto, cancellationToken);
         
         httpContext.Response.Cookies.Append("la-cookies", token);
-        
-        return Results.Ok();
     }
 
 }

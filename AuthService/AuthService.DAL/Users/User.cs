@@ -1,27 +1,26 @@
-﻿using MainService.DAL.Abstractions;
+﻿namespace AuthService.DAL.Users;
 
-namespace AuthService.DAL.Users;
-
-public class User : IEntity<Guid>
+public class User
 {
     public Guid Id { get; set; }
     public string Username { get; set; } = null!;
     public string Email { get; set; } = null!;
     public string PasswordHash { get; set; } = null!;
     public string? AvatarUrl { get; set; }
-    public bool? Status { get; set; }
-
-    private User(Guid id, string username, string email, string passwordHash, string? avatarUrl)
-    {
-        Id = id;
-        Username = username;
-        Email = email;
-        PasswordHash = passwordHash;
-        AvatarUrl = avatarUrl;
-        Status = true;
-    }
-
-    public static User Create(Guid id, string username, string email, string passwordHash, string? avatarUrl) => 
-        new User(id, username, email, passwordHash, avatarUrl);
+    public bool Status { get; set; }
+    public DateTime CreatedAt { get; set; }  
     
+    public User() {}                        
+    
+    public static User Create(Guid id, string username, string email, string passwordHash, string? avatarUrl) =>
+        new User
+        {
+            Id = id,
+            Username = username,
+            Email = email,
+            PasswordHash = passwordHash,
+            AvatarUrl = avatarUrl,
+            Status = true,
+            CreatedAt = DateTime.UtcNow
+        };
 }

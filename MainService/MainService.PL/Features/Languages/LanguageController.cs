@@ -1,11 +1,12 @@
 ﻿using MainService.AL.Features.Languages.DTO.Request;
-using MainService.AL.Features.Languages.DTO.Response;
 using MainService.AL.Features.Languages.Services;
 using MainService.PL.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Languages
 {
+    [Authorize]
     [Tags("Languages")]
     [ApiController]
     [Route("languages")]

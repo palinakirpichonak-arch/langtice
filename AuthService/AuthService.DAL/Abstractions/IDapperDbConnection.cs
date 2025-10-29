@@ -1,8 +1,8 @@
-using System.Data;
+using Npgsql;
 
 namespace AuthService.DAL.Abstractions;
 
 public interface IDapperDbConnection
 {
-    public IDbConnection CreateConnection();
+    public Task<NpgsqlConnection> CreateOpenConnectionAsync(CancellationToken cancellationToken);
 }

@@ -67,6 +67,12 @@ services:
       - "5434:5432" 
     volumes:
       - auth-postgres-data:/var/lib/postgresql/data
+      - ./db/auth/init:/docker-entrypoint-initdb.d
+    healthcheck:
+        test: [ "CMD-SHELL", "pg_isready -U postgres -d users" ]
+        interval: 5s
+        timeout: 5s
+        retries: 10
 
   mongo-db:
     container_name: langtice-mongo-db
