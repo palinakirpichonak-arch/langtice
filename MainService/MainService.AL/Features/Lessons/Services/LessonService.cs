@@ -56,10 +56,9 @@ public class LessonService : ILessonService
     {
         var entities = await _lessonRepository.GetAsync(
             filter: l => l.CourseId == courseId,
-            tracking: false,
             pageIndex: pageIndex,
             pageSize: pageSize,
-            cancellationToken: cancellationToken);
+            tracking: false, cancellationToken: cancellationToken);
 
         var list = entities.Select(_mapper.Map<ResponseLessonDto>).ToList();
 

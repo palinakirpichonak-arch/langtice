@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using MainService.DAL.Features.Courses;
 
 namespace MainService.DAL.Abstractions;
 
@@ -10,7 +11,7 @@ public interface IRepository<TEntity, TKey> where TEntity : IEntity<TKey>
         int? pageSize = null,
         bool tracking = false,
         CancellationToken cancellationToken = default,
-        params Expression<Func<TEntity, object>>[] includes);
+        params Expression<Func<TEntity, object>>[]? includes);
     void AddItem(TEntity item);
     void UpdateItem(TEntity item);
     void DeleteItem(TEntity item); 

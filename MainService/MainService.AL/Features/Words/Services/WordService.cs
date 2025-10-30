@@ -54,11 +54,9 @@ public class WordService : IWordService
 
     public async Task<PaginatedList<ResponseWordDto>> GetAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
-        var entities = await _wordRepository.GetAsync(
-            tracking: false,
-            pageIndex: pageIndex,
+        var entities = await _wordRepository.GetAsync(pageIndex: pageIndex,
             pageSize: pageSize,
-            cancellationToken: cancellationToken);
+            tracking: false, cancellationToken: cancellationToken);
 
         var list = entities.Select(_mapper.Map<ResponseWordDto>).ToList();
         return new PaginatedList<ResponseWordDto>(list, pageIndex, pageSize);

@@ -77,11 +77,9 @@ public class UserTestService : IUserTestService
         int pageSize,
         CancellationToken cancellationToken)
     {
-        var entities = await _userTestRepository.GetAsync(
-            tracking: false,
-            pageIndex: pageIndex,
+        var entities = await _userTestRepository.GetAsync(pageIndex: pageIndex,
             pageSize: pageSize,
-            cancellationToken: cancellationToken);
+            tracking: false, cancellationToken: cancellationToken);
 
         var list = entities.Select(_mapper.Map<ResponseUserTestDto>).ToList();
         return new PaginatedList<ResponseUserTestDto>(list, pageIndex, pageSize);
@@ -95,10 +93,9 @@ public class UserTestService : IUserTestService
     {
         var entities = await _userTestRepository.GetAsync(
             filter: ut => ut.UserId == userId,
-            tracking: false,
             pageIndex: pageIndex,
             pageSize: pageSize,
-            cancellationToken: cancellationToken);
+            tracking: false, cancellationToken: cancellationToken);
 
         var list = entities.Select(_mapper.Map<ResponseUserTestDto>).ToList();
         return new PaginatedList<ResponseUserTestDto>(list, pageIndex, pageSize);
@@ -108,10 +105,9 @@ public class UserTestService : IUserTestService
     {
         var userWords = (await _userWordRepository.GetAsync(
             filter: uw => uw.UserId == dto.UserId,
-            tracking: false,
             pageIndex: 1,
             pageSize: dto.Count,
-            cancellationToken: cancellationToken))
+            tracking: false, cancellationToken: cancellationToken))
             .ToList();
 
         if (!userWords.Any())
