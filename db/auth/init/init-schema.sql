@@ -20,6 +20,6 @@ CREATE TABLE IF NOT EXISTS auth.user_roles(
     role_id UUID NOT NULL REFERENCES auth.roles(id) ON DELETE CASCADE
 );
 
-INSERT INTO auth.roles(name) VALUES ("User"), ("Admin");
+INSERT INTO auth.roles(id, name) VALUES (get_random_uuid(), "User"), (get_random_uuid(),"Admin");
 
-CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_users_email ON auth.users(email);

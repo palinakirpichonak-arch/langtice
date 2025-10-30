@@ -8,7 +8,10 @@ public static class InfrastructureExtensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<JwtOptions>(configuration.GetSection("JwtOptions"));
+        services.AddOptions<JwtOptions>()
+            .Bind(configuration)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
         
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();

@@ -27,6 +27,11 @@ public class UserService : IUserService
     
     public async Task RegisterUser(RegisterUserDto newUserDto, CancellationToken cancellationToken)
     {
+        var existingUser = await _userRepository.GetByEmailAsync(newUserDto.Email, cancellationToken);
+        
+        if (existingUser != null)
+            throw new Exception("User with this email already exists");
+        
         var hashedPassword = _passwordHasher.HashPassword(newUserDto.Password);   
         var user = User.Create(Guid.NewGuid(), newUserDto.Username, newUserDto.Email, hashedPassword, newUserDto.AvatarUrl);
         
@@ -41,7 +46,7 @@ public class UserService : IUserService
 
         if (user == null)
         {
-            throw new Exception("User not found");
+            throw new Exception("Invalid username or password");
         }
         
         var result = _passwordHasher.VerifyHashedPassword(loginUserDto.Password, user.PasswordHash);

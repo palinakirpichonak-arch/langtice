@@ -22,21 +22,32 @@ services:
       DB_PASS: ${POSTGRES_PASSWORD}
       MONGO_CONNECTION: ${MONGO_CONNECTION}
       MONGO_DB: ${MONGO_DB}
+      Issuer: ${ISSUER}
+      Audience: ${AUDIENCE}
+      SecretKey: ${SECRET_KEY}
+      ExpiresHours: ${EXPIRES_HOURS}
       ASPNETCORE_ENVIRONMENT: Development
+      
 
   auth-service:
-    container_name: auth-service
-    image: auth-service
-    build:
-      context: AuthService/
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5001" 
-    depends_on:
-      - auth-postgres
-    environment:
-      ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: "Host=auth-postgres;Port=5432;Database=users;Username=postgres;Password=postgres"
+      container_name: auth-service
+      image: auth-service
+      build:
+          context: AuthService/
+          dockerfile: Dockerfile
+      ports:
+          - "5000:5001"
+      depends_on:
+          - auth-postgres
+      env_file:
+          - .env            
+      environment:
+          ASPNETCORE_ENVIRONMENT: Development
+          ConnectionStrings__DefaultConnection: "Host=auth-postgres;Port=5432;Database=users;Username=postgres;Password=postgres"
+          Issuer: ${ISSUER}
+          Audience: ${AUDIENCE}
+          SecretKey: ${SECRET_KEY}
+          ExpiresHours: ${EXPIRES_HOURS}
 
   main-postgres:
     container_name: langtice-main-postgres

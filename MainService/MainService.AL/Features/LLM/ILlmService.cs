@@ -1,4 +1,4 @@
-﻿namespace MainService.AL.Features.LLM;
+namespace MainService.AL.Features.LLM;
 
 public interface ILlmService
 {

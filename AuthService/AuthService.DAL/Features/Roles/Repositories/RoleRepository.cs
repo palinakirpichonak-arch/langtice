@@ -16,7 +16,7 @@ public class RoleRepository : IRoleRepository
                     SELECT roles.name
                     FROM auth.user_roles user_roles
                     JOIN auth.roles roles ON roles.id = user_roles.role_id
-                    WHERE user_roles.user_id = @userId;";
+                    WHERE user_roles.user_id = @UserId;";
        
        await using var conn = await _db.CreateOpenConnectionAsync(cancellationToken);
        

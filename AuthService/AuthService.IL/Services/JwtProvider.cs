@@ -29,12 +29,20 @@ public class JwtProvider : IJwtProvider
 
         var roleNames = await _roleRepository.GetUserRolesAsync(user.Id, cancellationToken);
         
+        if (roleNames == null || !roleNames.Any())
+        {
+            roleNames = new List<string> { "User" };
+        }
+        
        List<Claim> claims = new()
        {
-           new(ClaimTypes.NameIdentifier, user.Id.ToString())
+           new Claim("userId", user.Id.ToString()),
        };
        
-       claims.AddRange(roleNames.Select(r => new Claim(ClaimTypes.Role, r)));
+       foreach (var role in roleNames)
+       {
+           claims.Add(new Claim(ClaimTypes.Role, role));
+       }
        
         var token = new JwtSecurityToken(
             issuer: _jwtOptions.Issuer,

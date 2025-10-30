@@ -30,7 +30,13 @@ public  static class UserEndpoints
     {
         var token = await userService.Login(userDto, cancellationToken);
         
-        httpContext.Response.Cookies.Append("la-cookies", token);
+        httpContext.Response.Cookies.Append("la-cookies", token, new CookieOptions()
+        {
+            HttpOnly = true,
+            SameSite = SameSiteMode.Strict,
+            Secure = true,
+            Expires = DateTimeOffset.Now.AddHours(1)
+        });
     }
 
 }
