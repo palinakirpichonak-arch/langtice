@@ -1,10 +1,13 @@
 ﻿using MainService.AL.Features.UserTests.DTO.Request;
 using MainService.AL.Features.UserTests.Services;
+using MainService.PL.Extensions;
 using MainService.PL.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.UserTests
 {
+    [Authorize(Roles = "User")]
     [Tags("UserTests")]
     [Route("usertests")]
     [ApiController]
@@ -18,12 +21,13 @@ namespace MainService.PL.Features.UserTests
         }
         
         [HttpGet("user/{userId}")]
-        [ValidateParameters(nameof(userId))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAllByUserId(Guid userId, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> GetAllByUserId(CancellationToken cancellationToken = default)
         {
+            var userId = User.GetUserId();
+            
             var tests = await _userTestService.GetAllByUserIdAsync(userId, cancellationToken);
             return Ok(tests);
         }
@@ -45,6 +49,8 @@ namespace MainService.PL.Features.UserTests
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateUserTest([FromBody] RequestUserTestDto dto, CancellationToken cancellationToken)
         {
+            dto.UserId = User.GetUserId();
+            
             var createdTest = await _userTestService.CreateAsync(dto, cancellationToken);
             return Ok(createdTest);
         }

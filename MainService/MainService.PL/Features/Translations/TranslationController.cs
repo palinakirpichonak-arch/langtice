@@ -1,10 +1,12 @@
 ﻿using MainService.AL.Features.Translations.DTO.Request;
 using MainService.AL.Features.Translations.Services;
 using MainService.PL.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Translations;
 
+[Authorize]
 [Tags("Translations")]
 [Route("translations")]
 [ApiController]
@@ -17,6 +19,7 @@ public class TranslationsController : ControllerBase
         _translationService = translationService;
     }
 
+    [Authorize(Roles = "User, Admin")]
     [HttpGet]
     [ValidateParameters(nameof(pageIndex), nameof(pageSize))]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -28,6 +31,7 @@ public class TranslationsController : ControllerBase
         return Ok(translations);
     }
     
+    [Authorize(Roles = "User, Admin")]
     [HttpGet("{id}")]
     [ValidateParameters(nameof(id))]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -39,6 +43,7 @@ public class TranslationsController : ControllerBase
         return Ok(translation);
     }
     
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -49,6 +54,7 @@ public class TranslationsController : ControllerBase
         return Ok(created);
     }
     
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     [ValidateParameters(nameof(id))]
     [ProducesResponseType(StatusCodes.Status200OK)]

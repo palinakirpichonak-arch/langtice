@@ -1,10 +1,13 @@
 ﻿using MainService.AL.Features.UserWords.DTO.Request;
 using MainService.AL.Features.UserWords.Services;
+using MainService.PL.Extensions;
 using MainService.PL.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.UserWord
 {
+    [Authorize(Roles = "User")]
     [Tags("UserWords")]
     [Route("user-words")]
     [ApiController]
@@ -20,42 +23,49 @@ namespace MainService.PL.Features.UserWord
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ValidateParameters(nameof(userId), nameof(pageIndex), nameof(pageCount))]
-        public async Task<IActionResult> GetUserWords(Guid userId, int pageIndex,int pageCount,  CancellationToken cancellationToken)
+        [ValidateParameters(nameof(pageIndex), nameof(pageCount))]
+        public async Task<IActionResult> GetUserWords(int pageIndex,int pageCount,  CancellationToken cancellationToken)
         {
+            var userId = User.GetUserId();
             var words = await _userWordService.GetAllWithUserIdAsync(userId,pageIndex, pageCount, cancellationToken);
             return Ok(words);
         }
-
+        
         [HttpGet("{userId}/{wordId}")]
-        [ValidateParameters(nameof(userId), nameof(wordId))]
+        [ValidateParameters(nameof(wordId))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetUserWord(Guid userId, Guid wordId, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetUserWord(Guid wordId, CancellationToken cancellationToken)
         {
+            var userId = User.GetUserId();
+            
             var userWord = await _userWordService.GetByIdsAsync(userId, wordId, cancellationToken);
             return Ok(userWord);
         }
-
+        
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddUserWord([FromBody] RequestUserWordDto dto, CancellationToken cancellationToken)
         {
+            dto.UserId = User.GetUserId();
+
             var created = await _userWordService.CreateAsync(dto, cancellationToken);
             return Ok(created);
         }
-
+        
         [HttpDelete("{userId}/{wordId}")]
-        [ValidateParameters(nameof(userId), nameof(wordId))]
+        [ValidateParameters(nameof(wordId))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task DeleteUserWord(Guid userId, Guid wordId, CancellationToken cancellationToken)
+        public async Task DeleteUserWord(Guid wordId, CancellationToken cancellationToken)
         {
+            var userId = User.GetUserId();
+            
             await _userWordService.DeleteAsync(userId, wordId, cancellationToken);
         }
     }

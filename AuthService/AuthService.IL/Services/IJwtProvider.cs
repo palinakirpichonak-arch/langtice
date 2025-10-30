@@ -4,5 +4,5 @@ namespace AuthService.IL.Services;
 
 public interface IJwtProvider
 {
-    string GenerateJwtToken(User user);
+    Task<string> GenerateJwtToken(User user, CancellationToken cancellationToken);
 }

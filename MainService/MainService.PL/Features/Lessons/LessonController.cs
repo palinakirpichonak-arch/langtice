@@ -1,6 +1,7 @@
 ﻿using MainService.AL.Features.Lessons.DTO.Request;
 using MainService.AL.Features.Lessons.Services;
 using MainService.PL.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Lessons
@@ -17,6 +18,7 @@ namespace MainService.PL.Features.Lessons
             _lessonService = lessonService;
         }
         
+        [Authorize(Roles = "User, Admin")]
         [HttpGet("course/{courseId}")]
         [ValidateParameters(nameof(courseId), nameof(pageIndex), nameof(pageCount))]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -28,6 +30,7 @@ namespace MainService.PL.Features.Lessons
             return Ok(lessons);
         }
         
+        [Authorize(Roles = "User, Admin")]
         [HttpGet("{id}")]
         [ValidateParameters(nameof(id))]
         [ProducesResponseType(StatusCodes.Status200OK )]
@@ -39,6 +42,7 @@ namespace MainService.PL.Features.Lessons
             return Ok(lesson);
         }
         
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -49,6 +53,7 @@ namespace MainService.PL.Features.Lessons
             return Ok(created);
         }
         
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         [ValidateParameters(nameof(id))]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -60,6 +65,7 @@ namespace MainService.PL.Features.Lessons
             return Ok(updated);
         }
         
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [ValidateParameters(nameof(id))]
         [ProducesResponseType(StatusCodes.Status200OK)]

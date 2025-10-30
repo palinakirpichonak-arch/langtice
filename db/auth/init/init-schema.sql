@@ -10,4 +10,16 @@ CREATE TABLE IF NOT EXISTS auth.users(
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+CREATE TABLE IF NOT EXISTS auth.roles(
+    id UUID PRIMARY KEY,
+    name TEXT UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS auth.user_roles(
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    role_id UUID NOT NULL REFERENCES auth.roles(id) ON DELETE CASCADE
+);
+
+INSERT INTO auth.roles(name) VALUES ("User"), ("Admin");
+
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);

@@ -1,5 +1,6 @@
 using AuthService.AL.Features.Users.Dto;
 using AuthService.DAL.Abstractions;
+using AuthService.DAL.Features.Roles.Repositories;
 using AuthService.DAL.Users;
 using AuthService.IL.Services;
 
@@ -8,15 +9,18 @@ namespace AuthService.AL.Features.Users.Services;
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IRoleRepository _roleRepository;
     private readonly IPasswordHasher _passwordHasher;
     private readonly IJwtProvider _jwtProvider;
     
     public UserService(
-        IUserRepository userRepository, 
+        IUserRepository userRepository,
+        IRoleRepository roleRepository,
         IPasswordHasher passwordHasher,
         IJwtProvider jwtProvider)
     {
         _userRepository = userRepository;
+        _roleRepository = roleRepository;
         _passwordHasher = passwordHasher;
         _jwtProvider = jwtProvider;
     }
@@ -27,6 +31,8 @@ public class UserService : IUserService
         var user = User.Create(Guid.NewGuid(), newUserDto.Username, newUserDto.Email, hashedPassword, newUserDto.AvatarUrl);
         
         await _userRepository.AddAsync(user,  cancellationToken);
+        
+        await _roleRepository.AssignUserRolesAsync(user.Id, "User", cancellationToken);
     }
 
     public async Task<string> Login(LoginUserDto loginUserDto, CancellationToken cancellationToken)
@@ -45,7 +51,7 @@ public class UserService : IUserService
             throw new Exception("Invalid username or password");
         }
         
-        var token = _jwtProvider.GenerateJwtToken(user);
+        var token = await _jwtProvider.GenerateJwtToken(user, cancellationToken);
         
         return token;
     }
