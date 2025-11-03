@@ -170,9 +170,6 @@ namespace MainService.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
                     b.ToTable("UserInfo");
                 });
 
@@ -200,8 +197,6 @@ namespace MainService.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("UserTests");
                 });
 
@@ -221,41 +216,6 @@ namespace MainService.DAL.Migrations
                     b.HasIndex("WordId");
 
                     b.ToTable("UserWords");
-                });
-
-            modelBuilder.Entity("MainService.DAL.Features.Users.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("AvatarUrl")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool?>("Status")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("Username")
-                        .IsUnique();
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("MainService.DAL.Features.Words.Word", b =>
@@ -344,54 +304,16 @@ namespace MainService.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MainService.DAL.Features.Users.User", "User")
-                        .WithMany("UserCourses")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Course");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("MainService.DAL.Features.UserInfo.UserInfo", b =>
-                {
-                    b.HasOne("MainService.DAL.Features.Users.User", "User")
-                        .WithOne("Userinfo")
-                        .HasForeignKey("MainService.DAL.Features.UserInfo.UserInfo", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("MainService.DAL.Features.UserTest.UserTest", b =>
-                {
-                    b.HasOne("MainService.DAL.Features.Users.User", "User")
-                        .WithMany("UserTests")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MainService.DAL.Features.UserWord.UserWord", b =>
                 {
-                    b.HasOne("MainService.DAL.Features.Users.User", "User")
-                        .WithMany("UserWords")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("MainService.DAL.Features.Words.Word", "Word")
                         .WithMany("UserWords")
                         .HasForeignKey("WordId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
 
                     b.Navigation("Word");
                 });
@@ -412,18 +334,6 @@ namespace MainService.DAL.Migrations
                     b.Navigation("Lessons");
 
                     b.Navigation("UserCourses");
-                });
-
-            modelBuilder.Entity("MainService.DAL.Features.Users.User", b =>
-                {
-                    b.Navigation("UserCourses");
-
-                    b.Navigation("UserTests");
-
-                    b.Navigation("UserWords");
-
-                    b.Navigation("Userinfo")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("MainService.DAL.Features.Words.Word", b =>

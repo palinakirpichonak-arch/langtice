@@ -1,7 +1,7 @@
 ﻿using MainService.AL.Features.Languages.DTO.Request;
-using MainService.AL.Features.Languages.DTO.Response;
 using MainService.AL.Features.Languages.Services;
 using MainService.PL.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Languages
@@ -18,6 +18,7 @@ namespace MainService.PL.Features.Languages
             _languageService = languageService;
         }
 
+        [Authorize(Roles = "User, Admin")]
         [HttpGet]
         [ValidateParameters(nameof(pageIndex), nameof(pageSize))]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -28,7 +29,8 @@ namespace MainService.PL.Features.Languages
             var languages = await _languageService.GetAllAsync(pageIndex, pageSize, cancellationToken);
             return Ok(languages);
         }
-
+        
+        [Authorize(Roles = "User, Admin")]
         [HttpGet("{id:guid}")]
         [ValidateParameters(nameof(id))]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -40,6 +42,7 @@ namespace MainService.PL.Features.Languages
             return Ok(language);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -50,6 +53,7 @@ namespace MainService.PL.Features.Languages
             return Ok(created);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:guid}")]
         [ValidateParameters(nameof(id))]
         [ProducesResponseType(StatusCodes.Status200OK)]

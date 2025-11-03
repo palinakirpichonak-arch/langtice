@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using MainService.DAL.Abstractions;
 using MainService.DAL.Features.Courses;
-using MainService.DAL.Features.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace MainService.DAL.Features.UserCourse;
@@ -19,7 +18,6 @@ public class UserCourse :  IEntity<UserCourseKey>
         }
     }
     public Guid UserId { get; set; }
-    public User User { get; set; } = null!;
     public Guid CourseId { get; set; }
     public Course Course { get; set; } = null!;
 }

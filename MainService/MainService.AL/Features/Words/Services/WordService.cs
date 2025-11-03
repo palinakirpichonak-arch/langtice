@@ -1,5 +1,5 @@
 ﻿using MainService.AL.Exceptions;
-using MainService.AL.Features.LLM;
+using MainService.AL.Features.Llm;
 using MainService.AL.Features.Words.DTO.Request;
 using MainService.AL.Features.Words.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;

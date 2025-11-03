@@ -4,7 +4,6 @@ using MainService.DAL.Features.Languages;
 using MainService.DAL.Features.Lessons;
 using MainService.DAL.Features.Translations;
 using MainService.DAL.Features.UserCourse;
-using MainService.DAL.Features.Users;
 using MainService.DAL.Features.UserTest;
 using MainService.DAL.Features.UserWord;
 using MainService.DAL.Features.Words;
@@ -14,7 +13,6 @@ namespace MainService.DAL.Context.PostgreSql;
 
 public class PostgreDbContext(DbContextOptions<PostgreDbContext> options) : DbContext(options)
 {
-    public DbSet<User> Users { get; set; }
     public DbSet<Word> Words { get; set; }
     public DbSet<Language> Languages { get; set; }
     public DbSet<Course> Courses { get; set; }

@@ -24,19 +24,37 @@ namespace MainService.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "UserInfo",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Username = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    PasswordHash = table.Column<string>(type: "text", nullable: false),
-                    AvatarUrl = table.Column<string>(type: "text", nullable: true),
-                    Status = table.Column<bool>(type: "boolean", nullable: true)
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AddedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Period = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    WordsLearned = table.Column<int>(type: "integer", nullable: true),
+                    TestsFinished = table.Column<int>(type: "integer", nullable: true),
+                    MistakesMade = table.Column<int>(type: "integer", nullable: true),
+                    StreakLength = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_UserInfo", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserTests",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    TestId = table.Column<string>(type: "text", nullable: true),
+                    OrderNum = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTests", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,52 +103,6 @@ namespace MainService.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserInfo",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    AddedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Period = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    WordsLearned = table.Column<int>(type: "integer", nullable: true),
-                    TestsFinished = table.Column<int>(type: "integer", nullable: true),
-                    MistakesMade = table.Column<int>(type: "integer", nullable: true),
-                    StreakLength = table.Column<int>(type: "integer", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserInfo", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserInfo_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserTests",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    TestId = table.Column<string>(type: "text", nullable: true),
-                    OrderNum = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserTests", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserTests_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Lessons",
                 columns: table => new
                 {
@@ -166,12 +138,6 @@ namespace MainService.DAL.Migrations
                         name: "FK_UserCourses_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserCourses_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -218,12 +184,6 @@ namespace MainService.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserWords", x => new { x.UserId, x.WordId });
-                    table.ForeignKey(
-                        name: "FK_UserWords_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserWords_Words_WordId",
                         column: x => x.WordId,
@@ -285,29 +245,6 @@ namespace MainService.DAL.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserInfo_UserId",
-                table: "UserInfo",
-                column: "UserId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_Email",
-                table: "Users",
-                column: "Email",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_Username",
-                table: "Users",
-                column: "Username",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserTests_UserId",
-                table: "UserTests",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UserWords_WordId",
                 table: "UserWords",
                 column: "WordId");
@@ -347,9 +284,6 @@ namespace MainService.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Courses");
-
-            migrationBuilder.DropTable(
-                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Words");

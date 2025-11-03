@@ -1,7 +1,7 @@
 ﻿using MainService.BLL.Services.UnitOfWork;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MainService.BLL;
+namespace MainService.BLL.Extension;
 
 public static class UnitOfWorkConfiguration
 {

@@ -1,4 +1,4 @@
-﻿namespace MainService.AL.Features.Words.DTO.Request;
+﻿namespace MainService.AL.Features.Words.DTO.Response;
 public class ResponseTranslateWordDto
 {
     public Guid FromWordId { get; set; }

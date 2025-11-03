@@ -1,10 +1,13 @@
 ﻿using MainService.AL.Features.UserFlashCards.DTO.Request;
 using MainService.AL.Features.UserFlashCards.Services;
+using MainService.PL.Extensions;
 using MainService.PL.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.UserFlashCards;
 
+[Authorize(Roles = "User")]
 [Tags("Flashcards")]
 [Route("flashcards")]
 [ApiController]
@@ -18,12 +21,13 @@ public class UserFlashController : ControllerBase
     }
     
     [HttpGet("user/{userId}")]
-    [ValidateParameters(nameof(userId))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetAllByUser(Guid userId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllByUser(CancellationToken cancellationToken)
     {
+        var userId = User.GetUserId();
+        
         var sets = await _flashCardsService.GetAllByUserAsync(userId, cancellationToken);
         return Ok(sets);
     }
@@ -44,6 +48,8 @@ public class UserFlashController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GenerateFromUserWords([FromBody] RequestUserFlashCardDto dto, CancellationToken cancellationToken)
     {
+        dto.UserId = User.GetUserId();
+        
         var set = await _flashCardsService.GenerateFromUserWordsAsync(dto, cancellationToken);
         return Ok(set);
     }

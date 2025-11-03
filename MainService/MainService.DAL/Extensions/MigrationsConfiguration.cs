@@ -1,5 +1,4 @@
-﻿using MainService.DAL.Abstractions;
-using MainService.DAL.Services;
+﻿using MainService.DAL.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MainService.DAL.Extensions;

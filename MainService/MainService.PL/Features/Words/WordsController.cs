@@ -1,11 +1,12 @@
 ﻿using MainService.AL.Features.Words.DTO.Request;
-using MainService.AL.Features.Words.DTO.Response;
 using MainService.AL.Features.Words.Services;
 using MainService.PL.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Words
 {
+    [Authorize]
     [Tags("Words")]
     [Route("words")]
     [ApiController]
@@ -17,6 +18,7 @@ namespace MainService.PL.Features.Words
             _wordService = wordService;
         }
         
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [ValidateParameters(nameof(pageIndex), nameof(pageCount))]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -28,6 +30,7 @@ namespace MainService.PL.Features.Words
             return Ok(words);
         }
         
+        [Authorize(Roles = "Admin, User")]
         [HttpGet("{id}")]
         [ValidateParameters(nameof(id))]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -39,6 +42,7 @@ namespace MainService.PL.Features.Words
             return Ok(word);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -49,6 +53,7 @@ namespace MainService.PL.Features.Words
             return Ok(created);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         [ValidateParameters(nameof(id))]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -60,6 +65,7 @@ namespace MainService.PL.Features.Words
             await _wordService.DeleteAsync(id, cancellationToken);
         }
         
+        [Authorize(Roles = "User, Admin")]
         [HttpPost("translate")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]

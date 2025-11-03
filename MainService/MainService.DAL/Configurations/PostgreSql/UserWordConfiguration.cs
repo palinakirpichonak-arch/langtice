@@ -10,9 +10,9 @@ public class UserWordConfiguration : IEntityTypeConfiguration<UserWord>
     {
         builder.HasKey(uw => new { uw.UserId, uw.WordId });
 
-        builder.HasOne(uw => uw.User)
-            .WithMany(u => u.UserWords)
-            .HasForeignKey(uw => uw.UserId);
+        builder
+            .Property(uw => uw.UserId)
+            .IsRequired();
 
         builder.HasOne(uw => uw.Word)
             .WithMany(w => w.UserWords)

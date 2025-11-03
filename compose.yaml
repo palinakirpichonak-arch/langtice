@@ -1,36 +1,71 @@
 services:
   main-service:
+    container_name: main-service
+    image: main-service
     env_file:
       - .env
-    image: main-service
     build:
       context: MainService/
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
     depends_on:
-      postgre-db:
+      main-postgres:
         condition: service_healthy
       mongo-db:
         condition: service_healthy
     environment:
-      DB_HOST: ${POSTGRES_HOST}
-      DB_PORT: ${POSTGRES_PORT}
-      DB_NAME: ${POSTGRES_DB}
-      DB_USER: ${POSTGRES_USER}
-      DB_PASS: ${POSTGRES_PASSWORD}
-      MONGO_CONNECTION: ${MONGO_CONNECTION}
-      MONGO_DB: ${MONGO_DB}
+      PostgreHost: ${POSTGRES_HOST}
+      PostgrePort: ${POSTGRES_PORT}
+      PostgreDatabase: ${POSTGRES_DB}
+      PostgreUser: ${POSTGRES_USER}
+      PostgrePassword: ${POSTGRES_PASSWORD}
+      MongoConnection: ${MONGO_CONNECTION}
+      MongoDatabase: ${MONGO_DB}
+      ApiKey: ${API_KEY}
+      BaseUrl: ${BASE_URL}
+      Model: ${MODEL}
+      Issuer: ${ISSUER}
+      Audience: ${AUDIENCE}
+      AccessSecretKey: ${ACCESS_SECRET_KEY}
       ASPNETCORE_ENVIRONMENT: Development
+      
 
-  postgre-db:
-    container_name: langtice-postgre-db
+  auth-service:
+      container_name: auth-service
+      image: auth-service
+      build:
+          context: AuthService/
+          dockerfile: Dockerfile
+      ports:
+          - "5000:5001"
+      depends_on:
+          - auth-postgres
+          - redis
+      env_file:
+          - .env            
+      environment:
+          ASPNETCORE_ENVIRONMENT: Development
+          ConnectionStrings__DefaultConnection: "Host=auth-postgres;Port=5432;Database=users;Username=postgres;Password=postgres"
+          Issuer: ${ISSUER}
+          Audience: ${AUDIENCE}
+          AccessSecretKey: ${ACCESS_SECRET_KEY}
+          AccessExpiresHours: ${ACCESS_EXPIRES_HOURS} 
+          RefreshExpiresDays: ${REFRESH_EXPIRES_DAYS} 
+          RefreshSecretKey: ${REFRESH_SECRET_KEY}
+          RedisHost: ${REDIS_HOST}
+          RedisPort: ${REDIS_PORT}
+          RedisPassword: ${REDIS_PASSWORD}
+          RedisConnectionString: ${REDIS_CONNECTION}
+
+  main-postgres:
+    container_name: langtice-main-postgres
     image: postgres:17
     restart: always
     ports:
       - "5433:5432"
     volumes:
-      - postgre-db-data:/var/lib/postgresql/data
+      - main-postgres-data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -40,6 +75,24 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  auth-postgres:
+    image: postgres:17
+    container_name: langtice-auth-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: users
+    ports:
+      - "5434:5432" 
+    volumes:
+      - auth-postgres-data:/var/lib/postgresql/data
+      - ./db/auth/init:/docker-entrypoint-initdb.d
+    healthcheck:
+        test: [ "CMD-SHELL", "pg_isready -U postgres -d users" ]
+        interval: 5s
+        timeout: 5s
+        retries: 10
 
   mongo-db:
     container_name: langtice-mongo-db
@@ -59,6 +112,26 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+      image: redis:7-alpine
+      container_name: langtice-redis
+      restart: always
+      ports:
+          - "6379:6379"
+      command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}"]
+      environment:
+          REDIS_PASSWORD: ${REDIS_PASSWORD}
+          ConnectionStrings__Redis: ${REDIS_CONNECTION}
+      volumes:
+          - redis-data:/data
+      healthcheck:
+          test: [ "CMD", "redis-cli", "ping" ]
+          interval: 5s
+          timeout: 3s
+          retries: 10
+
 volumes:
-  postgre-db-data:
+  main-postgres-data:
+  auth-postgres-data:
   mongo-db-data:
+  redis-data:

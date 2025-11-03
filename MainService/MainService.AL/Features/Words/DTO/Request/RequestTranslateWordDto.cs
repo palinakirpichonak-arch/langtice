@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MainService.AL.Features.Words.DTO.Response;
+namespace MainService.AL.Features.Words.DTO.Request;
 
 public class RequestTranslateWordDto
 {

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using MainService.AL.Exceptions;
-using MainService.AL.Features.LLM;
+using MainService.AL.Features.Llm;
 using MainService.AL.Features.Tests.DTO.Request;
 using MainService.AL.Features.Tests.Services;
 using MainService.AL.Features.UserTests.DTO.Request;

@@ -5,7 +5,7 @@ using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Data.UserCourses;
 using MapsterMapper;
 
-namespace MainService.AL.Features.UserCourse.Service;
+namespace MainService.AL.Features.UserCourse.Services;
 
 public class UserCourseService : IUserCourseService
 {

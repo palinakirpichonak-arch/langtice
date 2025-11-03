@@ -1,5 +1,5 @@
 using MainService.AL.Extensions;
-using MainService.BLL;
+using MainService.BLL.Extension;
 using MainService.BLL.Resilience;
 using MainService.DAL.Extensions;
 using MainService.PL.Extensions;
@@ -19,6 +19,7 @@ services
     .ConfigureHostedServices()
     .ConfigureRepositories()
     .ConfigureApplicationServices()
+    .AddApiAuthentication(builder.Configuration)
     .ConfigureControllers()
     .ConfigureMappers()
     .ConfigureSwagger();
@@ -31,6 +32,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapHealthChecks("/health");
 app.MapControllers();

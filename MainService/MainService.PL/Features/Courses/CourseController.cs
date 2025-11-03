@@ -1,7 +1,7 @@
 ﻿using MainService.AL.Features.Courses.DTO.Request;
-using MainService.AL.Features.Courses.DTO.Response;
 using MainService.AL.Features.Courses.Services;
 using MainService.PL.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MainService.PL.Features.Courses
@@ -17,7 +17,7 @@ namespace MainService.PL.Features.Courses
         {
             _courseService = courseService;
         }
-        
+        [Authorize(Roles = "User, Admin")]
         [HttpGet("{id:guid}")]
         [ValidateParameters(nameof(id))]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -29,6 +29,7 @@ namespace MainService.PL.Features.Courses
             return Ok(course);
         }
         
+        [Authorize(Roles = "User, Admin")]
         [HttpGet("active")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -39,6 +40,7 @@ namespace MainService.PL.Features.Courses
             return Ok(course);
         }
         
+        [Authorize(Roles = "User, Admin")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -49,6 +51,7 @@ namespace MainService.PL.Features.Courses
             return Ok(courses);
         }
         
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -59,6 +62,7 @@ namespace MainService.PL.Features.Courses
             return Ok(course); 
         }
         
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:guid}")]
         [ValidateParameters(nameof(id))]
         [ProducesResponseType(StatusCodes.Status200OK)]

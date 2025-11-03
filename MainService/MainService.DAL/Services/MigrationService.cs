@@ -1,4 +1,3 @@
-using MainService.DAL.Abstractions;
 using MainService.DAL.Context.PostgreSql;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

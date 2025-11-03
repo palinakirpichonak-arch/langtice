@@ -12,9 +12,8 @@ public class UserCourseConfiguration :  IEntityTypeConfiguration<UserCourse>
             .HasKey(uc => new { uc.UserId, uc.CourseId });
 
         builder
-            .HasOne(uc => uc.User)
-            .WithMany(u => u.UserCourses)
-            .HasForeignKey(uc => uc.UserId);
+            .Property(uc => uc.UserId)
+            .IsRequired();
 
         builder
             .HasOne(uc => uc.Course)
