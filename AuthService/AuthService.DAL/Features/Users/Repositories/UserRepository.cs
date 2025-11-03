@@ -1,7 +1,8 @@
-using AuthService.DAL.Users;
+using AuthService.DAL.Abstractions;
+using AuthService.DAL.Features.Users.Models;
 using Dapper;
 
-namespace AuthService.DAL.Abstractions;
+namespace AuthService.DAL.Features.Users.Repositories;
 
 public class UserRepository : IUserRepository
 {

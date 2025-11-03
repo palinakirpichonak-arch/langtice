@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Text;
+using MainService.BLL.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -9,9 +10,11 @@ public static class AuthenticationConfiguration
 {
     public static IServiceCollection AddApiAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        var issuer = configuration["Issuer"];
-        var audience = configuration["Audience"];
-        var secretKey = configuration["SecretKey"];
+        var config = configuration.Get<JwtOptions>();
+
+        var issuer = config.Issuer;
+        var audience = config.Audience;
+        var secretKey = config.AccessSecretKey;
         
         if (string.IsNullOrWhiteSpace(issuer))
             throw new ArgumentException("JWT config error: Issuer is missing");

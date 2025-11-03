@@ -1,7 +1,7 @@
-﻿using MainService.BLL.Services.Options;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using System.Text;
 using System.Text.Json;
+using MainService.BLL.Options;
 
 namespace MainService.BLL.Services.LLM;
 

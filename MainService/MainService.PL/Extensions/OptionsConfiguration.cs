@@ -1,10 +1,16 @@
-﻿using MainService.BLL.Services.Options;
+﻿using MainService.BLL.Options;
+
 namespace MainService.PL.Extensions;
 
 public static class OptionsConfiguration
 {
     public static IServiceCollection ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
     {
+        //JwtOptions
+        services.AddOptions<JwtOptions>()
+            .Bind(configuration)
+            .ValidateOnStart();
+        
         // PostgreSQL
         services.AddOptions<PostgreOptions>()
             .Bind(configuration)

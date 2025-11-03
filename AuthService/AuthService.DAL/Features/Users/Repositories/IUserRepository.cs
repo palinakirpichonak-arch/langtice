@@ -1,6 +1,6 @@
-using AuthService.DAL.Users;
+using AuthService.DAL.Features.Users.Models;
 
-namespace AuthService.DAL.Abstractions;
+namespace AuthService.DAL.Features.Users.Repositories;
 
 public interface IUserRepository
 {

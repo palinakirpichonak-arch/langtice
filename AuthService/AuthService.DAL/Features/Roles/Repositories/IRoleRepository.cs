@@ -1,5 +1,3 @@
-using AuthService.DAL.Features.Roles.Models;
-
 namespace AuthService.DAL.Features.Roles.Repositories;
 
 public interface IRoleRepository

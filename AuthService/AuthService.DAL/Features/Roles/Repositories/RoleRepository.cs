@@ -1,5 +1,4 @@
 using AuthService.DAL.Abstractions;
-using AuthService.DAL.Features.Roles.Models;
 using Dapper;
 
 namespace AuthService.DAL.Features.Roles.Repositories;

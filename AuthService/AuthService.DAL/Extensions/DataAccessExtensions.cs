@@ -1,5 +1,5 @@
-using AuthService.DAL.Abstractions;
 using AuthService.DAL.Features.Roles.Repositories;
+using AuthService.DAL.Features.Users.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AuthService.DAL.Extensions;

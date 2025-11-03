@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace MainService.BLL.Services.Options
+namespace MainService.BLL.Options
 {
 	public class MongoOptions
 	{

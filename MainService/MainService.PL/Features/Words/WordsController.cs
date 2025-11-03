@@ -1,5 +1,4 @@
 ﻿using MainService.AL.Features.Words.DTO.Request;
-using MainService.AL.Features.Words.DTO.Response;
 using MainService.AL.Features.Words.Services;
 using MainService.PL.Filters;
 using Microsoft.AspNetCore.Authorization;

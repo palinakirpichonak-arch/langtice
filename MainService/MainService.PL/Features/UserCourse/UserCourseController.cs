@@ -1,6 +1,5 @@
-﻿using System.Security.Claims;
-using MainService.AL.Features.UserCourse.DTO.Request;
-using MainService.AL.Features.UserCourse.Service;
+﻿using MainService.AL.Features.UserCourse.DTO.Request;
+using MainService.AL.Features.UserCourse.Services;
 using MainService.PL.Extensions;
 using MainService.PL.Filters;
 using Microsoft.AspNetCore.Authorization;

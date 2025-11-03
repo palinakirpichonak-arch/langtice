@@ -1,4 +1,4 @@
-﻿using MainService.DAL.Abstractions;
+﻿using MainService.DAL.Services;
 using Polly.Registry;
 
 namespace MainService.PL.Services;

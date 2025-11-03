@@ -1,4 +1,4 @@
-﻿namespace MainService.DAL.Abstractions;
+﻿namespace MainService.DAL.Services;
 
 public interface IMigrationService
 {

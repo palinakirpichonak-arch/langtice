@@ -1,4 +1,4 @@
-﻿using MainService.BLL.Services.Options;
+﻿using MainService.BLL.Options;
 using MainService.DAL.Context.MongoDb;
 using MainService.DAL.Context.PostgreSql;
 using Microsoft.EntityFrameworkCore;

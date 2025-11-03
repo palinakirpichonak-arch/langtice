@@ -1,7 +1,7 @@
 ﻿using MainService.AL.Features.UserCourse.DTO.Request;
 using MainService.AL.Features.UserCourse.DTO.Response;
 
-namespace MainService.AL.Features.UserCourse.Service;
+namespace MainService.AL.Features.UserCourse.Services;
 
 public interface IUserCourseService 
 {

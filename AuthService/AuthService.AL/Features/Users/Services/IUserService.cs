@@ -1,10 +1,10 @@
 using AuthService.AL.Features.Users.Dto;
-using AuthService.DAL.Users;
+using AuthService.DAL.Features.Users.Models;
 
 namespace AuthService.AL.Features.Users.Services;
 
 public interface IUserService
 {
     Task RegisterUser(RegisterUserDto newUserDto, CancellationToken cancellationToken);
-    Task<string> Login(LoginUserDto loginUserDto, CancellationToken cancellationToken);
+    Task<User?> ValidateCredentialsAsync(LoginUserDto dto, CancellationToken ct);
 }

@@ -1,4 +1,4 @@
-﻿namespace MainService.DAL.Abstractions;
+﻿namespace AuthService.DAL.Abstractions;
 
 public interface IEntity<TKey>
 {

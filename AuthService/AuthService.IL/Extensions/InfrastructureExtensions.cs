@@ -1,4 +1,7 @@
+using AuthService.IL.Options;
 using AuthService.IL.Services;
+using AuthService.IL.Sessions;
+using AuthService.IL.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,8 +16,15 @@ public static class InfrastructureExtensions
             .ValidateDataAnnotations()
             .ValidateOnStart();
         
-        services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddOptions<RedisOptions>()
+            .Bind(configuration)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+        
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+        services.AddScoped<ISessionStore, SessionStore>();
+        services.AddScoped<IAccessTokenService, AccessTokenService>();
+        services.AddScoped<IRefreshTokenService, RefreshTokenService>();
         
         return services;
     }

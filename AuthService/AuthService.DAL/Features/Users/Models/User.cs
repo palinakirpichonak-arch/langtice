@@ -1,4 +1,4 @@
-﻿namespace AuthService.DAL.Users;
+﻿namespace AuthService.DAL.Features.Users.Models;
 
 public class User
 {

@@ -1,10 +1,10 @@
 ﻿using MainService.AL.Features.Courses.Services;
 using MainService.AL.Features.Languages.Services;
 using MainService.AL.Features.Lessons.Services;
-using MainService.AL.Features.LLM;
+using MainService.AL.Features.Llm;
 using MainService.AL.Features.Tests.Services;
 using MainService.AL.Features.Translations.Services;
-using MainService.AL.Features.UserCourse.Service;
+using MainService.AL.Features.UserCourse.Services;
 using MainService.AL.Features.UserFlashCards.Services;
 using MainService.AL.Features.UserTests.Services;
 using MainService.AL.Features.UserWords.Services;
