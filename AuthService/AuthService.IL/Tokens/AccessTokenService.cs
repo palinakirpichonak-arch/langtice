@@ -4,6 +4,7 @@ using System.Text;
 using AuthService.DAL.Features.Roles.Repositories;
 using AuthService.DAL.Features.Users.Models;
 using AuthService.IL.Options;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -48,10 +49,10 @@ public class AccessTokenService :  IAccessTokenService
         {
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
-       
+        
         var token = new JwtSecurityToken(
             issuer: _jwtOptions.Value.Issuer,
-            audience: _jwtOptions.Value.Issuer,
+            audience: _jwtOptions.Value.Audience,
             claims: claims,
             signingCredentials: _signingCredentials,
             expires: DateTime.UtcNow.AddHours(_jwtOptions.Value.AccessExpiresHours));
