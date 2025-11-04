@@ -47,8 +47,7 @@ public class CourseService : ICourseService
         var courses = await _courseRepository.GetAsync(
             tracking: false,
             cancellationToken: cancellationToken,
-            includes: 
-            [
+            includes: [
                 c => c.BaseLanguage,
                 c => c.LearningLanguage
             ]);
@@ -62,8 +61,7 @@ public class CourseService : ICourseService
             filter: c => c.Status == true,
             tracking: false,
             cancellationToken: cancellationToken,
-            includes: 
-            [
+            includes: [
                 c => c.BaseLanguage,
                 c => c.LearningLanguage
             ]);
@@ -103,8 +101,7 @@ public class CourseService : ICourseService
             filter: c => c.Id == id,
             tracking: true,
             cancellationToken: cancellationToken,
-            includes:
-            [
+            includes: [
                 c => c.BaseLanguage,
                 c => c.LearningLanguage
             ])).FirstOrDefault();

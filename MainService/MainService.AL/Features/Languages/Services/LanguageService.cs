@@ -40,11 +40,9 @@ public class LanguageService : ILanguageService
 
     public async Task<IEnumerable<ResponseLanguageDto>> GetAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
-        var entities = await _languageRepository.GetAsync(
-            tracking: false,
-            pageIndex:  pageIndex,
+        var entities = await _languageRepository.GetAsync(pageIndex: pageIndex,
             pageSize: pageSize,
-            cancellationToken: cancellationToken);
+            tracking: false, cancellationToken: cancellationToken);
 
         return _mapper.Map<IEnumerable<ResponseLanguageDto>>(entities);
     }

@@ -45,13 +45,10 @@ public class TranslationService : ITranslationService
 
     public async Task<IEnumerable<ResponseTranslationDto>> GetAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken)
     {
-        var entities = await _translationRepository.GetAsync(
-                tracking: false,
-                pageIndex: pageIndex,
+        var entities = await _translationRepository.GetAsync(pageIndex: pageIndex,
                 pageSize: pageSize,
-                cancellationToken: cancellationToken,
-                includes:
-                [
+                tracking: false,
+                cancellationToken: cancellationToken, includes: [
                     t => t.FromWord,
                     t => t.ToWord
                 ]);
@@ -92,8 +89,7 @@ public class TranslationService : ITranslationService
             filter: c => c.Id == id,
             tracking: true,
             cancellationToken: cancellationToken,
-            includes:
-            [
+            includes: [
                 t => t.FromWord,
                 t => t.ToWord
             ])).FirstOrDefault();

@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using System.Text;
 using MainService.BLL.Options;
-using MainService.PL.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -9,15 +8,12 @@ namespace MainService.PL.Extensions;
 
 public static class AuthenticationConfiguration
 {
-    
     public static IServiceCollection AddApiAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         var config = configuration.Get<JwtOptions>();
 
         var issuer = config.Issuer;
-
         var audience = config.Audience;
-        Console.WriteLine($"Issuer {issuer} - Audience {audience}");
         var secretKey = config.AccessSecretKey;
         
         if (string.IsNullOrWhiteSpace(issuer))
