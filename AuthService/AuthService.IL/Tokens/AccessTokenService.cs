@@ -4,6 +4,7 @@ using System.Text;
 using AuthService.DAL.Features.Roles.Repositories;
 using AuthService.DAL.Features.Users.Models;
 using AuthService.IL.Options;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -15,10 +16,12 @@ public class AccessTokenService :  IAccessTokenService
     private readonly IOptions<JwtOptions> _jwtOptions;
     private readonly IRoleRepository  _roleRepository;
     private readonly SigningCredentials _signingCredentials;
+    private readonly ILogger<AccessTokenService> _logger;
 
     public AccessTokenService(
         IOptions<JwtOptions> jwtOptions,
-        IRoleRepository roleRepository)
+        IRoleRepository roleRepository,
+        ILogger<AccessTokenService> logger)
     {
         _jwtOptions = jwtOptions;
         _roleRepository = roleRepository;
@@ -27,6 +30,8 @@ public class AccessTokenService :  IAccessTokenService
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         
         _signingCredentials = creds;
+        
+        _logger = logger;
     }
     
     public async Task<string> GenerateAccessToken(User user, CancellationToken cancellationToken)
@@ -49,9 +54,12 @@ public class AccessTokenService :  IAccessTokenService
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
        
+        _logger.LogInformation("Generate access token for user {userId} with issuer: {issuer} and audience: {audience}", 
+            user.Id, _jwtOptions.Value.Issuer, _jwtOptions.Value.Audience);
+        
         var token = new JwtSecurityToken(
             issuer: _jwtOptions.Value.Issuer,
-            audience: _jwtOptions.Value.Issuer,
+            audience: _jwtOptions.Value.Audience,
             claims: claims,
             signingCredentials: _signingCredentials,
             expires: DateTime.UtcNow.AddHours(_jwtOptions.Value.AccessExpiresHours));
