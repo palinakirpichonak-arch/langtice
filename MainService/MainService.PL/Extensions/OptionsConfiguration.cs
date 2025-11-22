@@ -29,6 +29,11 @@ public static class OptionsConfiguration
             .ValidateDataAnnotations()
             .ValidateOnStart();
         
+        services.AddOptions<RabbitMqOptions>()
+            .Bind(configuration)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+        
         return services;
     }
 }

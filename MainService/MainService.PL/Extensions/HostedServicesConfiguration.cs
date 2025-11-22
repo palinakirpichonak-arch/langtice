@@ -9,7 +9,7 @@ public static class HostedServicesConfiguration
     {
         services.AddHostedService<MigrationHostedService>();
         services.AddHostedService<MongoDbHostedService>();
-        services.AddHostedService<ExternalApiPollingService>();
+        services.AddHostedService<RabbitSenderService>();
        
         return services;
     }

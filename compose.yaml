@@ -14,6 +14,8 @@ services:
         condition: service_healthy
       mongo-db:
         condition: service_healthy
+      rabbitmq:
+          condition: service_healthy
     environment:
       PostgreHost: ${POSTGRES_HOST}
       PostgrePort: ${POSTGRES_PORT}
@@ -28,6 +30,11 @@ services:
       Issuer: ${ISSUER}
       Audience: ${AUDIENCE}
       AccessSecretKey: ${ACCESS_SECRET_KEY}
+      RabbitMQ__HostName: ${RABBITMQ_HOST}
+      RabbitMQ__Port: ${RABBITMQ_PORT}
+      RabbitMQ__UserName: ${RABBITMQ_USERNAME}
+      RabbitMQ__Password: ${RABBITMQ_PASSWORD}
+      RabbitMQ__Queue: ${RABBITMQ_QUEUE}
       ASPNETCORE_ENVIRONMENT: Development
       
 
@@ -60,15 +67,21 @@ services:
           
   notification-service:
       container_name: notification-service
-      image: notification-service
       build:
           context: NotificationService/
           dockerfile: Dockerfile
-      ports:
-          - "7777:7778"
       environment:
           ASPNETCORE_ENVIRONMENT: Development
-          ConnectionStrings__DefaultConnection: "Host=auth-postgres;Port=5432;Database=users;Username=postgres;Password=postgres"
+          RabbitMQ__HostName: ${RABBITMQ_HOST}
+          RabbitMQ__Port: ${RABBITMQ_PORT}
+          RabbitMQ__UserName: ${RABBITMQ_USERNAME}
+          RabbitMQ__Password: ${RABBITMQ_PASSWORD}
+          RabbitMQ__Queue: ${RABBITMQ_QUEUE}
+      depends_on:
+          rabbitmq:
+              condition: service_healthy
+      ports:
+          - "7777:7778"
 
   main-postgres:
     container_name: langtice-main-postgres
@@ -138,6 +151,24 @@ services:
           - redis-data:/data
       healthcheck:
           test: [ "CMD", "redis-cli", "ping" ]
+          interval: 5s
+          timeout: 3s
+          retries: 10
+          
+          
+        
+  rabbitmq:
+      image: rabbitmq:4-management
+      container_name: rabbitmq
+      restart: always
+      ports:
+          - "5672:5672"  
+          - "15672:15672"
+      environment:
+          RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+          RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+      healthcheck:
+          test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
           interval: 5s
           timeout: 3s
           retries: 10
