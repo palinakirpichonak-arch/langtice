@@ -57,6 +57,18 @@ services:
           RedisPort: ${REDIS_PORT}
           RedisPassword: ${REDIS_PASSWORD}
           RedisConnectionString: ${REDIS_CONNECTION}
+          
+  notification-service:
+      container_name: notification-service
+      image: notification-service
+      build:
+          context: NotificationService/
+          dockerfile: Dockerfile
+      ports:
+          - "7777:7778"
+      environment:
+          ASPNETCORE_ENVIRONMENT: Development
+          ConnectionStrings__DefaultConnection: "Host=auth-postgres;Port=5432;Database=users;Username=postgres;Password=postgres"
 
   main-postgres:
     container_name: langtice-main-postgres
