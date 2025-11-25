@@ -1,4 +1,5 @@
-﻿using MainService.BLL.Services.LLM;
+﻿using MainService.BLL.Services.gRPC;
+using MainService.BLL.Services.LLM;
 
 namespace MainService.PL.Extensions;
 
