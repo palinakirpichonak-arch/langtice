@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService.DAL", "AuthServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService.PL", "NotificationService\NotificationService.PL\NotificationService.PL.csproj", "{9FBF3BEC-21A4-473C-954F-455456D671BF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService.IL", "NotificationService\NotificationService.IL\NotificationService.IL.csproj", "{DB5FEBCA-4634-400F-9655-A336CC2295E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,6 +91,10 @@ Global
 		{9FBF3BEC-21A4-473C-954F-455456D671BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FBF3BEC-21A4-473C-954F-455456D671BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FBF3BEC-21A4-473C-954F-455456D671BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB5FEBCA-4634-400F-9655-A336CC2295E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB5FEBCA-4634-400F-9655-A336CC2295E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB5FEBCA-4634-400F-9655-A336CC2295E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB5FEBCA-4634-400F-9655-A336CC2295E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{16A9D84C-DE8D-4B4C-BF6F-6429B2CBD7D5} = {939F6642-6899-40FB-85E3-672D93513EBA}
@@ -101,5 +107,6 @@ Global
 		{3F71FC1D-F5BB-4F5E-8E99-2C2EB0443335} = {61648E5D-868A-4F32-87A7-B22D511F6D6E}
 		{8C9F985A-3270-4E50-9CDB-3B235D07F0C6} = {61648E5D-868A-4F32-87A7-B22D511F6D6E}
 		{9FBF3BEC-21A4-473C-954F-455456D671BF} = {357A0B0C-E2E5-4084-96B2-C580B68F689C}
+		{DB5FEBCA-4634-400F-9655-A336CC2295E0} = {357A0B0C-E2E5-4084-96B2-C580B68F689C}
 	EndGlobalSection
 EndGlobal

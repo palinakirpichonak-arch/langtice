@@ -30,7 +30,7 @@ public static class OptionsConfiguration
             .ValidateOnStart();
         
         services.AddOptions<RabbitMqOptions>()
-            .Bind(configuration)
+            .Bind(configuration.GetSection("RabbitMq")) 
             .ValidateDataAnnotations()
             .ValidateOnStart();
         

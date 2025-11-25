@@ -2,11 +2,11 @@ namespace MainService.BLL.Options;
 
 public class RabbitMqOptions
 {
-    public string HostName { get; init; } = "rabbitmq";
+    public string HostName { get; init; } 
     public int Port { get; init; }
-    public string UserName { get; init; } = "guest";
-    public string Password { get; init; } = "guest";
-    public string Queue { get; init; } = "notification";
-    public string Exchange { get; init; } = "";
+    public string UserName { get; init; } 
+    public string Password { get; init; } 
+    public string Queue { get; init; } 
+    public string Exchange { get; init; }     
     public string RoutingKey { get; init; }
 }

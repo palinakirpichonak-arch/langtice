@@ -13,9 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+      <ProjectReference Include="..\NotificationService.IL\NotificationService.IL.csproj" />
     </ItemGroup>
 
 </Project>

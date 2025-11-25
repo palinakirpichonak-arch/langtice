@@ -13,6 +13,8 @@ public class RabbitSenderService : BackgroundService
     private readonly ILogger<RabbitSenderService> _logger;
     private readonly RabbitMqOptions _rabbitMqOptions;
     private readonly PeriodicTimer _timer =  new(TimeSpan.FromSeconds(15));
+    private IConnection _connection;
+    private IChannel _channel;
     
     public RabbitSenderService(ILogger<RabbitSenderService> logger,  IOptions<RabbitMqOptions> rabbitMqOptions)
     {
@@ -22,25 +24,24 @@ public class RabbitSenderService : BackgroundService
     
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        
         while (await _timer.WaitForNextTickAsync(cancellationToken))
         {
             try
             {
                 var factory = new ConnectionFactory
                 {
-                    HostName = "rabbitmq",
-                    Port = 5672,
-                    UserName = "guest",
-                    Password = "guest"
+                    HostName = _rabbitMqOptions.HostName,
+                    Port = _rabbitMqOptions.Port,
+                    UserName = _rabbitMqOptions.UserName,
+                    Password = _rabbitMqOptions.Password,
                 };
-        
-            using var conn = await factory.CreateConnectionAsync(cancellationToken);
-            using var channel = await conn.CreateChannelAsync(cancellationToken:cancellationToken);
+                
+                _connection = await factory.CreateConnectionAsync(cancellationToken);
+                _channel = await _connection.CreateChannelAsync(cancellationToken:cancellationToken);
             
-            await channel.QueueDeclareAsync(
-                queue:  "notifications-queue", 
-                durable: false, 
+            await _channel.QueueDeclareAsync(
+                queue:  _rabbitMqOptions.Queue, 
+                durable: true, 
                 exclusive: false, 
                 autoDelete: false, 
                 arguments: null, 
@@ -50,9 +51,9 @@ public class RabbitSenderService : BackgroundService
 
                 var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(msg));
                     
-                await channel.BasicPublishAsync(
-                    exchange: "", 
-                    routingKey:  "notifications-queue", 
+                await _channel.BasicPublishAsync(
+                    exchange:  "", 
+                    routingKey:   _rabbitMqOptions.Queue, 
                     body: body, 
                     cancellationToken: cancellationToken);
 
