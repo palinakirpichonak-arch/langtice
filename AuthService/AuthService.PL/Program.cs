@@ -18,7 +18,7 @@ builder.Services.AddSwaggerGen();
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(7070, listenOptions =>
+    options.ListenAnyIP(5001, listenOptions =>
     {
         listenOptions.Protocols = HttpProtocols.Http1;
     });
@@ -38,6 +38,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapAuthEndpoints();
-app.MapGrpcService<GreeterService>();
+app.MapGrpcService<GrpcServer>();
 app.Run();
 

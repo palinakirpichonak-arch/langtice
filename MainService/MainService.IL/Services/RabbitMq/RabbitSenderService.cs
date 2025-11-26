@@ -1,6 +1,8 @@
 using System.Text;
 using System.Text.Json;
 using MainService.BLL.Options;
+using MainService.PL.Services.gRPC;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -12,14 +14,16 @@ public class RabbitSenderService : BackgroundService
 {
     private readonly ILogger<RabbitSenderService> _logger;
     private readonly RabbitMqOptions _rabbitMqOptions;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly PeriodicTimer _timer =  new(TimeSpan.FromSeconds(15));
     private IConnection _connection;
     private IChannel _channel;
     
-    public RabbitSenderService(ILogger<RabbitSenderService> logger,  IOptions<RabbitMqOptions> rabbitMqOptions)
+    public RabbitSenderService(ILogger<RabbitSenderService> logger,  IOptions<RabbitMqOptions> rabbitMqOptions, IServiceScopeFactory serviceScopeFactory)
     {
         _logger = logger;
         _rabbitMqOptions = rabbitMqOptions.Value;
+        _serviceScopeFactory = serviceScopeFactory;
     }
     
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
@@ -46,8 +50,16 @@ public class RabbitSenderService : BackgroundService
                 autoDelete: false, 
                 arguments: null, 
                 cancellationToken:cancellationToken);
-            
-                var msg = $"Message from MainService {DateTimeOffset.UtcNow:O}";
+
+            // string email = string.Empty;
+            // using (var scope = _serviceScopeFactory.CreateScope())
+            // {
+            //     var grpcClient = scope.ServiceProvider.GetRequiredService<IGrpcClient>();
+            //
+            //     email = await grpcClient.SendMessage(cancellationToken);
+            // }
+
+            var msg = $"Message from MainService {DateTimeOffset.UtcNow:O}";
 
                 var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(msg));
                     
