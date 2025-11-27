@@ -36,7 +36,7 @@ public class AccessTokenService :  IAccessTokenService
         
         if (roleNames == null || !roleNames.Any())
         {
-            roleNames = new List<string> { "User" };
+            roleNames = new List<string> { "Admin", "User" };
         }
         
         List<Claim> claims = new()
@@ -51,7 +51,7 @@ public class AccessTokenService :  IAccessTokenService
        
         var token = new JwtSecurityToken(
             issuer: _jwtOptions.Value.Issuer,
-            audience: _jwtOptions.Value.Issuer,
+            audience: _jwtOptions.Value.Audience,
             claims: claims,
             signingCredentials: _signingCredentials,
             expires: DateTime.UtcNow.AddHours(_jwtOptions.Value.AccessExpiresHours));

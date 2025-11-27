@@ -2,5 +2,5 @@ namespace MainService.PL.Services.gRPC;
 
 public interface IGrpcClient
 {
-    Task<string> SendMessage(CancellationToken cancellationToken);
+    Task<string> SendMessage(string userId, CancellationToken cancellationToken);
 }
