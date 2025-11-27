@@ -1,27 +1,33 @@
 using System.Text;
+using System.Text.Json;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NotificationService.IL.Services.Smtp;
 using NotificationService.PL;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace NotificationService.IL.Services
+namespace NotificationService.IL.Services.RabbitMq
 {
     
 public class RabbitConsumerService : BackgroundService
 {
     private readonly ILogger<RabbitConsumerService> _logger;
     private readonly RabbitMqOptions _rabbitMqOptions;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
     private IConnection? _connection;
     private IChannel? _channel;
 
     public RabbitConsumerService(
         ILogger<RabbitConsumerService> logger, 
-        IOptions<RabbitMqOptions> rabbitMqOptions)
+        IOptions<RabbitMqOptions> rabbitMqOptions,
+        IServiceScopeFactory serviceScopeFactory)
     {
         _logger = logger;
         _rabbitMqOptions = rabbitMqOptions.Value;
+        _serviceScopeFactory = serviceScopeFactory;
     }
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
@@ -54,6 +60,13 @@ public class RabbitConsumerService : BackgroundService
             var message = Encoding.UTF8.GetString(body);
             _logger.LogInformation(" [x] Received {0}", message);
           
+            using var scope = _serviceScopeFactory.CreateScope();
+            var emailSender =  scope.ServiceProvider.GetRequiredService<IEmailSender>();
+            
+            var fullEmail = JsonSerializer.Deserialize<Message>(message);
+            
+            await emailSender.SendEmail(fullEmail.Email, "FLASH CARD EXPIRES", fullEmail.MessageBody);
+            
         };
 
         await _channel.BasicConsumeAsync(
@@ -86,4 +99,11 @@ public class RabbitConsumerService : BackgroundService
         base.Dispose();
     }
 }
+}
+
+public class Message
+{
+    public string UserId { get; set; }
+    public string Email { get; set; }
+    public string MessageBody { get; set; }
 }

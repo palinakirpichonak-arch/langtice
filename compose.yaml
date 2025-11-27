@@ -30,7 +30,6 @@ services:
         Issuer: ${ISSUER}
         Audience: ${AUDIENCE}
         AccessSecretKey: ${ACCESS_SECRET_KEY}
-        
         RabbitMq__HostName: ${RABBITMQ_HOST}
         RabbitMq__Port: ${RABBITMQ_PORT}
         RabbitMq__UserName: ${RABBITMQ_USER_NAME}
@@ -82,6 +81,11 @@ services:
           RabbitMq__Exchange: ${RABBITMQ_EXCHANGE}
           RabbitMq__Queue: ${RABBITMQ_QUEUE}
           RabbitMq__RoutingKey: ${RABBITMQ_ROUTING_KEY}
+          EmailSettings__Server: ${EMAIL_SERVER}
+          EmailSettings__Port: ${EMAIL_PORT}
+          EmailSettings__SenderName: ${EMAIL_SENDER_NAME}
+          EmailSettings__Email: ${EMAIL_ADDRESS}
+          EmailSettings__Password: ${EMAIL_PASSWORD}
       depends_on:
           rabbitmq:
               condition: service_healthy
