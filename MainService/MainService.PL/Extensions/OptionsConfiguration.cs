@@ -1,4 +1,5 @@
 ﻿using MainService.BLL.Options;
+using Shared.Options;
 
 namespace MainService.PL.Extensions;
 

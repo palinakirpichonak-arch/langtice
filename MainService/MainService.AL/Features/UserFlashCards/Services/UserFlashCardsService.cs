@@ -1,10 +1,10 @@
 ﻿using MainService.AL.Exceptions;
 using MainService.AL.Features.UserFlashCards.DTO.Request;
 using MainService.BLL.Services.UnitOfWork;
-using MainService.DAL.Data.Translations;
-using MainService.DAL.Data.UserFlashCards;
-using MainService.DAL.Data.UserWord;
-using MainService.DAL.Features.UserFlashCard;
+using MainService.DAL.Models.UserFlashCardModel;
+using MainService.DAL.Repositories.Translations;
+using MainService.DAL.Repositories.UserFlashCards;
+using MainService.DAL.Repositories.UserWords;
 using MapsterMapper;
 using MongoDB.Bson;
 
@@ -31,12 +31,12 @@ namespace MainService.AL.Features.UserFlashCards.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<DAL.Features.UserFlashCard.UserFlashCards>> GetAllByUserAsync(Guid userId, CancellationToken cancellationToken)
+        public async Task<IEnumerable<DAL.Models.UserFlashCardModel.UserFlashCard>> GetAllByUserAsync(Guid userId, CancellationToken cancellationToken)
         {
             var all = await _flashCardsRepository.GetAllAsync(cancellationToken);
             return all.Where(fc => fc.UserId == userId);
         }
-        public async Task<DAL.Features.UserFlashCard.UserFlashCards?> GetByIdAsync(string id, CancellationToken cancellationToken)
+        public async Task<DAL.Models.UserFlashCardModel.UserFlashCard?> GetByIdAsync(string id, CancellationToken cancellationToken)
         {
             var flashCards = await _flashCardsRepository.GetByIdAsync(id, cancellationToken);
             if (flashCards == null)
@@ -44,7 +44,7 @@ namespace MainService.AL.Features.UserFlashCards.Services
             return flashCards;
         }
 
-        public async Task<DAL.Features.UserFlashCard.UserFlashCards> GenerateFromUserWordsAsync(RequestUserFlashCardDto dto, CancellationToken cancellationToken)
+        public async Task<DAL.Models.UserFlashCardModel.UserFlashCard> GenerateFromUserWordsAsync(RequestUserFlashCardDto dto, CancellationToken cancellationToken)
         {
             var userWordsPage = await _userWordRepository.GetAllByUserIdAsync(dto.UserId, 1, dto.Count, cancellationToken);
             var translations = await _translationRepository.GetAsync(
@@ -67,7 +67,7 @@ namespace MainService.AL.Features.UserFlashCards.Services
                 .Take(dto.Count)
                 .ToList()!;
 
-            var entity = new DAL.Features.UserFlashCard.UserFlashCards
+            var entity = new DAL.Models.UserFlashCardModel.UserFlashCard
             {
                 Id = ObjectId.GenerateNewId().ToString(),
                 UserId = dto.UserId,

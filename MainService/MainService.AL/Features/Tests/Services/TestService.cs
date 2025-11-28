@@ -2,10 +2,10 @@
 using MainService.AL.Features.Tests.DTO.Request;
 using MainService.AL.Features.Tests.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
-using MainService.DAL.Data.Lessons;
-using MainService.DAL.Data.Tests;
-using MainService.DAL.Data.UserTest;
-using MainService.DAL.Features.Test;
+using MainService.DAL.Models.TestModel;
+using MainService.DAL.Repositories.Lessons;
+using MainService.DAL.Repositories.Tests;
+using MainService.DAL.Repositories.UserTests;
 using MapsterMapper;
 using MongoDB.Bson;
 

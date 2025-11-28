@@ -2,8 +2,8 @@
 using MainService.AL.Features.UserWords.DTO.Request;
 using MainService.AL.Features.UserWords.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
-using MainService.DAL.Data.UserWord;
-using MainService.DAL.Features.UserWord;
+using MainService.DAL.Models.UserWordModel;
+using MainService.DAL.Repositories.UserWords;
 using Mapster;
 
 namespace MainService.AL.Features.UserWords.Services;

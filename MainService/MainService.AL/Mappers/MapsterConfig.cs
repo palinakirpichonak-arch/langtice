@@ -5,10 +5,10 @@ using MainService.AL.Features.UserWords.DTO.Request;
 using MainService.AL.Features.UserWords.DTO.Response;
 using MainService.AL.Features.Words.DTO.Response;
 using MainService.DAL.Abstractions;
-using MainService.DAL.Features.Translations;
-using MainService.DAL.Features.UserCourse;
-using MainService.DAL.Features.UserWord;
-using MainService.DAL.Features.Words;
+using MainService.DAL.Models.TranslationsModel;
+using MainService.DAL.Models.UserCourseModel;
+using MainService.DAL.Models.UserWordModel;
+using MainService.DAL.Models.WordsModel;
 using Mapster;
 
 namespace MainService.AL.Mappers;

@@ -2,9 +2,9 @@ using System.Linq.Expressions;
 using MainService.AL.Features.Courses.DTO.Response;
 using MainService.AL.Features.Courses.Services;
 using MainService.BLL.Services.UnitOfWork;
-using MainService.DAL.Data.Courses;
-using MainService.DAL.Data.Languages;
-using MainService.DAL.Features.Courses;
+using MainService.DAL.Models.CoursesModel;
+using MainService.DAL.Repositories.Courses;
+using MainService.DAL.Repositories.Language_;
 using MapsterMapper;
 using Moq;
 

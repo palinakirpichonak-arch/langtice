@@ -1,7 +1,7 @@
 ﻿using MainService.AL.Features.UserTests.DTO.Request;
 using MainService.AL.Features.UserTests.DTO.Response;
 using MainService.DAL.Abstractions;
-using MainService.DAL.Features.UserTest;
+using MainService.DAL.Models.UserTestModel;
 
 namespace MainService.AL.Features.UserTests.Services;
 

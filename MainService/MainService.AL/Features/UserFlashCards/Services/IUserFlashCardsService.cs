@@ -4,8 +4,8 @@ namespace MainService.AL.Features.UserFlashCards.Services;
 
 public interface IUserFlashCardsService
 {
-    Task<IEnumerable<DAL.Features.UserFlashCard.UserFlashCards>> GetAllByUserAsync(Guid userId, CancellationToken cancellationToken);
-    Task<DAL.Features.UserFlashCard.UserFlashCards?> GetByIdAsync(string id, CancellationToken cancellationToken);
-    Task<DAL.Features.UserFlashCard.UserFlashCards> GenerateFromUserWordsAsync(RequestUserFlashCardDto dto, CancellationToken cancellationToken);
+    Task<IEnumerable<DAL.Models.UserFlashCardModel.UserFlashCard>> GetAllByUserAsync(Guid userId, CancellationToken cancellationToken);
+    Task<DAL.Models.UserFlashCardModel.UserFlashCard?> GetByIdAsync(string id, CancellationToken cancellationToken);
+    Task<DAL.Models.UserFlashCardModel.UserFlashCard> GenerateFromUserWordsAsync(RequestUserFlashCardDto dto, CancellationToken cancellationToken);
     Task DeleteAsync(string id, CancellationToken cancellationToken);
 }

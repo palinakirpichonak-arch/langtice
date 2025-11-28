@@ -5,8 +5,8 @@ services:
     env_file:
         - .env
     build:
-        context: MainService/
-        dockerfile: Dockerfile
+        context: .
+        dockerfile: MainService/Dockerfile
     ports:
         - "8080:8080"
     depends_on:
@@ -42,8 +42,8 @@ services:
       container_name: auth-service
       image: auth-service
       build:
-          context: AuthService/
-          dockerfile: Dockerfile
+          context: .
+          dockerfile: AuthService/Dockerfile
       ports:
           - "5000:5001"
       depends_on:
@@ -68,8 +68,8 @@ services:
   notification-service:
       container_name: notification-service
       build:
-          context: NotificationService/
-          dockerfile: Dockerfile
+          context: .
+          dockerfile: NotificationService/Dockerfile
       env_file:
           - .env
       environment:

@@ -1,6 +1,6 @@
 ﻿using MainService.AL.Features.Tests.DTO.Request;
 using MainService.AL.Features.Tests.DTO.Response;
-using MainService.DAL.Features.Test;
+using MainService.DAL.Models.TestModel;
 
 namespace MainService.AL.Features.Tests.Services;
 

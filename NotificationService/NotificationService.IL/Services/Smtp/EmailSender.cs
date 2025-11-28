@@ -3,7 +3,7 @@ using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NotificationService.IL.Options;
-using NotificationService.PL;
+using Shared.Data;
 
 namespace NotificationService.IL.Services.Smtp;
 
@@ -47,9 +47,11 @@ public class EmailSender : IEmailSender
         return message;
     }
 
-    public async Task SendEmail(string email, string subject, string body)
+    public async Task SendEmail(string email, MessageType type, string body,  params object[] parameters)
     {
-       var msg = MailMessageServer(_emailOptions.Email, _emailOptions.SenderName, email, subject, body );
+        var subjectText = string.Format(EmailSubjectTemplates.Templates[type].MessageSubject, parameters);
+        
+       var msg = MailMessageServer(_emailOptions.Email, _emailOptions.SenderName, email, subjectText, body );
        
        await _smtpClient.SendMailAsync(msg);
     }

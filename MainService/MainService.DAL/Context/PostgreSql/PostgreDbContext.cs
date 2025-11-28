@@ -1,12 +1,12 @@
 ﻿using System.Reflection;
-using MainService.DAL.Features.Courses;
-using MainService.DAL.Features.Languages;
-using MainService.DAL.Features.Lessons;
-using MainService.DAL.Features.Translations;
-using MainService.DAL.Features.UserCourse;
-using MainService.DAL.Features.UserTest;
-using MainService.DAL.Features.UserWord;
-using MainService.DAL.Features.Words;
+using MainService.DAL.Models.CoursesModel;
+using MainService.DAL.Models.LanguagesModel;
+using MainService.DAL.Models.LessonsModel;
+using MainService.DAL.Models.TranslationsModel;
+using MainService.DAL.Models.UserCourseModel;
+using MainService.DAL.Models.UserTestModel;
+using MainService.DAL.Models.UserWordModel;
+using MainService.DAL.Models.WordsModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace MainService.DAL.Context.PostgreSql;
