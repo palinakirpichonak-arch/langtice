@@ -47,9 +47,9 @@ public class EmailSender : IEmailSender
         return message;
     }
 
-    public async Task SendEmail(string email, MessageType type, string body,  params object[] parameters)
+    public async Task SendEmail(string email, MessageNotificationType notificationType, string body,  params object[] parameters)
     {
-        var subjectText = string.Format(EmailSubjectTemplates.Templates[type].MessageSubject, parameters);
+        var subjectText = string.Format(EmailSubjectTemplates.Templates[notificationType].MessageSubject, parameters);
         
        var msg = MailMessageServer(_emailOptions.Email, _emailOptions.SenderName, email, subjectText, body );
        

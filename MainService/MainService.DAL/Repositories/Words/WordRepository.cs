@@ -13,11 +13,4 @@ public class WordRepository : Repository<Word, Guid>, IWordRepository
     {
         _dbContext = dbContext;
     }
-
-    public async Task<Word?> GetItemByIdAsync(Guid id, CancellationToken ct)
-    {
-        return await _dbContext.Words
-            .Include(w => w.Language)
-            .FirstOrDefaultAsync(w => w.Id == id, ct);
-    }
 }

@@ -10,7 +10,7 @@ public static class InfrastructureExtension
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
     {
         services.AddSingleton<IGrpcClient, GrpcClient>();
-        services.AddScoped<IMessageSender, MessageSender>();
+        services.AddSingleton<IRabbitMqPublisher, RabbitMqPublisher>();
         
         return services;
     }

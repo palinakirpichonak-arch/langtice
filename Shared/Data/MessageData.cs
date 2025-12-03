@@ -1,8 +1,9 @@
 namespace Shared.Data
 {
-    public enum MessageType
+    public enum MessageNotificationType
     {
-        Expiration
+        ExpirationNotification,
+        StreakNotification
     }
 
     public class MessageData
@@ -13,13 +14,20 @@ namespace Shared.Data
 
     public static class EmailSubjectTemplates
     {
-        public static readonly Dictionary<MessageType, MessageData> Templates = new()
+        public static readonly Dictionary<MessageNotificationType, MessageData> Templates = new()
         {
             {
-                MessageType.Expiration, new MessageData()
+                MessageNotificationType.ExpirationNotification, new MessageData()
                 {
                     MessageSubject = "Flashcard expiration",
                     MessageBody = "Your flashcard will expire in {0} minutes"
+                }
+            },
+            {
+                MessageNotificationType.StreakNotification, new MessageData()
+                {
+                    MessageSubject = "Don't loose you're daily streak!",
+                    MessageBody = "Complete a lesson not to lose you daily streak"
                 }
             }
         };

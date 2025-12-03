@@ -9,7 +9,7 @@ using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Abstractions;
 using MainService.DAL.Models.TestModel;
 using MainService.DAL.Models.UserTestModel;
-using MainService.DAL.Repositories.Language_;
+using MainService.DAL.Repositories.Languages;
 using MainService.DAL.Repositories.Tests;
 using MainService.DAL.Repositories.UserTests;
 using MainService.DAL.Repositories.UserWords;

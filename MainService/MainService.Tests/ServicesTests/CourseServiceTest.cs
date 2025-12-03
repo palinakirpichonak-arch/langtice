@@ -4,7 +4,7 @@ using MainService.AL.Features.Courses.Services;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Models.CoursesModel;
 using MainService.DAL.Repositories.Courses;
-using MainService.DAL.Repositories.Language_;
+using MainService.DAL.Repositories.Languages;
 using MapsterMapper;
 using Moq;
 
