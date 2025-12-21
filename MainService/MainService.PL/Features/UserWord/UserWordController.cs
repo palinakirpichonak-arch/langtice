@@ -19,7 +19,7 @@ namespace MainService.PL.Features.UserWord
             _userWordService = service;
         }
         
-        [HttpGet("user/{userId}")]
+        [HttpGet("all")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -31,7 +31,7 @@ namespace MainService.PL.Features.UserWord
             return Ok(words);
         }
         
-        [HttpGet("{userId}/{wordId}")]
+        [HttpGet("{wordId}")]
         [ValidateParameters(nameof(wordId))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -56,7 +56,7 @@ namespace MainService.PL.Features.UserWord
             return Ok(created);
         }
         
-        [HttpDelete("{userId}/{wordId}")]
+        [HttpDelete("{wordId}")]
         [ValidateParameters(nameof(wordId))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

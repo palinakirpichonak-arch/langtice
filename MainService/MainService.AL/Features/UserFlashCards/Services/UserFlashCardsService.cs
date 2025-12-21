@@ -44,9 +44,9 @@ namespace MainService.AL.Features.UserFlashCards.Services
             return flashCards;
         }
 
-        public async Task<DAL.Models.UserFlashCardModel.UserFlashCard> GenerateFromUserWordsAsync(RequestUserFlashCardDto dto, CancellationToken cancellationToken)
+        public async Task<DAL.Models.UserFlashCardModel.UserFlashCard> GenerateFromUserWordsAsync(RequestUserFlashCardDto dto, Guid userId, CancellationToken cancellationToken)
         {
-            var userWordsPage = await _userWordRepository.GetAllByUserIdAsync(dto.UserId, 1, dto.Count, cancellationToken);
+            var userWordsPage = await _userWordRepository.GetAllByUserIdAsync(userId, 1, dto.Count, cancellationToken);
             var translations = await _translationRepository.GetAsync(
                 tracking: false,
                 cancellationToken: cancellationToken);
@@ -67,10 +67,12 @@ namespace MainService.AL.Features.UserFlashCards.Services
                 .Take(dto.Count)
                 .ToList()!;
 
+            System.Console.WriteLine("Flashcards count" + flashCards.Count);
+
             var entity = new DAL.Models.UserFlashCardModel.UserFlashCard
             {
                 Id = ObjectId.GenerateNewId().ToString(),
-                UserId = dto.UserId,
+                UserId = userId,
                 Title = dto.Title ?? "Generated Flashcards",
                 Items = flashCards,
                 CreatedAt = DateTime.UtcNow

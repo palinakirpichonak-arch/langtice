@@ -9,7 +9,7 @@ namespace MainService.PL.Features.UserTests
 {
     [Authorize(Roles = "User")]
     [Tags("UserTests")]
-    [Route("usertests")]
+    [Route("user-tests")]
     [ApiController]
     public class UserTestController : ControllerBase
     {
@@ -20,7 +20,7 @@ namespace MainService.PL.Features.UserTests
             _userTestService = userTestService;
         }
         
-        [HttpGet("user/{userId}")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -32,7 +32,7 @@ namespace MainService.PL.Features.UserTests
             return Ok(tests);
         }
         
-        [HttpGet("{id}")]
+        [HttpGet("{testId}")]
         [ValidateParameters(nameof(id))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -49,13 +49,13 @@ namespace MainService.PL.Features.UserTests
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateUserTest([FromBody] RequestUserTestDto dto, CancellationToken cancellationToken)
         {
-            dto.UserId = User.GetUserId();
-            
-            var createdTest = await _userTestService.CreateAsync(dto, cancellationToken);
+            var userId = User.GetUserId();
+
+            var createdTest = await _userTestService.CreateAsync(dto, userId, cancellationToken);
             return Ok(createdTest);
         }
         
-        [HttpDelete("{id}")]
+        [HttpDelete("{testId}")]
         [ValidateParameters(nameof(id))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

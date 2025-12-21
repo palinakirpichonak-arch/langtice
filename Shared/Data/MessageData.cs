@@ -20,7 +20,7 @@ namespace Shared.Data
                 MessageNotificationType.ExpirationNotification, new MessageData()
                 {
                     MessageSubject = "Flashcard expiration",
-                    MessageBody = "Your flashcard will expire in {0} minutes"
+                    MessageBody = "Your flashcard will expire at {0}"
                 }
             },
             {

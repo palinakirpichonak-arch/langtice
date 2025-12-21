@@ -20,7 +20,7 @@ public class UserCourseController : ControllerBase
         _userCourseService = userCourseService;
     }
     
-    [HttpGet("user/{userId}")]
+    [HttpGet("all")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -32,7 +32,7 @@ public class UserCourseController : ControllerBase
         return Ok(courses);
     }
     
-    [HttpGet("{userId}/{courseId}")]
+    [HttpGet("{courseId}")]
     [ValidateParameters(nameof(courseId))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -57,7 +57,7 @@ public class UserCourseController : ControllerBase
         return Ok(entity);
     }
     
-    [HttpDelete("{userId}/{courseId}")]
+    [HttpDelete("{courseId}")]
     [ValidateParameters(nameof(courseId))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

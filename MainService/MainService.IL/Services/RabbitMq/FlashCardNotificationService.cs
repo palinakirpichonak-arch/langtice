@@ -122,13 +122,14 @@ public class FlashCardNotificationService : BackgroundService
             var template = EmailSubjectTemplates
                 .Templates[MessageNotificationType.ExpirationNotification];
 
-            var minutes = (int)remaining.TotalMinutes;
+           var expirationTime = DateTime.UtcNow.Add(remaining);
+           var expirationTimeFormatted = expirationTime.ToString("MMMM dd, yyyy HH:mm");
 
             var msg = new Message
             {
                 UserId = card.UserId.ToString(),
                 Email = email,
-                MessageBody = string.Format(template.MessageBody, minutes)
+                MessageBody = string.Format(template.MessageBody, expirationTimeFormatted)
             };
 
             await publisher.PublishAsync(msg, cancellationToken);

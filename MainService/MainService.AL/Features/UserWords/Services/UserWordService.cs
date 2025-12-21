@@ -31,7 +31,8 @@ public class UserWordService : IUserWordService
             filter: uw => uw.UserId == userId,
             pageIndex: pageIndex,
             pageSize: pageSize,
-            tracking: false, cancellationToken: cancellationToken);
+            tracking: false, cancellationToken: cancellationToken,
+            includes: uw => uw.Word);
 
         var userWordDtos = entities.Adapt<List<UserWordDto>>();
 
@@ -47,7 +48,8 @@ public class UserWordService : IUserWordService
         var entities = await _userWordRepository.GetAsync(
             filter: uw => uw.UserId == userId && uw.WordId == wordId,
             tracking: false,
-            cancellationToken: cancellationToken);
+            cancellationToken: cancellationToken,
+            includes: uw => uw.Word);
 
         var entity = entities.FirstOrDefault();
         if (entity is null)
@@ -71,8 +73,14 @@ public class UserWordService : IUserWordService
         _userWordRepository.AddItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        var userWordDto = entity.Adapt<UserWordDto>();
-        var paginated = new List<UserWordDto> {userWordDto};
+        var saved = (await _userWordRepository.GetAsync(
+            filter: uw => uw.UserId == entity.UserId && uw.WordId == entity.WordId,
+            tracking: false,
+            cancellationToken: cancellationToken,
+            includes: uw => uw.Word)).FirstOrDefault();
+
+        var userWordDto = (saved ?? entity).Adapt<UserWordDto>();
+        var paginated = new List<UserWordDto> { userWordDto };
 
         return new ResponseUserWordDto
         {

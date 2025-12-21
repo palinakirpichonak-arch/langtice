@@ -9,7 +9,7 @@ namespace MainService.PL.Features.UserFlashCards;
 
 [Authorize(Roles = "User")]
 [Tags("Flashcards")]
-[Route("flashcards")]
+[Route("flash-cards")]
 [ApiController]
 public class UserFlashController : ControllerBase
 {
@@ -20,7 +20,7 @@ public class UserFlashController : ControllerBase
         _flashCardsService = flashCardsService;
     }
     
-    [HttpGet("user/{userId}")]
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -32,7 +32,7 @@ public class UserFlashController : ControllerBase
         return Ok(sets);
     }
     
-    [HttpGet("{id}")]
+    [HttpGet("{flash-card-id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -42,19 +42,19 @@ public class UserFlashController : ControllerBase
         return Ok(set);
     }
     
-    [HttpPost("generate/{userId}")]
+    [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GenerateFromUserWords([FromBody] RequestUserFlashCardDto dto, CancellationToken cancellationToken)
     {
-        dto.UserId = User.GetUserId();
+        var userId = User.GetUserId();
         
-        var set = await _flashCardsService.GenerateFromUserWordsAsync(dto, cancellationToken);
+        var set = await _flashCardsService.GenerateFromUserWordsAsync(dto, userId, cancellationToken);
         return Ok(set);
     }
     
-    [HttpDelete("{id}")]
+    [HttpDelete("{{flash-card-id}}")]
     [ValidateParameters(nameof(id))]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
