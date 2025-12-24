@@ -15,7 +15,7 @@ public class FlashCardNotificationService : BackgroundService
     private readonly IRabbitMqPublisher _rabbitMqPublisher;
     private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    private readonly PeriodicTimer _checkInterval = new(TimeSpan.FromMinutes(1));
+    private readonly PeriodicTimer _checkInterval = new(TimeSpan.FromHours(1));
     private readonly TimeSpan _lifeTime = TimeSpan.FromDays(1);
 
     public FlashCardNotificationService(

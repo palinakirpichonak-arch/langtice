@@ -65,9 +65,10 @@ public class UserWordService : IUserWordService
         };
     }
 
-    public async Task<ResponseUserWordDto> CreateAsync(RequestUserWordDto dto, CancellationToken cancellationToken)
+    public async Task<ResponseUserWordDto> CreateAsync(RequestUserWordDto dto, Guid userId, CancellationToken cancellationToken)
     {
         var entity = dto.Adapt<UserWord>();
+        entity.UserId = userId;
         entity.AddedAt = DateTime.UtcNow;
 
         _userWordRepository.AddItem(entity);

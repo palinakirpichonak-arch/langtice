@@ -58,10 +58,10 @@ public class UserTestService : IUserTestService
         return userTests;
     }
 
-    public async Task<ResponseUserTestDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<ResponseUserTestDto?> GetByIdAsync(string id, CancellationToken cancellationToken)
     {
         var entity = (await _userTestRepository.GetAsync(
-            filter: ut => ut.Id == id,
+            filter: ut => ut.Id.ToString() == id,
             tracking: false,
             cancellationToken: cancellationToken))
             .FirstOrDefault();

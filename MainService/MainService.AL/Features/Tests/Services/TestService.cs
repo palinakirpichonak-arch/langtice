@@ -32,7 +32,6 @@ public class TestService : ITestService
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
-
     public async Task<ActiveTestDto> GetActiveTest(string testId, CancellationToken cancellationToken)
     {
         var test = await _testRepository.GetByIdAsync(testId, cancellationToken);
@@ -115,24 +114,47 @@ public class TestService : ITestService
     }
 
 
-    public async Task<(int correct, int mistake)> CheckTest(string testId, UserAnswerDto userTest, CancellationToken cancellationToken)
+  public async Task<TestResultDto> CheckTest(
+    string testId,
+    UserTestSubmissionDto submission,
+    CancellationToken cancellationToken)
+{
+    var test = await _testRepository.GetByIdAsync(testId, cancellationToken);
+
+    if (test == null)
+        throw new KeyNotFoundException("Test not found");
+
+    var correct = 0;
+    var mistake = 0;
+
+    var questions = test.Questions
+        .ToDictionary(q => q.QuestionNumber);
+
+    foreach (var answer in submission.Answers)
     {
-        var test = await _testRepository.GetByIdAsync(testId, cancellationToken);
-
-        (int correct, int mistake) = (0, 0);
-        var answers = test.Questions;
-        var userAnswers = userTest.Questions;
-
-        for (var i = 0; i < answers.Count; i++)
+        if (!questions.TryGetValue(answer.QuestionNumber, out var question))
         {
-            if (userAnswers[i] == null || userAnswers[i] != answers[i])
-            {
-                mistake++;
-                continue;
-            }
-            correct++;
+            mistake++;
+            continue;
         }
 
-        return (correct, mistake);
+        if (string.Equals(
+            answer.Answer,
+            question.CorrectAnswer,
+            StringComparison.OrdinalIgnoreCase))
+        {
+            correct++;
+        }
+        else
+        {
+            mistake++;
+        }
     }
+
+    return new TestResultDto
+    {
+        Correct = correct,
+        Mistake = mistake
+    };
+}
 }

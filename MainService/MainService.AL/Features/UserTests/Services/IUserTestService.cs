@@ -8,7 +8,7 @@ namespace MainService.AL.Features.UserTests.Services;
 public interface IUserTestService
 {
     Task<IEnumerable<UserTest>> GetAllByUserIdAsync(Guid userId, CancellationToken cancellationToken);
-    Task<ResponseUserTestDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<ResponseUserTestDto?> GetByIdAsync(string id, CancellationToken cancellationToken);
     Task<PaginatedList<ResponseUserTestDto>> GetAllAsync(int pageIndex, int pageSize, CancellationToken cancellationToken);
     Task<PaginatedList<ResponseUserTestDto>> GetAllWithUserIdAsync(Guid userId, int pageIndex, int pageSize, CancellationToken cancellationToken);
     Task<ResponseUserTestDto> CreateAsync(RequestUserTestDto dto, Guid userId, CancellationToken cancellationToken);

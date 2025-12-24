@@ -50,9 +50,9 @@ namespace MainService.PL.Features.UserWord
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddUserWord([FromBody] RequestUserWordDto dto, CancellationToken cancellationToken)
         {
-            dto.UserId = User.GetUserId();
+            var userId = User.GetUserId();
 
-            var created = await _userWordService.CreateAsync(dto, cancellationToken);
+            var created = await _userWordService.CreateAsync(dto, userId, cancellationToken);
             return Ok(created);
         }
         

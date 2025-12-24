@@ -6,7 +6,7 @@ namespace MainService.AL.Features.Tests.Services;
 
 public interface ITestService 
 {
-    public Task<(int correct, int mistake)> CheckTest(string testId, UserAnswerDto userTest, CancellationToken cancellationToken);
+    Task<TestResultDto> CheckTest(string testId, UserTestSubmissionDto submission, CancellationToken cancellationToken);
     public Task<ActiveTestDto> GetActiveTest(string testId, CancellationToken cancellationToken);
     Task<Test?> GetByIdAsync(string id, CancellationToken cancellationToken);
     Task<IEnumerable<Test>> GetAllAsync(CancellationToken cancellationToken);

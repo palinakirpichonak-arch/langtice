@@ -32,12 +32,12 @@ namespace MainService.PL.Features.UserTests
             return Ok(tests);
         }
         
-        [HttpGet("{testId}")]
+        [HttpGet("testId")]
         [ValidateParameters(nameof(id))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetUserTestById(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetUserTestById(string id, CancellationToken cancellationToken)
         {
             var test = await _userTestService.GetByIdAsync(id, cancellationToken);
             return Ok(test);
