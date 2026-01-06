@@ -2,8 +2,8 @@
 using MainService.AL.Features.UserWords.DTO.Request;
 using MainService.AL.Features.UserWords.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
-using MainService.DAL.Data.UserWord;
-using MainService.DAL.Features.UserWord;
+using MainService.DAL.Models.UserWordModel;
+using MainService.DAL.Repositories.UserWords;
 using Mapster;
 
 namespace MainService.AL.Features.UserWords.Services;
@@ -31,7 +31,8 @@ public class UserWordService : IUserWordService
             filter: uw => uw.UserId == userId,
             pageIndex: pageIndex,
             pageSize: pageSize,
-            tracking: false, cancellationToken: cancellationToken);
+            tracking: false, cancellationToken: cancellationToken,
+            includes: uw => uw.Word);
 
         var userWordDtos = entities.Adapt<List<UserWordDto>>();
 
@@ -47,7 +48,8 @@ public class UserWordService : IUserWordService
         var entities = await _userWordRepository.GetAsync(
             filter: uw => uw.UserId == userId && uw.WordId == wordId,
             tracking: false,
-            cancellationToken: cancellationToken);
+            cancellationToken: cancellationToken,
+            includes: uw => uw.Word);
 
         var entity = entities.FirstOrDefault();
         if (entity is null)
@@ -63,16 +65,23 @@ public class UserWordService : IUserWordService
         };
     }
 
-    public async Task<ResponseUserWordDto> CreateAsync(RequestUserWordDto dto, CancellationToken cancellationToken)
+    public async Task<ResponseUserWordDto> CreateAsync(RequestUserWordDto dto, Guid userId, CancellationToken cancellationToken)
     {
         var entity = dto.Adapt<UserWord>();
+        entity.UserId = userId;
         entity.AddedAt = DateTime.UtcNow;
 
         _userWordRepository.AddItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        var userWordDto = entity.Adapt<UserWordDto>();
-        var paginated = new List<UserWordDto> {userWordDto};
+        var saved = (await _userWordRepository.GetAsync(
+            filter: uw => uw.UserId == entity.UserId && uw.WordId == entity.WordId,
+            tracking: false,
+            cancellationToken: cancellationToken,
+            includes: uw => uw.Word)).FirstOrDefault();
+
+        var userWordDto = (saved ?? entity).Adapt<UserWordDto>();
+        var paginated = new List<UserWordDto> { userWordDto };
 
         return new ResponseUserWordDto
         {

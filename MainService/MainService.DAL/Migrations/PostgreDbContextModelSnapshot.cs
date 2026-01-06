@@ -17,12 +17,12 @@ namespace MainService.DAL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.9")
+                .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("MainService.DAL.Features.Courses.Course", b =>
+            modelBuilder.Entity("MainService.DAL.Models.CoursesModel.Course", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -49,7 +49,7 @@ namespace MainService.DAL.Migrations
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("MainService.DAL.Features.Languages.Language", b =>
+            modelBuilder.Entity("MainService.DAL.Models.LanguagesModel.Language", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -66,7 +66,7 @@ namespace MainService.DAL.Migrations
                     b.ToTable("Languages");
                 });
 
-            modelBuilder.Entity("MainService.DAL.Features.Lessons.Lesson", b =>
+            modelBuilder.Entity("MainService.DAL.Models.LessonsModel.Lesson", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -99,7 +99,7 @@ namespace MainService.DAL.Migrations
                     b.ToTable("Lessons");
                 });
 
-            modelBuilder.Entity("MainService.DAL.Features.Translations.Translation", b =>
+            modelBuilder.Entity("MainService.DAL.Models.TranslationsModel.Translation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -126,7 +126,7 @@ namespace MainService.DAL.Migrations
                     b.ToTable("Translations");
                 });
 
-            modelBuilder.Entity("MainService.DAL.Features.UserCourse.UserCourse", b =>
+            modelBuilder.Entity("MainService.DAL.Models.UserCourseModel.UserCourse", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -141,7 +141,7 @@ namespace MainService.DAL.Migrations
                     b.ToTable("UserCourses");
                 });
 
-            modelBuilder.Entity("MainService.DAL.Features.UserInfo.UserInfo", b =>
+            modelBuilder.Entity("MainService.DAL.Models.UserInfoModel.UserInfo", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -173,7 +173,42 @@ namespace MainService.DAL.Migrations
                     b.ToTable("UserInfo");
                 });
 
-            modelBuilder.Entity("MainService.DAL.Features.UserTest.UserTest", b =>
+            modelBuilder.Entity("MainService.DAL.Models.UserStreakModel.UserStreak", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("CurrentStreakDays")
+                        .HasColumnType("integer");
+
+                    b.Property<DateOnly?>("LastActiveDate")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime?>("LastEveningNotificationAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("LastMorningNotificationAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserStreaks");
+                });
+
+            modelBuilder.Entity("MainService.DAL.Models.UserTestModel.UserTest", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -200,7 +235,7 @@ namespace MainService.DAL.Migrations
                     b.ToTable("UserTests");
                 });
 
-            modelBuilder.Entity("MainService.DAL.Features.UserWord.UserWord", b =>
+            modelBuilder.Entity("MainService.DAL.Models.UserWordModel.UserWord", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -218,7 +253,7 @@ namespace MainService.DAL.Migrations
                     b.ToTable("UserWords");
                 });
 
-            modelBuilder.Entity("MainService.DAL.Features.Words.Word", b =>
+            modelBuilder.Entity("MainService.DAL.Models.WordsModel.Word", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -241,15 +276,15 @@ namespace MainService.DAL.Migrations
                     b.ToTable("Words");
                 });
 
-            modelBuilder.Entity("MainService.DAL.Features.Courses.Course", b =>
+            modelBuilder.Entity("MainService.DAL.Models.CoursesModel.Course", b =>
                 {
-                    b.HasOne("MainService.DAL.Features.Languages.Language", "BaseLanguage")
+                    b.HasOne("MainService.DAL.Models.LanguagesModel.Language", "BaseLanguage")
                         .WithMany()
                         .HasForeignKey("BaseLanguageId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("MainService.DAL.Features.Languages.Language", "LearningLanguage")
+                    b.HasOne("MainService.DAL.Models.LanguagesModel.Language", "LearningLanguage")
                         .WithMany()
                         .HasForeignKey("LearningLanguageId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -260,9 +295,9 @@ namespace MainService.DAL.Migrations
                     b.Navigation("LearningLanguage");
                 });
 
-            modelBuilder.Entity("MainService.DAL.Features.Lessons.Lesson", b =>
+            modelBuilder.Entity("MainService.DAL.Models.LessonsModel.Lesson", b =>
                 {
-                    b.HasOne("MainService.DAL.Features.Courses.Course", "Course")
+                    b.HasOne("MainService.DAL.Models.CoursesModel.Course", "Course")
                         .WithMany("Lessons")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -271,19 +306,19 @@ namespace MainService.DAL.Migrations
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("MainService.DAL.Features.Translations.Translation", b =>
+            modelBuilder.Entity("MainService.DAL.Models.TranslationsModel.Translation", b =>
                 {
-                    b.HasOne("MainService.DAL.Features.Courses.Course", "Course")
+                    b.HasOne("MainService.DAL.Models.CoursesModel.Course", "Course")
                         .WithMany()
                         .HasForeignKey("CourseId");
 
-                    b.HasOne("MainService.DAL.Features.Words.Word", "FromWord")
+                    b.HasOne("MainService.DAL.Models.WordsModel.Word", "FromWord")
                         .WithMany()
                         .HasForeignKey("FromWordId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("MainService.DAL.Features.Words.Word", "ToWord")
+                    b.HasOne("MainService.DAL.Models.WordsModel.Word", "ToWord")
                         .WithMany()
                         .HasForeignKey("ToWordId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -296,9 +331,9 @@ namespace MainService.DAL.Migrations
                     b.Navigation("ToWord");
                 });
 
-            modelBuilder.Entity("MainService.DAL.Features.UserCourse.UserCourse", b =>
+            modelBuilder.Entity("MainService.DAL.Models.UserCourseModel.UserCourse", b =>
                 {
-                    b.HasOne("MainService.DAL.Features.Courses.Course", "Course")
+                    b.HasOne("MainService.DAL.Models.CoursesModel.Course", "Course")
                         .WithMany("UserCourses")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -307,9 +342,9 @@ namespace MainService.DAL.Migrations
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("MainService.DAL.Features.UserWord.UserWord", b =>
+            modelBuilder.Entity("MainService.DAL.Models.UserWordModel.UserWord", b =>
                 {
-                    b.HasOne("MainService.DAL.Features.Words.Word", "Word")
+                    b.HasOne("MainService.DAL.Models.WordsModel.Word", "Word")
                         .WithMany("UserWords")
                         .HasForeignKey("WordId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -318,9 +353,9 @@ namespace MainService.DAL.Migrations
                     b.Navigation("Word");
                 });
 
-            modelBuilder.Entity("MainService.DAL.Features.Words.Word", b =>
+            modelBuilder.Entity("MainService.DAL.Models.WordsModel.Word", b =>
                 {
-                    b.HasOne("MainService.DAL.Features.Languages.Language", "Language")
+                    b.HasOne("MainService.DAL.Models.LanguagesModel.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -329,14 +364,14 @@ namespace MainService.DAL.Migrations
                     b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("MainService.DAL.Features.Courses.Course", b =>
+            modelBuilder.Entity("MainService.DAL.Models.CoursesModel.Course", b =>
                 {
                     b.Navigation("Lessons");
 
                     b.Navigation("UserCourses");
                 });
 
-            modelBuilder.Entity("MainService.DAL.Features.Words.Word", b =>
+            modelBuilder.Entity("MainService.DAL.Models.WordsModel.Word", b =>
                 {
                     b.Navigation("UserWords");
                 });

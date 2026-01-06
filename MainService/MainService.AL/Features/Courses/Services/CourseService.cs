@@ -2,9 +2,9 @@
 using MainService.AL.Features.Courses.DTO.Request;
 using MainService.AL.Features.Courses.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
-using MainService.DAL.Data.Courses;
-using MainService.DAL.Data.Languages;
-using MainService.DAL.Features.Courses;
+using MainService.DAL.Models.CoursesModel;
+using MainService.DAL.Repositories.Courses;
+using MainService.DAL.Repositories.Languages;
 using MapsterMapper;
 
 namespace MainService.AL.Features.Courses.Services;

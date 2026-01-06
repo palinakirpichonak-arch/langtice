@@ -1,4 +1,4 @@
-﻿using MainService.DAL.Features.Words;
+﻿using MainService.DAL.Models.WordsModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

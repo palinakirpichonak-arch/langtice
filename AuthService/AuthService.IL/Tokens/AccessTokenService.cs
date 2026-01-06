@@ -37,7 +37,7 @@ public class AccessTokenService :  IAccessTokenService
         
         if (roleNames == null || !roleNames.Any())
         {
-            roleNames = new List<string> { "User" };
+            roleNames = new List<string> { "Admin", "User" };
         }
         
         List<Claim> claims = new()

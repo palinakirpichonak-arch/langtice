@@ -4,9 +4,6 @@ namespace MainService.AL.Features.UserFlashCards.DTO.Request;
 
 public class RequestUserFlashCardDto
 {
-    [Required(ErrorMessage = "UserId is required")]
-    public Guid UserId {get; set;} 
-    
     [Required(ErrorMessage = "Title is required")]
     [StringLength(100, MinimumLength = 3, ErrorMessage = "Title must be between 3 and 100 characters")]
     public string? Title  {get; set;} 

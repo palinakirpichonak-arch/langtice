@@ -33,7 +33,7 @@ public class SessionStore : ISessionStore
         var data = await _redisDb.StringGetAsync(key);
         if (data.IsNullOrEmpty) return null;
 
-        return JsonSerializer.Deserialize<RefreshTokenState>(data!)!;
+        return JsonSerializer.Deserialize<RefreshTokenState>(data.ToString()!)!;
     }
 
     public async ValueTask MarkRotatedAsync(string jti, CancellationToken ct)
@@ -43,7 +43,7 @@ public class SessionStore : ISessionStore
         var data = await _redisDb.StringGetAsync(key);
         if (data.IsNullOrEmpty) return;
         
-        var rec = JsonSerializer.Deserialize<RefreshTokenState>(data!)!;
+        var rec = JsonSerializer.Deserialize<RefreshTokenState>(data.ToString()!)!;
         rec.Rotated = true;
         
         var ttl = await _redisDb.KeyTimeToLiveAsync(key) ?? TimeSpan.FromHours(1);
@@ -56,8 +56,10 @@ public class SessionStore : ISessionStore
 
         foreach (var endpoint in endpoints)
         {
-            var server = _redisConnection.GetServer(endpoint);
-            await foreach (var key in server.KeysAsync(pattern: "refresh:*").WithCancellation(ct))
+            var data = await _redisDb.StringGetAsync(key);
+            if (data.IsNullOrEmpty) continue;
+            var rec = JsonSerializer.Deserialize<RefreshTokenState>(data.ToString()!)!;
+            if (rec.FamilyId == familyId)
             {
                 var data = await _redisDb.StringGetAsync(key);
                 if (data.IsNullOrEmpty) continue;

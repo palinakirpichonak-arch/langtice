@@ -8,10 +8,30 @@ using MainService.PL.Services;
 using NLog;
 using NLog.Web;
 
-var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
-logger.Debug("Init MainService");
+var builder = WebApplication.CreateBuilder(args);
+builder.Logging.AddConsole();
+var services = builder.Services;
 
-try
+services
+    .ConfigureOptions(builder.Configuration)
+    .ConfigureHttpClient()
+    .ConfigureResilience()
+    .ConfigureDbContext()
+    .ConfigureMigrations()
+    .ConfigureUnitOfWork()
+    .AddInfrastructureServices()
+    .ConfigureHostedServices()
+    .ConfigureRepositories()
+    .ConfigureApplicationServices()
+    .AddApiAuthentication(builder.Configuration)
+    .ConfigureControllers()
+    .ConfigureMappers()
+    .ConfigureSwagger();
+
+var app = builder.Build();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+if (app.Environment.IsDevelopment())
 {
     var builder = WebApplication.CreateBuilder(args);
     builder.Logging.AddConsole();

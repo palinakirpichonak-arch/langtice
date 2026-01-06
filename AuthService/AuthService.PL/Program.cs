@@ -1,58 +1,41 @@
 using AuthService.AL.Extensions;
 using AuthService.DAL.Extensions;
 using AuthService.IL.Extensions;
+using AuthService.IL.gRPC;
 using AuthService.PL.Auth;
 using AuthService.PL.Extensions;
-using Serilog;
-using Serilog.Formatting.Compact;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateBootstrapLogger();
 
-try
+builder.Services.AddGrpc();
+builder.Services.AddConnectExternalsExtension(builder.Configuration);
+builder.Services.AddDataAccess();
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.WebHost.ConfigureKestrel(options =>
 {
-
-    Log.Information("Init AuthService");
-
-    var builder = WebApplication.CreateBuilder(args);
-    
-    builder.Services.AddSerilog((services, lc) => lc
-        .ReadFrom.Configuration(builder.Configuration)
-        .ReadFrom.Services(services)
-        .Enrich.FromLogContext()
-        .WriteTo.Console(new RenderedCompactJsonFormatter()));
-    
-    builder.Services.AddConnectExternalsExtension(builder.Configuration);
-    builder.Services.AddDataAccess();
-    builder.Services.AddInfrastructure(builder.Configuration);
-    builder.Services.AddApplication();
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
-
-    var app = builder.Build();
-
-    app.UseSerilogRequestLogging();
-    
-    if (app.Environment.IsDevelopment())
+    options.ListenAnyIP(5001, listenOptions =>
     {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+        listenOptions.Protocols = HttpProtocols.Http1;
+    });
+    
+    options.ListenAnyIP(7071, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http2;
+    });
+});
 
-    app.MapAuthEndpoints();
-
-    app.Run();
+var app = builder.Build();
 
 }
 
-catch (Exception ex)
-{
-    Log.Fatal(ex,"Application terminated unexpectedly");
-}
-finally
-{
-    Log.CloseAndFlush();
-}
-
+app.MapAuthEndpoints();
+app.MapGrpcService<GrpcServer>();
+app.Run();
 

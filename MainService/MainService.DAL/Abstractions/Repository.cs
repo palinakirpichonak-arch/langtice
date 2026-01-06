@@ -1,6 +1,5 @@
 ﻿using System.Linq.Expressions;
 using MainService.DAL.Context.PostgreSql;
-using MainService.DAL.Features.Courses;
 using Microsoft.EntityFrameworkCore;
 
 namespace MainService.DAL.Abstractions;

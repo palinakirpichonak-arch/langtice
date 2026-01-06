@@ -1,6 +1,6 @@
 ﻿using MainService.DAL.Configurations.MongoDb;
-using MainService.DAL.Features.Test;
-using MainService.DAL.Features.UserFlashCard;
+using MainService.DAL.Models.TestModel;
+using MainService.DAL.Models.UserFlashCardModel;
 using MongoDB.Driver;
 
 namespace MainService.DAL.Context.MongoDb
@@ -9,7 +9,7 @@ namespace MainService.DAL.Context.MongoDb
     {
         private readonly IMongoDatabase _database;
         public IMongoCollection<Test> Tests { get; private set; }
-        public IMongoCollection<UserFlashCards> Flashcards { get; private set; }
+        public IMongoCollection<UserFlashCard> Flashcards { get; private set; }
 
         public MongoDbContext(string connectionString, string databaseName)
         {

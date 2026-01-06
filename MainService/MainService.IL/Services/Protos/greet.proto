@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option csharp_namespace = "MainService.IL.Services.Protos";
+
+package Sender;
+
+service EmailSender {
+
+    rpc SendEmail (EmailRequest) returns (EmailReply);
+}
+
+message EmailRequest {
+    string user_id = 1;
+}
+
+message EmailReply {
+    string email = 1;
+}

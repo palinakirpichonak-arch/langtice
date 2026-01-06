@@ -2,9 +2,9 @@
 using MainService.AL.Features.Lessons.DTO.Request;
 using MainService.AL.Features.Lessons.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
-using MainService.DAL.Data.Lessons;
-using MainService.DAL.Data.Tests;
-using MainService.DAL.Features.Lessons;
+using MainService.DAL.Models.LessonsModel;
+using MainService.DAL.Repositories.Lessons;
+using MainService.DAL.Repositories.Tests;
 using MapsterMapper;
 
 namespace MainService.AL.Features.Lessons.Services;

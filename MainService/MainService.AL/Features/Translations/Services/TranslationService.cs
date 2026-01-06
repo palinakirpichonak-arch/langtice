@@ -3,8 +3,8 @@ using MainService.AL.Features.Translations.DTO.Request;
 using MainService.AL.Features.Translations.DTO.Response;
 using MainService.AL.Features.Words.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
-using MainService.DAL.Data.Translations;
-using MainService.DAL.Features.Translations;
+using MainService.DAL.Models.TranslationsModel;
+using MainService.DAL.Repositories.Translations;
 using MapsterMapper;
 
 namespace MainService.AL.Features.Translations.Services;
