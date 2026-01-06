@@ -3,7 +3,7 @@ using MainService.AL.Features.Languages.DTO.Request;
 using MainService.AL.Features.Languages.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Models.LanguagesModel;
-using MainService.DAL.Repositories.Language_;
+using MainService.DAL.Repositories.Languages;
 using MapsterMapper;
 
 namespace MainService.AL.Features.Languages.Services;

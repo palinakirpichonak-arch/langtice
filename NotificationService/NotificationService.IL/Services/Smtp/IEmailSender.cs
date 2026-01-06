@@ -4,5 +4,5 @@ namespace NotificationService.IL.Services.Smtp;
 
 public interface IEmailSender
 {
-    Task SendEmail(string email, MessageType type, string body,  params object[] parameters);
+    Task SendEmail(string email, MessageNotificationType notificationType, string body,  params object[] parameters);
 }

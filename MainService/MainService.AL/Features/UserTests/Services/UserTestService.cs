@@ -9,7 +9,7 @@ using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Abstractions;
 using MainService.DAL.Models.TestModel;
 using MainService.DAL.Models.UserTestModel;
-using MainService.DAL.Repositories.Language_;
+using MainService.DAL.Repositories.Languages;
 using MainService.DAL.Repositories.Tests;
 using MainService.DAL.Repositories.UserTests;
 using MainService.DAL.Repositories.UserWords;
@@ -58,10 +58,10 @@ public class UserTestService : IUserTestService
         return userTests;
     }
 
-    public async Task<ResponseUserTestDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<ResponseUserTestDto?> GetByIdAsync(string id, CancellationToken cancellationToken)
     {
         var entity = (await _userTestRepository.GetAsync(
-            filter: ut => ut.Id == id,
+            filter: ut => ut.Id.ToString() == id,
             tracking: false,
             cancellationToken: cancellationToken))
             .FirstOrDefault();
@@ -100,14 +100,15 @@ public class UserTestService : IUserTestService
         var list = entities.Select(_mapper.Map<ResponseUserTestDto>).ToList();
         return new PaginatedList<ResponseUserTestDto>(list, pageIndex, pageSize);
     }
-
-    public async Task<ResponseUserTestDto> CreateAsync(RequestUserTestDto dto, CancellationToken cancellationToken)
+    public async Task<ResponseUserTestDto> CreateAsync(RequestUserTestDto dto, Guid userId, CancellationToken cancellationToken)
     {
         var userWords = (await _userWordRepository.GetAsync(
-            filter: uw => uw.UserId == dto.UserId,
+            filter: uw => uw.UserId == userId,
             pageIndex: 1,
             pageSize: dto.Count,
-            tracking: false, cancellationToken: cancellationToken))
+            tracking: false, 
+            cancellationToken: cancellationToken,
+            includes: uw => uw.Word))
             .ToList();
 
         if (!userWords.Any())
@@ -128,11 +129,14 @@ public class UserTestService : IUserTestService
         );
 
         var wordsList = string.Join(", ", wordLanguageMap.Select(kv => $"'{kv.Key}' ({kv.Value})"));
+        
+        System.Console.WriteLine(wordsList);
+        
         var prompt =
             "Generate vocabulary test questions for the following words. " +
             "For each word, generate 2 fill-in-the-blank sentences in the specified language, " +
-            "each with 3 answer options (one correct). " +
-            "Return a JSON object where each key is the word and each value is an array of questions.\n" +
+            "each with 3 answer options (one correct). Don't use words with close context in one sentence (for example, if the cat and dog or other words can be both correct in one sentence)" +
+            "Return a plain formatted JSON object only (no sentences in the beggining) where each key is the word and each value is an array of questions.\n" +
             $"Example: {{ \"Hello\": [{{\"Sentence\":..., \"AnswerOptions\": [...], \"CorrectAnswer\": ...}}, ...] }}\n" +
             $"Words: {wordsList}";
 
@@ -147,6 +151,8 @@ public class UserTestService : IUserTestService
         {
             generatedTests = new Dictionary<string, List<Question>>();
         }
+
+         System.Console.WriteLine(generatedTests);
 
         var questions = new List<Question>();
         int questionNumber = 1;
@@ -184,7 +190,7 @@ public class UserTestService : IUserTestService
         var userTest = new UserTest
         {
             Id = Guid.NewGuid(),
-            UserId = dto.UserId,
+            UserId = userId,
             Name = dto.Name,
             Description = dto.Description,
             OrderNum = dto.OrderNum,

@@ -1,11 +1,12 @@
-﻿#nullable disable
-
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
 
 namespace MainService.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class InitMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -38,6 +39,24 @@ namespace MainService.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserInfo", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserStreaks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CurrentStreakDays = table.Column<int>(type: "integer", nullable: false),
+                    LastActiveDate = table.Column<DateOnly>(type: "date", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastMorningNotificationAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastEveningNotificationAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserStreaks", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -244,6 +263,12 @@ namespace MainService.DAL.Migrations
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserStreaks_UserId",
+                table: "UserStreaks",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserWords_WordId",
                 table: "UserWords",
                 column: "WordId");
@@ -274,6 +299,9 @@ namespace MainService.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserInfo");
+
+            migrationBuilder.DropTable(
+                name: "UserStreaks");
 
             migrationBuilder.DropTable(
                 name: "UserTests");

@@ -11,8 +11,9 @@ public static class HostedServicesConfiguration
     {
         services.AddHostedService<MigrationHostedService>();
         services.AddHostedService<MongoDbHostedService>();
-        services.AddHostedService<RabbitSenderService>();
-       
+        services.AddHostedService<FlashCardNotificationService>();
+        services.AddHostedService<StreakReminderService>();
+        
         return services;
     }
 }

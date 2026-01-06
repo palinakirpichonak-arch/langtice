@@ -125,7 +125,7 @@ namespace NotificationService.IL.Services.RabbitMq
                     {
                         await emailSender.SendEmail(
                             fullEmail.Email,
-                            MessageType.Expiration,
+                            MessageNotificationType.ExpirationNotification,
                             fullEmail.MessageBody ?? string.Empty
                         );
                     }

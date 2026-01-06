@@ -3,10 +3,7 @@
 namespace MainService.AL.Features.UserTests.DTO.Request;
 
 public class RequestUserTestDto
-{
-    [Required(ErrorMessage = "UserId is required")]
-    public Guid UserId { get; set; }
-    
+{ 
     [Required(ErrorMessage = "UserTest name is required")]
     [StringLength(25, MinimumLength = 3, ErrorMessage = "Name must be between 3 and 25 characters")]
     public string Name { get; set; } = null!;

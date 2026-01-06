@@ -4,6 +4,7 @@ using MainService.DAL.Models.LanguagesModel;
 using MainService.DAL.Models.LessonsModel;
 using MainService.DAL.Models.TranslationsModel;
 using MainService.DAL.Models.UserCourseModel;
+using MainService.DAL.Models.UserStreakModel;
 using MainService.DAL.Models.UserTestModel;
 using MainService.DAL.Models.UserWordModel;
 using MainService.DAL.Models.WordsModel;
@@ -21,6 +22,7 @@ public class PostgreDbContext(DbContextOptions<PostgreDbContext> options) : DbCo
     public DbSet<UserCourse> UserCourses { get; set; }
     public DbSet<UserTest> UserTests { get; set; }
     public DbSet<Translation> Translations { get; set; }
+    public DbSet<UserStreak> UserStreaks {get; set;}
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {}
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

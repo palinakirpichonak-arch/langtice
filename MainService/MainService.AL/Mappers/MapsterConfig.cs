@@ -18,7 +18,6 @@ public static class MapsterConfig
     public static void Configure()
     {
         TypeAdapterConfig<RequestUserWordDto, UserWord>.NewConfig()
-            .Map(dest => dest.UserId, src => src.UserId)
             .Map(dest => dest.WordId, src => src.WordId)
             .Map(dest => dest.AddedAt, src => DateTime.UtcNow);
         TypeAdapterConfig<UserWord, ResponseUserWordDto>.NewConfig()

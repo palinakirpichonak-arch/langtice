@@ -6,6 +6,7 @@ using MainService.AL.Features.Tests.Services;
 using MainService.AL.Features.Translations.Services;
 using MainService.AL.Features.UserCourse.Services;
 using MainService.AL.Features.UserFlashCards.Services;
+using MainService.AL.Features.UserStreaks;
 using MainService.AL.Features.UserTests.Services;
 using MainService.AL.Features.UserWords.Services;
 using MainService.AL.Features.Words.Services;
@@ -28,6 +29,7 @@ public static class ApplicationServicesConfiguration
         services.AddScoped<IUserFlashCardsService, UserFlashCardsService>();
         services.AddScoped<IUserTestService, UserTestService>();
         services.AddScoped<ILlmService, LlmService>();
+        services.AddScoped<IUserStreakService, UserStreakService>();
         
         return services;
     }
