@@ -1,17 +1,13 @@
-using RabbitMQ.Client;
+using NotificationService.PL.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
+builder.Logging.AddConsole();
 
-builder.Services.AddSingleton(_ =>
-{
-    var uri = new Uri("amqp://guest:guest@rabbit:5672/CUSTOM_HOST");
-    return new ConnectionFactory
-    {
-        Uri = uri,
-    };
-});
+builder.Services
+    .AddOptions(builder.Configuration)
+    .AddInfrastructureServices()
+    .AddBackgroundServices();
 
 var app = builder.Build();
 

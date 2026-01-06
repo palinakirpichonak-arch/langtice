@@ -1,12 +1,12 @@
 ﻿using MainService.AL.Features.Tests.DTO.Request;
 using MainService.AL.Features.Tests.DTO.Response;
-using MainService.DAL.Features.Test;
+using MainService.DAL.Models.TestModel;
 
 namespace MainService.AL.Features.Tests.Services;
 
 public interface ITestService 
 {
-    public Task<(int correct, int mistake)> CheckTest(string testId, UserAnswerDto userTest, CancellationToken cancellationToken);
+    Task<TestResultDto> CheckTest(string testId, UserTestSubmissionDto submission, CancellationToken cancellationToken);
     public Task<ActiveTestDto> GetActiveTest(string testId, CancellationToken cancellationToken);
     Task<Test?> GetByIdAsync(string id, CancellationToken cancellationToken);
     Task<IEnumerable<Test>> GetAllAsync(CancellationToken cancellationToken);

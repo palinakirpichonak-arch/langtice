@@ -1,5 +1,7 @@
-﻿using MainService.BLL.Services.RabbitMq;
+﻿using MainService.BLL.Services.gRPC;
+using MainService.BLL.Services.RabbitMq;
 using MainService.PL.Services;
+using MainService.PL.Services.gRPC;
 
 namespace MainService.PL.Extensions;
 
@@ -9,8 +11,9 @@ public static class HostedServicesConfiguration
     {
         services.AddHostedService<MigrationHostedService>();
         services.AddHostedService<MongoDbHostedService>();
-        services.AddHostedService<ExternalApiPollingService>();
-       
+        services.AddHostedService<FlashCardNotificationService>();
+        services.AddHostedService<StreakReminderService>();
+        
         return services;
     }
 }

@@ -7,27 +7,25 @@ ENV ASPNETCORE_URLS=http://+:5001 \
 
 EXPOSE 5001
 
-
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-COPY ["AuthService.PL/AuthService.PL.csproj", "AuthService.PL/"]
-COPY ["AuthService.AL/AuthService.AL.csproj", "AuthService.AL/"]
-COPY ["AuthService.IL/AuthService.IL.csproj", "AuthService.IL/"]
-COPY ["AuthService.DAL/AuthService.DAL.csproj", "AuthService.DAL/"]
+COPY ["AuthService/AuthService.PL/AuthService.PL.csproj", "AuthService/AuthService.PL/"]
+COPY ["AuthService/AuthService.AL/AuthService.AL.csproj", "AuthService/AuthService.AL/"]
+COPY ["AuthService/AuthService.IL/AuthService.IL.csproj", "AuthService/AuthService.IL/"]
+COPY ["AuthService/AuthService.DAL/AuthService.DAL.csproj", "AuthService/AuthService.DAL/"]
+COPY ["Shared/Shared.csproj", "Shared/"]
 
-RUN dotnet restore "AuthService.PL/AuthService.PL.csproj"
+RUN dotnet restore "AuthService/AuthService.PL/AuthService.PL.csproj"
 
 COPY . .
 
-WORKDIR "/src/AuthService.PL"
+WORKDIR "/src/AuthService/AuthService.PL"
 RUN dotnet build "AuthService.PL.csproj" -c $BUILD_CONFIGURATION -o /app/build
-
 
 FROM build AS publish
 RUN dotnet publish "AuthService.PL.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
 
 FROM base AS final
 WORKDIR /app

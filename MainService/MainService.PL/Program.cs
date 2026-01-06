@@ -16,6 +16,7 @@ services
     .ConfigureDbContext()
     .ConfigureMigrations()
     .ConfigureUnitOfWork()
+    .AddInfrastructureServices()
     .ConfigureHostedServices()
     .ConfigureRepositories()
     .ConfigureApplicationServices()

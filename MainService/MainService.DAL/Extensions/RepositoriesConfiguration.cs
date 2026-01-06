@@ -1,18 +1,19 @@
 ﻿using MainService.DAL.Abstractions;
 using MainService.DAL.Constants;
 using MainService.DAL.Context.MongoDb;
-using MainService.DAL.Data.Courses;
-using MainService.DAL.Data.Languages;
-using MainService.DAL.Data.Lessons;
-using MainService.DAL.Data.Tests;
-using MainService.DAL.Data.Translations;
-using MainService.DAL.Data.UserCourses;
-using MainService.DAL.Data.UserFlashCards;
-using MainService.DAL.Data.UserTest;
-using MainService.DAL.Data.UserWord;
-using MainService.DAL.Data.Words;
-using MainService.DAL.Features.Test;
-using MainService.DAL.Features.UserFlashCard;
+using MainService.DAL.Models.TestModel;
+using MainService.DAL.Models.UserFlashCardModel;
+using MainService.DAL.Repositories.Courses;
+using MainService.DAL.Repositories.Languages;
+using MainService.DAL.Repositories.Lessons;
+using MainService.DAL.Repositories.Tests;
+using MainService.DAL.Repositories.Translations;
+using MainService.DAL.Repositories.UserCourses;
+using MainService.DAL.Repositories.UserFlashCards;
+using MainService.DAL.Repositories.UserStreaks;
+using MainService.DAL.Repositories.UserTests;
+using MainService.DAL.Repositories.UserWords;
+using MainService.DAL.Repositories.Words;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MainService.DAL.Extensions;
@@ -31,10 +32,12 @@ public static class RepositoriesConfiguration
         services.AddScoped<ITestRepository, TestRepository>();
         services.AddScoped<IUserTestRepository, UserTestRepository>();
         services.AddScoped<IUserFlashCardsRepository, UserFlashCardsRepository>();
+        services.AddScoped<IUserStreakRepository, UserStreakRepository>();
+        
         services.AddScoped<IMongoRepository<Test, string>>(sp =>
             new MongoRepository<Test, string>(sp.GetRequiredService<MongoDbContext>(), MongoDbCollections.TestsCollectionName)); 
-        services.AddScoped<IMongoRepository<UserFlashCards, string>>(sp =>
-            new MongoRepository<UserFlashCards, string>(sp.GetRequiredService<MongoDbContext>(), MongoDbCollections.FlashCardsCollectionName));
+        services.AddScoped<IMongoRepository<UserFlashCard, string>>(sp =>
+            new MongoRepository<UserFlashCard, string>(sp.GetRequiredService<MongoDbContext>(), MongoDbCollections.FlashCardsCollectionName));
         
         return services;
     }

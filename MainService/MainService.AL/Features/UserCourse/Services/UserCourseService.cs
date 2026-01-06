@@ -2,7 +2,7 @@
 using MainService.AL.Features.UserCourse.DTO.Request;
 using MainService.AL.Features.UserCourse.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
-using MainService.DAL.Data.UserCourses;
+using MainService.DAL.Repositories.UserCourses;
 using MapsterMapper;
 
 namespace MainService.AL.Features.UserCourse.Services;
@@ -49,7 +49,7 @@ public class UserCourseService : IUserCourseService
 
     public async Task<ResponseUserCourseDto> CreateAsync(RequestUserCourseDto dto, CancellationToken cancellationToken)
     {
-        var entity = _mapper.Map<DAL.Features.UserCourse.UserCourse>(dto);
+        var entity = _mapper.Map<DAL.Models.UserCourseModel.UserCourse>(dto);
 
         _userCourseRepository.AddItem(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

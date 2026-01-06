@@ -1,4 +1,5 @@
 ﻿using MainService.BLL.Options;
+using Shared.Options;
 
 namespace MainService.PL.Extensions;
 
@@ -26,6 +27,11 @@ public static class OptionsConfiguration
         //LLM
         services.AddOptions<LlmOptions>()
             .Bind(configuration)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+        
+        services.AddOptions<RabbitMqOptions>()
+            .Bind(configuration.GetSection("RabbitMq")) 
             .ValidateDataAnnotations()
             .ValidateOnStart();
         
