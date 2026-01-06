@@ -1,24 +1,32 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-USER $APP_UID
+﻿FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
+USER root
 WORKDIR /app
+
+ENV ASPNETCORE_URLS=http://+:8080 \
+    ASPNETCORE_ENVIRONMENT=Development
+
 EXPOSE 8080
 EXPOSE 8081
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
+WORKDIR /src   
 
+COPY ["MainService/MainService.PL/MainService.PL.csproj", "MainService/MainService.PL/"]
+COPY ["MainService/MainService.AL/MainService.AL.csproj", "MainService/MainService.AL/"]
+COPY ["MainService/MainService.DAL/MainService.DAL.csproj", "MainService/MainService.DAL/"]
+COPY ["MainService/MainService.IL/MainService.IL.csproj", "MainService/MainService.IL/"]
 
-COPY ["MainService.PL/MainService.PL.csproj", "MainService.PL/"]
-COPY ["MainService.AL/MainService.AL.csproj", "MainService.AL/"]
-COPY ["MainService.IL/MainService.IL.csproj", "MainService.IL/"]
-COPY ["MainService.DAL/MainService.DAL.csproj", "MainService.DAL/"]
+COPY ["Shared/Shared.csproj", "Shared/"]
 
-RUN dotnet restore "MainService.PL/MainService.PL.csproj"
+RUN dotnet restore "MainService/MainService.PL/MainService.PL.csproj"
 
 COPY . .
 
-WORKDIR "/src/MainService.PL"
+WORKDIR "/src/MainService/MainService.PL"
 RUN dotnet build "MainService.PL.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
