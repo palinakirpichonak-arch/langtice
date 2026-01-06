@@ -1,6 +1,6 @@
 ﻿using MainService.DAL.Abstractions;
 using MainService.DAL.Constants;
-using MainService.DAL.Features.Test;
+using MainService.DAL.Models.TestModel;
 using MongoDB.Driver;
 
 namespace MainService.DAL.Configurations.MongoDb;

@@ -1,7 +1,6 @@
 using System.Security;
 using AuthService.AL.Features.Users.Dto;
 using AuthService.AL.Features.Users.Services;
-using AuthService.IL.Services;
 using AuthService.IL.Tokens;
 
 namespace AuthService.AL.Features;

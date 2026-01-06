@@ -93,11 +93,11 @@ public class TestController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SubmitTest(
-        string id,
-        [FromBody] UserAnswerDto userTest,
-        CancellationToken cancellationToken)
-    {
-        var result = await _testService.CheckTest(id, userTest, cancellationToken);
-        return Ok(result);
-    }
+    string id,
+    [FromBody] UserTestSubmissionDto submission,
+    CancellationToken cancellationToken)
+{
+    var result = await _testService.CheckTest(id, submission, cancellationToken);
+    return Ok(new {result});
+}
 }

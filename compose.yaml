@@ -3,40 +3,47 @@ services:
     container_name: main-service
     image: main-service
     env_file:
-      - .env
+        - .env
     build:
-      context: MainService/
-      dockerfile: Dockerfile
+        context: .
+        dockerfile: MainService/Dockerfile
     ports:
-      - "8080:8080"
+        - "8080:8080"
     depends_on:
-      main-postgres:
-        condition: service_healthy
-      mongo-db:
-        condition: service_healthy
+        main-postgres:
+            condition: service_healthy
+        mongo-db:
+            condition: service_healthy
+        rabbitmq:
+            condition: service_healthy
     environment:
-      PostgreHost: ${POSTGRES_HOST}
-      PostgrePort: ${POSTGRES_PORT}
-      PostgreDatabase: ${POSTGRES_DB}
-      PostgreUser: ${POSTGRES_USER}
-      PostgrePassword: ${POSTGRES_PASSWORD}
-      MongoConnection: ${MONGO_CONNECTION}
-      MongoDatabase: ${MONGO_DB}
-      ApiKey: ${API_KEY}
-      BaseUrl: ${BASE_URL}
-      Model: ${MODEL}
-      Issuer: ${ISSUER}
-      Audience: ${AUDIENCE}
-      AccessSecretKey: ${ACCESS_SECRET_KEY}
-      ASPNETCORE_ENVIRONMENT: Development
+        PostgreHost: ${POSTGRES_HOST}
+        PostgrePort: ${POSTGRES_PORT}
+        PostgreDatabase: ${POSTGRES_DB}
+        PostgreUser: ${POSTGRES_USER}
+        PostgrePassword: ${POSTGRES_PASSWORD}
+        MongoConnection: ${MONGO_CONNECTION}
+        MongoDatabase: ${MONGO_DB}
+        ApiKey: ${API_KEY}
+        BaseUrl: ${BASE_URL}
+        Model: ${MODEL}
+        Issuer: ${ISSUER}
+        Audience: ${AUDIENCE}
+        AccessSecretKey: ${ACCESS_SECRET_KEY}
+        RabbitMq__HostName: ${RABBITMQ_HOST}
+        RabbitMq__Port: ${RABBITMQ_PORT}
+        RabbitMq__UserName: ${RABBITMQ_USER_NAME}
+        RabbitMq__Password: ${RABBITMQ_PASSWORD}
+        RabbitMq__Exchange: ${RABBITMQ_EXCHANGE}
+        RabbitMq__Queue: ${RABBITMQ_QUEUE}
+        RabbitMq__RoutingKey: ${RABBITMQ_ROUTING_KEY}
       
-
   auth-service:
       container_name: auth-service
       image: auth-service
       build:
-          context: AuthService/
-          dockerfile: Dockerfile
+          context: .
+          dockerfile: AuthService/Dockerfile
       ports:
           - "5000:5001"
       depends_on:
@@ -57,6 +64,33 @@ services:
           RedisPort: ${REDIS_PORT}
           RedisPassword: ${REDIS_PASSWORD}
           RedisConnectionString: ${REDIS_CONNECTION}
+          
+  notification-service:
+      container_name: notification-service
+      build:
+          context: .
+          dockerfile: NotificationService/Dockerfile
+      env_file:
+          - .env
+      environment:
+          ASPNETCORE_ENVIRONMENT: Development
+          RabbitMq__HostName: ${RABBITMQ_HOST}
+          RabbitMq__Port: ${RABBITMQ_PORT}
+          RabbitMq__UserName: ${RABBITMQ_USER_NAME}
+          RabbitMq__Password: ${RABBITMQ_PASSWORD}
+          RabbitMq__Exchange: ${RABBITMQ_EXCHANGE}
+          RabbitMq__Queue: ${RABBITMQ_QUEUE}
+          RabbitMq__RoutingKey: ${RABBITMQ_ROUTING_KEY}
+          EmailSettings__Server: ${EMAIL_SERVER}
+          EmailSettings__Port: ${EMAIL_PORT}
+          EmailSettings__SenderName: ${EMAIL_SENDER_NAME}
+          EmailSettings__Email: ${EMAIL_ADDRESS}
+          EmailSettings__Password: ${EMAIL_PASSWORD}
+      depends_on:
+          rabbitmq:
+              condition: service_healthy
+      ports:
+          - "7777:7777"
 
   main-postgres:
     container_name: langtice-main-postgres
@@ -128,6 +162,22 @@ services:
           test: [ "CMD", "redis-cli", "ping" ]
           interval: 5s
           timeout: 3s
+          retries: 10
+        
+  rabbitmq:
+      image: rabbitmq:4-management
+      container_name: rabbitmq
+      restart: always
+      ports:
+          - "5672:5672"
+          - "15672:15672"
+      environment:
+          RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+          RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+      healthcheck:
+          test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
+          interval: 10s
+          timeout: 5s
           retries: 10
 
 volumes:

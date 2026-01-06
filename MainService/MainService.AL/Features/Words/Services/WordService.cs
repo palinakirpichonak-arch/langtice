@@ -4,11 +4,11 @@ using MainService.AL.Features.Words.DTO.Request;
 using MainService.AL.Features.Words.DTO.Response;
 using MainService.BLL.Services.UnitOfWork;
 using MainService.DAL.Abstractions;
-using MainService.DAL.Data.Courses;
-using MainService.DAL.Data.Translations;
-using MainService.DAL.Data.Words;
-using MainService.DAL.Features.Translations;
-using MainService.DAL.Features.Words;
+using MainService.DAL.Models.TranslationsModel;
+using MainService.DAL.Models.WordsModel;
+using MainService.DAL.Repositories.Courses;
+using MainService.DAL.Repositories.Translations;
+using MainService.DAL.Repositories.Words;
 using MapsterMapper;
 
 namespace MainService.AL.Features.Words.Services;

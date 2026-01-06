@@ -19,7 +19,7 @@ namespace MainService.PL.Features.UserWord
             _userWordService = service;
         }
         
-        [HttpGet("user/{userId}")]
+        [HttpGet("all")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -31,7 +31,7 @@ namespace MainService.PL.Features.UserWord
             return Ok(words);
         }
         
-        [HttpGet("{userId}/{wordId}")]
+        [HttpGet("{wordId}")]
         [ValidateParameters(nameof(wordId))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -50,13 +50,13 @@ namespace MainService.PL.Features.UserWord
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddUserWord([FromBody] RequestUserWordDto dto, CancellationToken cancellationToken)
         {
-            dto.UserId = User.GetUserId();
+            var userId = User.GetUserId();
 
-            var created = await _userWordService.CreateAsync(dto, cancellationToken);
+            var created = await _userWordService.CreateAsync(dto, userId, cancellationToken);
             return Ok(created);
         }
         
-        [HttpDelete("{userId}/{wordId}")]
+        [HttpDelete("{wordId}")]
         [ValidateParameters(nameof(wordId))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

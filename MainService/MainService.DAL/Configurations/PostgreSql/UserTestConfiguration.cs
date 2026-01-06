@@ -1,4 +1,4 @@
-﻿using MainService.DAL.Features.UserTest;
+﻿using MainService.DAL.Models.UserTestModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
