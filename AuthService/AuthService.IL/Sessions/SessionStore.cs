@@ -11,9 +11,9 @@ public class SessionStore : ISessionStore
     private readonly RedisOptions _options;
     private readonly IDatabase _redisDb;
 
-    public SessionStore(IConnectionMultiplexer redisOptions)
+    public SessionStore(IOptions<RedisOptions> redisOptions)
     {
-        _redisConnection = redisOptions;
+        _redisConnection = ConnectionMultiplexer.Connect(redisOptions.Value.RedisConnectionString);;
         _redisDb = _redisConnection.GetDatabase();
     }
     
@@ -53,21 +53,16 @@ public class SessionStore : ISessionStore
     public async Task RevokeFamilyAsync(Guid familyId, CancellationToken ct)
     {
         var endpoints = _redisConnection.GetEndPoints();
-
-        foreach (var endpoint in endpoints)
+        var server =  _redisConnection.GetServer(endpoints[0]);
+        
+        foreach (var key in server.Keys(pattern: "refresh:*"))
         {
             var data = await _redisDb.StringGetAsync(key);
             if (data.IsNullOrEmpty) continue;
             var rec = JsonSerializer.Deserialize<RefreshTokenState>(data.ToString()!)!;
             if (rec.FamilyId == familyId)
             {
-                var data = await _redisDb.StringGetAsync(key);
-                if (data.IsNullOrEmpty) continue;
-                var rec = JsonSerializer.Deserialize<RefreshTokenState>(data!)!;
-                if (rec.FamilyId == familyId)
-                {
-                        await _redisDb.KeyDeleteAsync(key);
-                }   
+                await _redisDb.KeyDeleteAsync(key);
             }
         }
     }
