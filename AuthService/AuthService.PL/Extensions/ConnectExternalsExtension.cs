@@ -17,7 +17,7 @@ public static class ConnectExternalsExtension
             return new PostgreDbConnection(connString);
         });
 
-        services.AddSingleton<IConnectionMultiplexer>(_ =>
+        services.AddSingleton<IConnectionMultiplexer>(options =>
         {
             var config = configuration.GetConnectionString("Redis");
             return ConnectionMultiplexer.Connect(config);

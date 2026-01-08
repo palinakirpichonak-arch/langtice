@@ -6,9 +6,7 @@ using AuthService.PL.Auth;
 using AuthService.PL.Extensions;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .CreateBootstrapLogger();
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddGrpc();
 builder.Services.AddConnectExternalsExtension(builder.Configuration);
@@ -33,6 +31,10 @@ builder.WebHost.ConfigureKestrel(options =>
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.MapAuthEndpoints();
