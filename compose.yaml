@@ -180,6 +180,14 @@ services:
           timeout: 5s
           retries: 10
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: vite-react-frontend
+    ports:
+      - "5173:5173"
+
 volumes:
   main-postgres-data:
   auth-postgres-data:
